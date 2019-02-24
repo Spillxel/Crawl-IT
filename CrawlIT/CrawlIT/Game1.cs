@@ -15,14 +15,17 @@ namespace CrawlIT
         SpriteBatch spriteBatch;
 
         private Texture2D background;
-        IResolution _resolution;
+        readonly IResolution _resolution;
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
-            graphics.SupportedOrientations = DisplayOrientation.Portrait | DisplayOrientation.PortraitDown;
+            graphics = new GraphicsDeviceManager(this)
+            {
+                SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight,
+                IsFullScreen = true
+            };
 
-            _resolution = new ResolutionComponent(this, graphics, new Point(720, 1280), new Point(720, 1280), true, false);
+            _resolution = new ResolutionComponent(this, graphics, new Point(1280, 720), new Point(1280, 720), true, false);
 
             Content.RootDirectory = "Content";
         }
