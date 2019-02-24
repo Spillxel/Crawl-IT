@@ -12,6 +12,8 @@
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>iOS</AssemblyName>
     <MonoGamePlatform>iOS</MonoGamePlatform>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +39,7 @@
     <ConsolePause>false</ConsolePause>
     <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
+    <OptimizePNGs>true</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -90,14 +93,18 @@
     <CodesignProvision>Automatic:AppStore</CodesignProvision>
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <AppExtensionDebugBundleId />
+    <LaunchForBackgroundFetch>false</LaunchForBackgroundFetch>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.iOS.3.7.1.189\lib\XamariniOS\MonoGame.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
-    <Reference Include="MonoGame.Framework">
-      <HintPath>\Users\dev\dev\crawlit\CrawlIT\packages\MonoGame.Framework.iOS.3.7.0.1708\lib\XamariniOS\MonoGame.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="RandomExtensions.iOS">
       <HintPath>..\packages\RandomExtensions.dmanning23.2.0.0\lib\Xamarin.iOS10\RandomExtensions.iOS.dll</HintPath>
     </Reference>
@@ -129,5 +136,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
-  <Import Project="..\packages\MonoGame.Framework.iOS.3.7.0.1708\build\MonoGame.Framework.iOS.targets" Condition="Exists('..\packages\MonoGame.Framework.iOS.3.7.0.1708\build\MonoGame.Framework.iOS.targets')" />
+  <Import Project="..\packages\MonoGame.Framework.iOS.3.7.1.189\build\MonoGame.Framework.iOS.targets" Condition="Exists('..\packages\MonoGame.Framework.iOS.3.7.1.189\build\MonoGame.Framework.iOS.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MonoGame.Framework.iOS.3.7.1.189\build\MonoGame.Framework.iOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.iOS.3.7.1.189\build\MonoGame.Framework.iOS.targets'))" />
+  </Target>
 </Project>
