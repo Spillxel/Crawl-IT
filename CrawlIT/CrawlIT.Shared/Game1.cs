@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Media;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 
 using ResolutionBuddy;
+using Microsoft.Xna.Framework.Input.Touch;
 
 #endregion
 
@@ -20,11 +21,14 @@ namespace CrawlIT
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        TouchCollection touchCollection;
 
         private Texture2D _background;
         readonly IResolution _resolution;
-
+        private Rectangle target = new Rectangle(0,0,100,100);
         private Song _backgroundSong;
+        private Song _backgroundSong2;
+        private SpriteFont font;
 
         public Game1()
         {
@@ -64,6 +68,8 @@ namespace CrawlIT
             //TODO: use this.Content to load your game content here
             _background = Content.Load<Texture2D>("mulli");
             _backgroundSong = Content.Load<Song>("sneaky_snitch");
+            _backgroundSong2 = Content.Load<Song>("investigations");
+            font = Content.Load<SpriteFont>("test");
 
             XnaMediaPlayer.Play(_backgroundSong);
         }
@@ -80,11 +86,25 @@ namespace CrawlIT
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-#if !__IOS__
+            #if !__IOS__
                 Exit();
-#endif
+            #endif
             }
-            // TODO: Add your update logic here         
+            // TODO: Add your update logic here  
+            touchCollection = TouchPanel.GetState();
+
+            foreach (TouchLocation tl in touchCollection)
+            {
+                if (tl.State == TouchLocationState.Pressed &&
+                    tl.Position.X > target.Left &&
+                    tl.Position.X < target.Right &&
+                    tl.Position.Y > target.Top &&
+                    tl.Position.Y < target.Bottom)
+                {
+                    XnaMediaPlayer.Play(_backgroundSong2);
+                }
+            }
+
             base.Update(gameTime);
         }
 
@@ -101,6 +121,7 @@ namespace CrawlIT
             spriteBatch.Begin();
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            spriteBatch.DrawString(font, "touch me", new Vector2(25, 50), Color.Black);
 
             spriteBatch.End();
 

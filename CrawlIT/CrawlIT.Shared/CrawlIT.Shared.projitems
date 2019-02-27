@@ -20,4 +20,4 @@
     <None Include="$(MSBuildThisFileDirectory)Content\mulli.jpg" />
     <None Include="$(MSBuildThisFileDirectory)Content\sneaky_snitch.mp3" />
   </ItemGroup>
- </Project>
+</Project>
