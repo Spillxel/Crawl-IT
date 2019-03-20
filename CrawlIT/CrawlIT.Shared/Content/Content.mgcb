@@ -13,7 +13,26 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin mulli.jpg
+#begin Audio/Investigations.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Investigations.mp3
+
+#begin Audio/sneaky_snitch.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/sneaky_snitch.mp3
+
+#begin Fonts/File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/File.spritefont
+
+#begin Sprites/charactersheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,11 +42,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:mulli.jpg
-
-#begin sneaky_snitch.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:sneaky_snitch.mp3
+/build:Sprites/charactersheet.png
 

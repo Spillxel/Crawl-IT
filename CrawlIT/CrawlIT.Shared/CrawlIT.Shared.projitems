@@ -11,13 +11,20 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Game1.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Content\" />
-  </ItemGroup>
+  <!--
   <ItemGroup>
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+  </ItemGroup>
+-->
+  <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
-    <None Include="$(MSBuildThisFileDirectory)Content\mulli.jpg" />
-    <None Include="$(MSBuildThisFileDirectory)Content\sneaky_snitch.mp3" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Fonts\File.spritefont" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Content\Audio\Investigations.mp3" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Audio\sneaky_snitch.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Content\Sprites\charactersheet.png" />
   </ItemGroup>
 </Project>

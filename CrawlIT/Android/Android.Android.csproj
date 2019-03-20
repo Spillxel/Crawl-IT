@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <NoWarn>CS0436</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -74,11 +75,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Fonts\File.spritefont" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="packages.config" />
-    <None Include="Content\mulli.jpg" />
-    <None Include="Content\sneaky_snitch.mp3" />
+    <None Include="Content\Audio\sneaky_snitch.mp3" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Layout\" />
@@ -92,6 +93,12 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Audio\Investigations.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sprites\charactersheet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

@@ -21,14 +21,12 @@ namespace CrawlIT
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        TouchCollection touchCollection;
 
-        private Texture2D _background;
         readonly IResolution _resolution;
-        private Rectangle target = new Rectangle(0,0,100,100);
+
         private Song _backgroundSong;
-        private Song _backgroundSong2;
-        private SpriteFont font;
+
+        private Texture2D _characterSheetTexture;
 
         public Game1()
         {
@@ -38,7 +36,7 @@ namespace CrawlIT
                 IsFullScreen = true
             };
 
-            _resolution = new ResolutionComponent(this, graphics, new Point(1280, 720), new Point(1280, 720), true, false);
+            _resolution = new ResolutionComponent(this, graphics, new Point(640, 360), new Point(640, 360), true, false);
 
             Content.RootDirectory = "Content";
         }
@@ -64,12 +62,10 @@ namespace CrawlIT
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            //TODO: use this.Content to load your game content here
-            _background = Content.Load<Texture2D>("mulli");
-            _backgroundSong = Content.Load<Song>("sneaky_snitch");
-            _backgroundSong2 = Content.Load<Song>("investigations");
-            font = Content.Load<SpriteFont>("test");
+            
+                //TODO: use this.Content to load your game content here
+            _backgroundSong = Content.Load<Song>("Audio/Investigations");
+            _characterSheetTexture = Content.Load<Texture2D>("Sprites/charactersheet");
 
             XnaMediaPlayer.Play(_backgroundSong);
         }
@@ -86,24 +82,11 @@ namespace CrawlIT
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-            #if !__IOS__
-                Exit();
-            #endif
+#if !__IOS__
+                Game.Activity.MoveTaskToBack(true);
+#endif
             }
             // TODO: Add your update logic here  
-            touchCollection = TouchPanel.GetState();
-
-            foreach (TouchLocation tl in touchCollection)
-            {
-                if (tl.State == TouchLocationState.Pressed &&
-                    tl.Position.X > target.Left &&
-                    tl.Position.X < target.Right &&
-                    tl.Position.Y > target.Top &&
-                    tl.Position.Y < target.Bottom)
-                {
-                    XnaMediaPlayer.Play(_backgroundSong2);
-                }
-            }
 
             base.Update(gameTime);
         }
@@ -114,14 +97,13 @@ namespace CrawlIT
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DarkSlateGray);
 
             //TODO: Add your drawing code here
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
 
-            spriteBatch.Draw(_background, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-            spriteBatch.DrawString(font, "touch me", new Vector2(25, 50), Color.Black);
+            spriteBatch.Draw(_characterSheetTexture, Vector2.Zero, Color.White);
 
             spriteBatch.End();
 
