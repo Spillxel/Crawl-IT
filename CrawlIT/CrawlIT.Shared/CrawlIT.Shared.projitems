@@ -27,4 +27,7 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Content\Sprites\charactersheet.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)New Folder\" />
+  </ItemGroup>
 </Project>
