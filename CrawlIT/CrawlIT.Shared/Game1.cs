@@ -13,6 +13,11 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 using CrawlIT.Shared.Entity;
 
+using MonoGame.Extended;
+using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Graphics;
+using MonoGame.Extended.ViewportAdapters;
+
 #endregion
 
 namespace CrawlIT
@@ -32,6 +37,12 @@ namespace CrawlIT
         private Texture2D _playerTexture;
 
         private Player _player;
+
+        private TiledMap _map;
+
+        private TiledMapRenderer _mapRenderer;
+
+        //private Camera2D _camera;
 
         public Game1()
         {
@@ -54,8 +65,11 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
-            XnaMediaPlayer.IsRepeating = true;
             base.Initialize();
+            XnaMediaPlayer.IsRepeating = true;
+            _mapRenderer = new TiledMapRenderer(GraphicsDevice);
+            //var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            //_camera = new Camera2D(viewportAdapter);
         }
 
         /// <summary>
@@ -67,9 +81,10 @@ namespace CrawlIT
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-                //TODO: use this.Content to load your game content here
+            //TODO: use this.Content to load your game content here
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
             _playerTexture = Content.Load<Texture2D>("Sprites/charactersheet");
+            _map = Content.Load<TiledMap>("test2");
 
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());
 
@@ -93,9 +108,8 @@ namespace CrawlIT
 #endif
             }
             // TODO: Add your update logic here  
-
+            _mapRenderer.Update(_map, gameTime);
             _player.Update(gameTime);
-
             base.Update(gameTime);
         }
 
@@ -110,8 +124,14 @@ namespace CrawlIT
             //TODO: Add your drawing code here
 
             spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
+            
+            //the camera produces a view matrix that can be applied to any sprite batch
+            //var transformMatrix = _camera.GetViewMatrix();
+            //spriteBatch.Begin(transformMatrix: transformMatrix);
 
             _player.Draw(spriteBatch);
+
+            _mapRenderer.Draw(_map);
 
             spriteBatch.End();
 
