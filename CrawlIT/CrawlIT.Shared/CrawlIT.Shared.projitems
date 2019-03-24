@@ -10,6 +10,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Game1.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Entity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Player.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationFrame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Animation\Animation.cs" />
   </ItemGroup>
   <!--
   <ItemGroup>
@@ -26,5 +30,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Content\Sprites\charactersheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Entity\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Animation\" />
   </ItemGroup>
 </Project>
