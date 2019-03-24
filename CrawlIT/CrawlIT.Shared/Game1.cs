@@ -1,4 +1,5 @@
 ﻿#region Using Statements
+
 using System;
 
 using Microsoft.Xna.Framework;
@@ -9,6 +10,8 @@ using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 
 using ResolutionBuddy;
 using Microsoft.Xna.Framework.Input.Touch;
+
+using CrawlIT.Shared.Entity;
 
 #endregion
 
@@ -22,11 +25,13 @@ namespace CrawlIT
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        readonly IResolution _resolution;
+        private readonly IResolution _resolution;
 
         private Song _backgroundSong;
 
-        private Texture2D _characterSheetTexture;
+        private Texture2D _playerTexture;
+
+        private Player _player;
 
         public Game1()
         {
@@ -49,7 +54,6 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             XnaMediaPlayer.IsRepeating = true;
             base.Initialize();
         }
@@ -62,10 +66,12 @@ namespace CrawlIT
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
                 //TODO: use this.Content to load your game content here
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
-            _characterSheetTexture = Content.Load<Texture2D>("Sprites/charactersheet");
+            _playerTexture = Content.Load<Texture2D>("Sprites/charactersheet");
+
+            _player = new Player(_playerTexture, _resolution.TransformationMatrix());
 
             XnaMediaPlayer.Play(_backgroundSong);
         }
@@ -88,6 +94,8 @@ namespace CrawlIT
             }
             // TODO: Add your update logic here  
 
+            _player.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -103,7 +111,7 @@ namespace CrawlIT
 
             spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
 
-            spriteBatch.Draw(_characterSheetTexture, Vector2.Zero, Color.White);
+            _player.Draw(spriteBatch);
 
             spriteBatch.End();
 
