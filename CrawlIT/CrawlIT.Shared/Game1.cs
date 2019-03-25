@@ -31,7 +31,35 @@ namespace CrawlIT
 
         private Texture2D _playerTexture;
 
+        private Texture2D _startButton;
+
+        private Texture2D _exitButton;
+
+        private Texture2D _pauseButton;
+
+        private Texture2D _resumeButton;
+
         private Player _player;
+
+        private Vector2 _startButtonPosition;
+
+        private Vector2 _exitButtonPosition;
+
+        private Vector2 _resumeButtonPosition;
+
+        private Vector2 _pauseButtonPosition;
+
+        TouchCollection touchCollection;
+
+        private GameState gameState;
+
+        enum GameState
+        {
+            StartMenu,
+            Loading,
+            Playing,
+            Paused
+        }
 
         public Game1()
         {
@@ -55,6 +83,19 @@ namespace CrawlIT
         protected override void Initialize()
         {
             XnaMediaPlayer.IsRepeating = true;
+
+            ////set the position of the buttons
+            _startButtonPosition = new Vector2(60, 200);
+            _exitButtonPosition = new Vector2(60, 250);
+            _resumeButtonPosition = new Vector2(60, 200);
+            _pauseButtonPosition = new Vector2(0, 0);
+
+            //set the gamestate to start menu
+            gameState = GameState.StartMenu;
+
+            //get the touch state
+            touchCollection = TouchPanel.GetState();
+
             base.Initialize();
         }
 
@@ -70,6 +111,11 @@ namespace CrawlIT
                 //TODO: use this.Content to load your game content here
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
             _playerTexture = Content.Load<Texture2D>("Sprites/charactersheet");
+
+            _startButton = Content.Load<Texture2D>(@"start");
+            _exitButton = Content.Load<Texture2D>(@"exit");
+            _resumeButton = Content.Load<Texture2D>(@"resume");
+            _pauseButton = Content.Load<Texture2D>(@"pause");
 
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());
 
@@ -92,9 +138,21 @@ namespace CrawlIT
                 Game.Activity.MoveTaskToBack(true);
 #endif
             }
-            // TODO: Add your update logic here  
+            //Create the player if the game is playing
+            if (gameState == GameState.Playing)
+            { 
+                _player.Update(gameTime);
+            }
 
-            _player.Update(gameTime);
+            //wait for touch interaction
+            touchCollection = TouchPanel.GetState();
+
+            if (touchCollection.Count > 0)
+            {
+                Vector2 touchVector= Vector2.Transform(touchCollection[0].Position, Matrix.Invert(_resolution.TransformationMatrix()));
+                //To add proper touch interaction
+                TouchedScreen((int)touchVector.X, (int)touchVector.Y);
+            }
 
             base.Update(gameTime);
         }
@@ -111,11 +169,82 @@ namespace CrawlIT
 
             spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
 
-            _player.Draw(spriteBatch);
+            if(gameState==GameState.StartMenu)
+            {
+                spriteBatch.Draw(_startButton, _startButtonPosition, Color.White);
+                spriteBatch.Draw(_exitButton, _exitButtonPosition, Color.White);
+            }
+
+            if (gameState == GameState.Playing)
+            {
+                Vector2 scaleVector = new Vector2(0.5f, 0.5f);
+                _player.Draw(spriteBatch);
+                spriteBatch.Draw(texture: _pauseButton, position: _pauseButtonPosition, color: Color.White, scale: scaleVector);
+            }
+
+            if(gameState==GameState.Paused)
+            {
+                spriteBatch.Draw(_resumeButton, _resumeButtonPosition, Color.White);
+                spriteBatch.Draw(_exitButton, _exitButtonPosition, Color.White);
+            }
 
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
+
+        void TouchedScreen(int x, int y)
+        {
+            //creates a rectangle of 5x5 around the place where the screen was touched
+            Rectangle touchRect = new Rectangle(x, y, 5, 5);
+
+            //check the startmenu
+            if (gameState == GameState.StartMenu)
+            {
+                Rectangle startButtonRect = new Rectangle((int)_startButtonPosition.X, (int)_startButtonPosition.Y, 100, 20);
+                Rectangle exitButtonRect = new Rectangle((int)_exitButtonPosition.X, (int)_exitButtonPosition.Y, 100, 20);
+
+                if (touchRect.Intersects(startButtonRect)) //player touched start button
+                {
+                    gameState = GameState.Playing;
+                }
+                else if (touchRect.Intersects(exitButtonRect)) //player clicked exit button
+                {
+                    Exit();
+                }
+
+            }
+
+            //check the pausebutton
+            if (gameState == GameState.Playing)
+            {
+                Rectangle pauseButtonRect = new Rectangle((int)_pauseButtonPosition.X, (int)_pauseButtonPosition.Y, 35, 35);
+
+                if (touchRect.Intersects(pauseButtonRect))
+                {
+                    gameState = GameState.Paused;
+                }
+
+            }
+
+            //check the resumebutton
+            if (gameState == GameState.Paused)
+            {
+                Rectangle resumeButtonRect = new Rectangle((int)_resumeButtonPosition.X, (int)_resumeButtonPosition.Y, 100, 20);
+                Rectangle exitButtonRect = new Rectangle((int)_exitButtonPosition.X, (int)_exitButtonPosition.Y, 100, 20);
+
+                if (touchRect.Intersects(resumeButtonRect))
+                {
+                    gameState = GameState.Playing;
+                }
+                else if (touchRect.Intersects(exitButtonRect)) //player clicked exit button
+                {
+                    Exit();
+                }
+
+            }
+
+        }
+
     }
 }
