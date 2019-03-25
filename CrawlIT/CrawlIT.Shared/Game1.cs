@@ -12,6 +12,7 @@ using ResolutionBuddy;
 using Microsoft.Xna.Framework.Input.Touch;
 
 using CrawlIT.Shared.Entity;
+using CrawlIT.Shared.Camera;
 
 using MonoGame.Extended;
 using MonoGame.Extended.Tiled;
@@ -50,7 +51,7 @@ namespace CrawlIT
 
         private TiledMapRenderer _mapRenderer;
 
-        //private Camera2D _camera;
+        //private Camera _camera;
 
         private Vector2 _startButtonPosition;
 
@@ -108,8 +109,9 @@ namespace CrawlIT
             touchCollection = TouchPanel.GetState();
 
             _mapRenderer = new TiledMapRenderer(GraphicsDevice);
-            //var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            //_camera = new Camera2D(viewportAdapter);
+
+            //_camera = new Camera(_resolution.VirtualResolution.X, _resolution.VirtualResolution.Y);
+
             base.Initialize();
         }
 
@@ -172,6 +174,8 @@ namespace CrawlIT
                 TouchedScreen((int)touchVector.X, (int)touchVector.Y);
             }
 
+            //_camera.Follow(_player);
+
             base.Update(gameTime);
         }
 
@@ -186,16 +190,16 @@ namespace CrawlIT
             //TODO: Add your drawing code here
 
             spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
-            
-            //the camera produces a view matrix that can be applied to any sprite batch
-            //var transformMatrix = _camera.GetViewMatrix();
-            //spriteBatch.Begin(transformMatrix: transformMatrix);
 
-            if(gameState==GameState.StartMenu)
+            if (gameState==GameState.StartMenu)
             {
+                //spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
                 spriteBatch.Draw(_startButton, _startButtonPosition, Color.White);
                 spriteBatch.Draw(_exitButton, _exitButtonPosition, Color.White);
+                //spriteBatch.End();
             }
+
+            //spriteBatch.Begin(transformMatrix: _camera.Transform / 2);
 
             if (gameState == GameState.Playing)
             {
@@ -210,7 +214,6 @@ namespace CrawlIT
                 spriteBatch.Draw(_resumeButton, _resumeButtonPosition, Color.White);
                 spriteBatch.Draw(_exitButton, _exitButtonPosition, Color.White);
             }
-
 
             spriteBatch.End();
 
