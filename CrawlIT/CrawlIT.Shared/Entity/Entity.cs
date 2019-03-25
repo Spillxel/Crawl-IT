@@ -14,7 +14,6 @@ namespace CrawlIT.Shared.Entity
         public float X { get; protected set; }
         public float Y { get; protected set; }
 
-
         public float PosX { get; protected set; }
         public float PosY { get; protected set; }
 
