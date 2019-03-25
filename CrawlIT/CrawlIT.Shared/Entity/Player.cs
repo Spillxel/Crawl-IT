@@ -18,7 +18,7 @@ namespace CrawlIT.Shared.Entity
         private Animation.Animation _standLeft;
         private Animation.Animation _standRight;
 
-        private Animation.Animation _currentAnimation;
+        private Animation.Animation _currentAnimation = new Animation.Animation();
 
         private Matrix _scale;
 
@@ -96,8 +96,8 @@ namespace CrawlIT.Shared.Entity
             if (touchCollection.Count > 0)
             {
                 var touchPoint = ScaleInput(touchCollection[0].Position);
-                velocity.X = touchPoint.X - PosX;
-                velocity.Y = touchPoint.Y - PosY;
+                velocity.X = touchPoint.X - (720/2);
+                velocity.Y = touchPoint.Y - (1280/2);
 
                 if (velocity.X != 0 || velocity.Y != 0)
                 {

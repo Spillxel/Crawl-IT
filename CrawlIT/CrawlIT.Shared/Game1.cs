@@ -51,7 +51,8 @@ namespace CrawlIT
 
         private TiledMapRenderer _mapRenderer;
 
-        //private Camera _camera;
+        private Camera _playerCamera;
+        private Camera _staticCamera;
 
         private Vector2 _startButtonPosition;
 
@@ -81,7 +82,7 @@ namespace CrawlIT
                 IsFullScreen = true
             };
 
-            _resolution = new ResolutionComponent(this, graphics, new Point(640, 360), new Point(640, 360), true, false);
+            _resolution = new ResolutionComponent(this, graphics, new Point(720, 1280), new Point(720, 1280), true, false);
 
             Content.RootDirectory = "Content";
         }
@@ -110,7 +111,6 @@ namespace CrawlIT
 
             _mapRenderer = new TiledMapRenderer(GraphicsDevice);
 
-            //_camera = new Camera(_resolution.VirtualResolution.X, _resolution.VirtualResolution.Y);
 
             base.Initialize();
         }
@@ -127,7 +127,7 @@ namespace CrawlIT
             //TODO: use this.Content to load your game content here
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
             _playerTexture = Content.Load<Texture2D>("Sprites/charactersheet");
-            _map = Content.Load<TiledMap>("test2");
+            _map = Content.Load<TiledMap>("Maps/test2");
 
             _startButton = Content.Load<Texture2D>(@"start");
             _exitButton = Content.Load<Texture2D>(@"exit");
@@ -135,6 +135,9 @@ namespace CrawlIT
             _pauseButton = Content.Load<Texture2D>(@"pause");
 
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());
+            _playerCamera = new Camera(_resolution.ScreenArea.Width, _resolution.ScreenArea.Height, _resolution.TransformationMatrix());
+            _staticCamera = new Camera(0, 0, _resolution.TransformationMatrix());
+
 
             XnaMediaPlayer.Play(_backgroundSong);
         }
@@ -169,12 +172,24 @@ namespace CrawlIT
 
             if (touchCollection.Count > 0)
             {
-                Vector2 touchVector= Vector2.Transform(touchCollection[0].Position, Matrix.Invert(_resolution.TransformationMatrix()));
+                Vector2 touchVector;
+                // For Laurence: pause button won't work atm because touch manager isnt ready ye
+                // the two lines below make it so the input is recalculated while playing to make
+                // the player move correctly
+                if (gameState == GameState.Playing)
+                    touchVector = Vector2.Transform(touchCollection[0].Position, Matrix.Invert(_playerCamera.Transform));
+                else
+                    touchVector = touchCollection[0].Position;
+
                 //To add proper touch interaction
                 TouchedScreen((int)touchVector.X, (int)touchVector.Y);
             }
 
-            //_camera.Follow(_player);
+            // For Laurence:
+            // - make player cam follow player
+            // - make static cam follow null (check camera class for why)
+            _playerCamera.Follow(_player);
+            _staticCamera.Follow(null);
 
             base.Update(gameTime);
         }
@@ -189,33 +204,47 @@ namespace CrawlIT
 
             //TODO: Add your drawing code here
 
-            spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
 
             if (gameState==GameState.StartMenu)
             {
-                //spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
+                spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
                 spriteBatch.Draw(_startButton, _startButtonPosition, Color.White);
                 spriteBatch.Draw(_exitButton, _exitButtonPosition, Color.White);
-                //spriteBatch.End();
+                spriteBatch.End();
             }
-
-            //spriteBatch.Begin(transformMatrix: _camera.Transform / 2);
 
             if (gameState == GameState.Playing)
             {
                 Vector2 scaleVector = new Vector2(0.5f, 0.5f);
-                _mapRenderer.Draw(_map);
+                // For Laurence: give map renderer player camera as view point, makes sense right?
+                _mapRenderer.Draw(_map, viewMatrix: _playerCamera.Transform);
+                //spriteBatch.Begin(transformMatrix: _playerCamera.Transform);
+                // For Laurence: 
+                // idk know what the stuff below does, might be able to simplify
+                // player spriteBatch with playercam, makes sprite be drawn at center..
+                spriteBatch.Begin(SpriteSortMode.BackToFront,
+                                  BlendState.AlphaBlend,
+                                  null, null, null, null,
+                                  _playerCamera.Transform);
                 _player.Draw(spriteBatch);
+                spriteBatch.End();
+                // For Laurence: static stuff should be drawn using other camera, so it doesnt move on player movement
+                spriteBatch.Begin(SpriteSortMode.BackToFront,
+                                  BlendState.AlphaBlend,
+                                  null, null, null, null,
+                                  _staticCamera.Transform);
                 spriteBatch.Draw(texture: _pauseButton, position: _pauseButtonPosition, color: Color.White, scale: scaleVector);
+                spriteBatch.End();
             }
 
-            if(gameState==GameState.Paused)
+            if (gameState==GameState.Paused)
             {
+                spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
                 spriteBatch.Draw(_resumeButton, _resumeButtonPosition, Color.White);
                 spriteBatch.Draw(_exitButton, _exitButtonPosition, Color.White);
+                spriteBatch.End();
             }
 
-            spriteBatch.End();
 
             base.Draw(gameTime);
         }
