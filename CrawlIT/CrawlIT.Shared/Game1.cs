@@ -109,9 +109,9 @@ namespace CrawlIT
             //get the touch state
             touchCollection = TouchPanel.GetState();
 
+            //Initialize map renderer
             _mapRenderer = new TiledMapRenderer(GraphicsDevice);
-
-
+            
             base.Initialize();
         }
 
@@ -138,7 +138,6 @@ namespace CrawlIT
             _playerCamera = new Camera(_resolution.ScreenArea.Width, _resolution.ScreenArea.Height, _resolution.TransformationMatrix());
             _staticCamera = new Camera(0, 0, _resolution.TransformationMatrix());
 
-
             XnaMediaPlayer.Play(_backgroundSong);
         }
 
@@ -160,7 +159,7 @@ namespace CrawlIT
             }
             // TODO: Add your update logic here  
        
-            //Create the player if the game is playing
+            //Create the player and map if the game is playing
             if (gameState == GameState.Playing)
             { 
                 _mapRenderer.Update(_map, gameTime);
@@ -173,7 +172,7 @@ namespace CrawlIT
             if (touchCollection.Count > 0)
             {
                 Vector2 touchVector;
-                // For Laurence: pause button won't work atm because touch manager isnt ready ye
+                // For Laurence: pause button won't work atm because touch manager isnt ready yet
                 // the two lines below make it so the input is recalculated while playing to make
                 // the player move correctly
                 if (gameState == GameState.Playing)
@@ -182,7 +181,9 @@ namespace CrawlIT
                     touchVector = touchCollection[0].Position;
 
                 //To add proper touch interaction
-                TouchedScreen((int)touchVector.X, (int)touchVector.Y);
+                //TouchedScreen((int)touchVector.X, (int)touchVector.Y);
+                TouchedScreen((int)touchCollection[0].Position.X, (int)touchCollection[0].Position.Y);
+
             }
 
             // For Laurence:
@@ -203,7 +204,6 @@ namespace CrawlIT
             GraphicsDevice.Clear(Color.DarkSlateGray);
 
             //TODO: Add your drawing code here
-
 
             if (gameState==GameState.StartMenu)
             {
