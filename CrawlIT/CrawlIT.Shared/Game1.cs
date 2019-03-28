@@ -65,9 +65,6 @@ namespace CrawlIT
 
             XnaMediaPlayer.IsRepeating = true;
 
-            //get the touch state
-            touchCollection = TouchPanel.GetState();
-
             base.Initialize();
         }
 
@@ -142,7 +139,7 @@ namespace CrawlIT
 
             if (level!=0)
             {
-                spriteBatch.Begin();
+                spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
                 _player.Draw(spriteBatch);
                 spriteBatch.End();
             }
