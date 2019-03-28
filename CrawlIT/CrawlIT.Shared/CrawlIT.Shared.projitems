@@ -14,6 +14,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\Animation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameStates\IGameState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameStates\GameState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameStates\GameStateManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Level1.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Menu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Level2.cs" />
   </ItemGroup>
   <!--
   <ItemGroup>
@@ -34,5 +40,6 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Entity\" />
     <Folder Include="$(MSBuildThisFileDirectory)Animation\" />
+    <Folder Include="$(MSBuildThisFileDirectory)GameStates\" />
   </ItemGroup>
 </Project>
