@@ -8,6 +8,8 @@ namespace CrawlIT.Shared.GameStates
 {
     public class Level1 : GameState
     {
+        private Enum _state;
+
         public Level1(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
         {
@@ -19,6 +21,16 @@ namespace CrawlIT.Shared.GameStates
 
         public override void LoadContent(ContentManager content)
         {
+        }
+
+        public override void SetState(Enum gameState)
+        {
+            _state = gameState;
+        }
+
+        public override Enum GetState()
+        {
+            return _state;
         }
 
         public override void UnloadContent()

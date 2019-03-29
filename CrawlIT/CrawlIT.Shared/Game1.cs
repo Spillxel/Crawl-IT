@@ -35,8 +35,6 @@ namespace CrawlIT
 
         private readonly IResolution _resolution;
 
-        private GameStateManager _gameStateManager;
-
         private Camera _staticCamera;
         private Song _backgroundSong;
 
@@ -44,12 +42,21 @@ namespace CrawlIT
         private Camera _playerCamera;
         private Texture2D _playerTexture;
 
+        private GameState _menu;
+        private GameState _level1;
+        private GameState _level2;
+
+        enum _gameStates
+        { 
+            Playing,
+            Fighting,
+            Menu
+        }
+
         private SpriteFont _font;
 
         private TiledMap _map;
         private TiledMapRenderer _mapRenderer;
-
-        private int _level;
 
         public Game1()
         {
@@ -74,7 +81,14 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
-            _level = 0;
+            _menu = new Menu(GraphicsDevice);
+            _menu.SetState(_gameStates.Menu);
+
+            _level1 = new Level1(GraphicsDevice);
+            _level1.SetState(_gameStates.Playing);
+
+            _level2 = new Level2(GraphicsDevice);
+            _level2.SetState(_gameStates.Playing);
 
             // TODO: make this work
             // _gameStateManager.GameState = GameState.StartMenu;
@@ -110,8 +124,12 @@ namespace CrawlIT
 
             _staticCamera = new Camera(0, 0, 1.0f);
 
+            //Set the content to the GameStateManager to be able to use it
             GameStateManager.Instance.SetContent(Content);
-            GameStateManager.Instance.AddScreen(new Menu(GraphicsDevice));
+
+            //Initialize by adding the Menu screen into the game
+            GameStateManager.Instance.AddScreen(_menu);
+
         }
 
         /// <summary>
@@ -134,16 +152,13 @@ namespace CrawlIT
             GameStateManager.Instance.Update(gameTime);
 
             _touchCollection = TouchPanel.GetState();
-            if (_level == 0 && _touchCollection.Count > 0)
+            if (GameStateManager.Instance.GetCurrentState().Equals(_gameStates.Menu) && _touchCollection.Count > 0)
             {
                 // TODO: re-implement Start/Exit button touch...
-                GameStateManager.Instance.RemoveScreen();
-                GameStateManager.Instance.AddScreen(new Level2(GraphicsDevice));
-
-                _level = 1;
+                GameStateManager.Instance.ChangeScreen(_level1);
             }
 
-            if (_level != 0)
+            if (GameStateManager.Instance.GetCurrentState().Equals(_gameStates.Playing))
             {
                 _mapRenderer.Update(_map, gameTime);
                 _player.Update(gameTime);
@@ -158,14 +173,14 @@ namespace CrawlIT
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>j
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.DarkSlateGray);
         
             GameStateManager.Instance.Draw(_spriteBatch);
 
-            if (_level != 0)
+            if (GameStateManager.Instance.GetCurrentState().Equals(_gameStates.Playing))
             {
                 _mapRenderer.Draw(_map, viewMatrix: _playerCamera.Transform);
                 _spriteBatch.Begin(SpriteSortMode.BackToFront,

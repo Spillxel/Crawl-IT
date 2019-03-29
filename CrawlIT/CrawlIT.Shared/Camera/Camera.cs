@@ -26,7 +26,7 @@ namespace CrawlIT.Shared.Camera
             var posy = target?.PosY ?? 0;
 
             Transform = 
-                Matrix.CreateTranslation(new Vector3(- posx, - posy, 0))
+                Matrix.CreateTranslation(new Vector3(- posx - 8, - posy - 8, 0))
                                          * Matrix.CreateRotationZ(0)
                                          * Matrix.CreateScale(new Vector3(_zoom, _zoom, 1))
                                          * Matrix.CreateTranslation(new Vector3(_width * 0.5f, _height * 0.5f, 0));
