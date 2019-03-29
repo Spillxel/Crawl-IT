@@ -40,6 +40,7 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Entity\" />
     <Folder Include="$(MSBuildThisFileDirectory)Animation\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Camera\" />
     <Folder Include="$(MSBuildThisFileDirectory)GameStates\" />
   </ItemGroup>
 </Project>

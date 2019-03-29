@@ -81,9 +81,9 @@ namespace CrawlIT.Shared.Entity
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Vector2 topLeft = new Vector2(PosX, PosY);
+            Vector2 position = new Vector2(PosX, PosY);
             var sourceRectangle = _currentAnimation.CurrentRectangle;
-            spriteBatch.Draw(TextureSheet, topLeft, sourceRectangle, Color.White);
+            spriteBatch.Draw(TextureSheet, position, sourceRectangle, Color.White);
         }
 
         private Vector2 GetVelocity()
@@ -102,7 +102,7 @@ namespace CrawlIT.Shared.Entity
                 if (velocity.X != 0 || velocity.Y != 0)
                 {
                     velocity.Normalize();
-                    const float desiredSpeed = 200;
+                    const float desiredSpeed = 170;
                     velocity *= desiredSpeed;
                 }
             }
@@ -114,7 +114,7 @@ namespace CrawlIT.Shared.Entity
         {
             if (velocity != Vector2.Zero)
             {
-                bool movingHorizontally = Math.Abs(velocity.X) > Math.Abs(velocity.Y);
+                var movingHorizontally = Math.Abs(velocity.X) > Math.Abs(velocity.Y);
                 _currentAnimation =
                     movingHorizontally
                         ? (velocity.X > 0 ? _walkRight : _walkLeft)
