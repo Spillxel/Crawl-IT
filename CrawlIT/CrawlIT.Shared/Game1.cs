@@ -104,7 +104,7 @@ namespace CrawlIT
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());
             _playerCamera = new Camera(_graphics.PreferredBackBufferWidth,
                                        _graphics.PreferredBackBufferHeight,
-                                       6.0f);
+                                       8.0f);
 
             _font = Content.Load<SpriteFont>("Fonts/File");
 
@@ -170,7 +170,8 @@ namespace CrawlIT
                 _mapRenderer.Draw(_map, viewMatrix: _playerCamera.Transform);
                 _spriteBatch.Begin(SpriteSortMode.BackToFront,
                                    BlendState.AlphaBlend,
-                                   null, null, null, null,
+                                   SamplerState.PointClamp,
+                                   null, null, null,
                                    _playerCamera.Transform);
                 _player.Draw(_spriteBatch);
                 _spriteBatch.End();
@@ -184,10 +185,14 @@ namespace CrawlIT
 
             // FPS counter
             var fps = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
-            var fpsString = "FPS: " + fps;
+            var fpsString = "FPS: " + Math.Ceiling(fps);
+            var stringDimensions = _font.MeasureString(fpsString);
+
+            var stringPosX = _resolution.ScreenArea.Width / 2 - stringDimensions.X / 2;
+            var stringPosY = _resolution.ScreenArea.Height - stringDimensions.Y / 2;
 
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, fpsString, new Vector2(0, _graphics.PreferredBackBufferHeight - 70), Color.Black);
+            _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Black);
             _spriteBatch.End();
 
             base.Draw(gameTime);
