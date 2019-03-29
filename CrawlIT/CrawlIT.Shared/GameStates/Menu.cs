@@ -8,7 +8,7 @@ namespace CrawlIT.Shared.GameStates
 {
     public class Menu : GameState
     {
-        private string _state;
+        private Enum _state;
 
         private Texture2D _startButton;
         private Texture2D _exitButton;
@@ -33,12 +33,12 @@ namespace CrawlIT.Shared.GameStates
             _exitButton = content.Load<Texture2D>(@"exit");
         }
 
-        public override void SetState(string state)
+        public override void SetState(Enum gameState)
         {
-            _state = state;
+            _state = gameState;
         }
 
-        public override string GetState()
+        public override Enum GetState()
         {
             return _state;
         }

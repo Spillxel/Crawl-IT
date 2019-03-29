@@ -37,7 +37,7 @@ namespace CrawlIT.Shared.GameStates
         }
 
         // Get the state of the current screen
-        public string GetCurrentState()
+        public Enum GetCurrentState()
         {
             return _screens.Peek().GetState();
         }

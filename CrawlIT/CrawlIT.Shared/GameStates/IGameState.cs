@@ -14,10 +14,10 @@ namespace CrawlIT.Shared.GameStates
         void LoadContent(ContentManager content);
 
         // Set the state here
-        void SetState(string state);
+        void SetState(Enum gameState);
 
         // Get the state here
-        string GetState();
+        Enum GetState();
 
         // Unload any content here
         void UnloadContent();
