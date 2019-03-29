@@ -16,6 +16,8 @@ namespace CrawlIT.Shared.GameStates
 
         private ContentManager _content;
 
+        private string _state;
+
         public static GameStateManager Instance
         {
             get
@@ -32,6 +34,12 @@ namespace CrawlIT.Shared.GameStates
         public void SetContent(ContentManager content)
         {
             _content = content;
+        }
+
+        // Get the state of the current screen
+        public string GetCurrentState()
+        {
+            return _screens.Peek().GetState();
         }
 
         // Adds a new screen to the stack 

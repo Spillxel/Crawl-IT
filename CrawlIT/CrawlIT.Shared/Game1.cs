@@ -25,18 +25,17 @@ namespace CrawlIT
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-
         SpriteBatch spriteBatch;
-
         private readonly IResolution _resolution;
 
         private Song _backgroundSong;
 
         private Texture2D _playerTexture;
-
         private Player _player;
 
-        private int level;
+        private GameState _menu;
+        private GameState _level1;
+        private GameState _level2;
 
         TouchCollection touchCollection;
 
@@ -61,7 +60,14 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
-            level = 0;
+            _menu = new Menu(GraphicsDevice);
+            _menu.SetState("Menu");
+
+            _level1 = new Level1(GraphicsDevice);
+            _level1.SetState("Playing");
+
+            _level2 = new Level2(GraphicsDevice);
+            _level2.SetState("Playing");
 
             XnaMediaPlayer.IsRepeating = true;
 
@@ -88,7 +94,7 @@ namespace CrawlIT
             GameStateManager.Instance.SetContent(Content);
 
             //Initialize by adding the Menu screen into the game
-            GameStateManager.Instance.AddScreen(new Menu(GraphicsDevice));
+            GameStateManager.Instance.AddScreen(_menu);
         }
 
         /// <summary>
@@ -117,9 +123,7 @@ namespace CrawlIT
 
             if (touchCollection.Count > 0)
             {
-                GameStateManager.Instance.AddScreen(new Level2(GraphicsDevice));
-               
-                level = 1;
+                GameStateManager.Instance.AddScreen(_level1);
             }
 
             _player.Update(gameTime);
@@ -130,14 +134,14 @@ namespace CrawlIT
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>j
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
             GameStateManager.Instance.Draw(spriteBatch);
 
-            if (level!=0)
+            if (GameStateManager.Instance.GetCurrentState() == "Playing")
             {
                 spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
                 _player.Draw(spriteBatch);

@@ -8,6 +8,8 @@ namespace CrawlIT.Shared.GameStates
 {
     public class Level1 : GameState
     {
+        private string _state;
+
         public Level1(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
         {
@@ -19,6 +21,16 @@ namespace CrawlIT.Shared.GameStates
 
         public override void LoadContent(ContentManager content)
         {
+        }
+
+        public override void SetState(string state)
+        {
+            _state = state;
+        }
+
+        public override string GetState()
+        {
+            return _state;
         }
 
         public override void UnloadContent()
