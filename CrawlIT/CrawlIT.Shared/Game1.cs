@@ -122,7 +122,7 @@ namespace CrawlIT
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
             XnaMediaPlayer.Play(_backgroundSong);
 
-            _map = Content.Load<TiledMap>("Maps/test2");
+            _map = Content.Load<TiledMap>("Maps/test3");
 
             _playerTexture = Content.Load<Texture2D>("Sprites/charactersheet");
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());

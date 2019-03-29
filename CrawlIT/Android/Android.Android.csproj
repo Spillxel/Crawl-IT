@@ -98,6 +98,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Content\Fonts\File.spritefont" />
+    <None Include="Content\Maps\test3.tmx" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="packages.config" />
