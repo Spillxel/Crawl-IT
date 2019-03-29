@@ -74,10 +74,10 @@
 /processor:TiledMapProcessor
 /build:Maps/test2.tmx
 
-#begin Maps/test3.tmx
+#begin Maps/test4.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Maps/test3.tmx
+/build:Maps/test4.tmx
 
 #begin pause.png
 /importer:TextureImporter

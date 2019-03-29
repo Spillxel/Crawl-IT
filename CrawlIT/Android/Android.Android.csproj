@@ -98,7 +98,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Content\Fonts\File.spritefont" />
-    <None Include="Content\Maps\test3.tmx" />
+    <None Include="Content\Maps\test4.tmx" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="packages.config" />
@@ -115,7 +115,9 @@
     <AndroidResource Include="Resources\Values\Styles.xml" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb" />
+    <MonoGameContentReference Include="Content\Content.mgcb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </MonoGameContentReference>
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
