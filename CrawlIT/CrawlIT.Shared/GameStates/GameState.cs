@@ -18,6 +18,10 @@ namespace CrawlIT.Shared.GameStates
 
         public abstract void LoadContent(ContentManager content);
 
+        public abstract void SetState(Enum gameState);
+
+        public abstract Enum GetState();
+
         public abstract void UnloadContent();
 
         public abstract void Update(GameTime gameTime);
