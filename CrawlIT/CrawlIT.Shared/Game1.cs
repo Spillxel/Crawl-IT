@@ -48,6 +48,7 @@ namespace CrawlIT
 
         private TiledMap _map;
         private TiledMapRenderer _mapRenderer;
+        private RenderTarget2D _mapRenderTarget;
 
         private int _level;
 
@@ -80,11 +81,20 @@ namespace CrawlIT
             // _gameStateManager.GameState = GameState.StartMenu;
 
             _mapRenderer = new TiledMapRenderer(GraphicsDevice);
-
+            
             // Repeat _backgroundSong on end
             XnaMediaPlayer.IsRepeating = true;
 
             base.Initialize();
+
+            PresentationParameters pp = _graphics.GraphicsDevice.PresentationParameters;
+            _mapRenderTarget = new RenderTarget2D(GraphicsDevice,
+                                                  _graphics.PreferredBackBufferWidth,
+                                                  _graphics.PreferredBackBufferHeight,
+                                                  false, SurfaceFormat.Color,
+                                                  DepthFormat.None,
+                                                  pp.MultiSampleCount,
+                                                  RenderTargetUsage.DiscardContents);
         }
 
         /// <summary>
@@ -162,12 +172,27 @@ namespace CrawlIT
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.DarkSlateGray);
-        
+
             GameStateManager.Instance.Draw(_spriteBatch);
 
             if (_level != 0)
-            {
+            {   
+                //Little trick to show the tiled map as PointClamp even though we don't use spritebatch to draw it
+                GraphicsDevice.SetRenderTarget(_mapRenderTarget);
+                GraphicsDevice.BlendState = BlendState.AlphaBlend;
+                GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+                GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
                 _mapRenderer.Draw(_map, viewMatrix: _playerCamera.Transform);
+
+                GraphicsDevice.SetRenderTarget(null);
+                _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+                _spriteBatch.Draw(_mapRenderTarget,
+                                  destinationRectangle: new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
+                                  color: Color.White);
+                _spriteBatch.End();
+                //End of little trick
+
                 _spriteBatch.Begin(SpriteSortMode.BackToFront,
                                    BlendState.AlphaBlend,
                                    SamplerState.PointClamp,
