@@ -114,6 +114,9 @@
   <ItemGroup>
     <None Include="Content\Maps\PathAndObjects.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Maps\test2.tmx" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <Import Project="..\packages\MonoGame.Framework.Android.3.7.1.189\build\MonoGame.Framework.Android.targets" Condition="Exists('..\packages\MonoGame.Framework.Android.3.7.1.189\build\MonoGame.Framework.Android.targets')" />

@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\packages\MonoGame.Extended.Content.Pipeline.1.1.0\tools\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -66,7 +67,12 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:PathAndObjects.png
+/build:Maps/PathAndObjects.png
+
+#begin Maps/test2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/test2.tmx
 
 #begin pause.png
 /importer:TextureImporter
