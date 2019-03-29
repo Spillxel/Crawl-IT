@@ -5,15 +5,20 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 
+using MonoGame.Extended;
+using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Graphics;
+
 using ResolutionBuddy;
-using Microsoft.Xna.Framework.Input.Touch;
 
 using CrawlIT.Shared.Entity;
+using CrawlIT.Shared.Camera;
+using Camera = CrawlIT.Shared.Camera.Camera;
 using CrawlIT.Shared.GameStates;
-using System.Collections.Generic;
 
 #endregion
 
@@ -24,30 +29,43 @@ namespace CrawlIT
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private TouchCollection _touchCollection;
+
         private readonly IResolution _resolution;
 
+        private GameStateManager _gameStateManager;
+
+        private Camera _staticCamera;
         private Song _backgroundSong;
 
-        private Texture2D _playerTexture;
         private Player _player;
+        private Camera _playerCamera;
+        private Texture2D _playerTexture;
 
         private GameState _menu;
         private GameState _level1;
         private GameState _level2;
 
-        TouchCollection touchCollection;
+        private SpriteFont _font;
+
+        private TiledMap _map;
+        private TiledMapRenderer _mapRenderer;
+
+        private int _level;
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this)
-            {
+            _graphics = new GraphicsDeviceManager(this)
+            {   // Force orientation to be fullscreen portrait
                 SupportedOrientations = DisplayOrientation.Portrait,
                 IsFullScreen = true
             };
 
-            _resolution = new ResolutionComponent(this, graphics, new Point(640, 360), new Point(640, 360), true, false);
+            _resolution =
+                new ResolutionComponent(this, _graphics, new Point(720, 1280),
+                                        new Point(720, 1280), true, false);
 
             Content.RootDirectory = "Content";
         }
@@ -68,7 +86,14 @@ namespace CrawlIT
 
             _level2 = new Level2(GraphicsDevice);
             _level2.SetState("Playing");
+            _level = 0;
 
+            // TODO: make this work
+            // _gameStateManager.GameState = GameState.StartMenu;
+
+            _mapRenderer = new TiledMapRenderer(GraphicsDevice);
+
+            // Repeat _backgroundSong on end
             XnaMediaPlayer.IsRepeating = true;
 
             base.Initialize();
@@ -80,21 +105,29 @@ namespace CrawlIT
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ////TODO: use this.Content to load your game content here
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
-            _playerTexture = Content.Load<Texture2D>("Sprites/charactersheet");
-            _player = new Player(_playerTexture, _resolution.TransformationMatrix());
-
             XnaMediaPlayer.Play(_backgroundSong);
 
-            //Set of the content for being used by GameStateManager
+            _map = Content.Load<TiledMap>("Maps/test2");
+
+            _playerTexture = Content.Load<Texture2D>("Sprites/charactersheet");
+            _player = new Player(_playerTexture, _resolution.TransformationMatrix());
+            _playerCamera = new Camera(_graphics.PreferredBackBufferWidth,
+                                       _graphics.PreferredBackBufferHeight,
+                                       8.0f);
+
+            _font = Content.Load<SpriteFont>("Fonts/File");
+
+            _staticCamera = new Camera(0, 0, 1.0f);
+
+
             GameStateManager.Instance.SetContent(Content);
 
             //Initialize by adding the Menu screen into the game
             GameStateManager.Instance.AddScreen(_menu);
+
         }
 
         /// <summary>
@@ -106,27 +139,33 @@ namespace CrawlIT
         {
             // For Mobile devices, this logic will close the Game when the Back button is pressed
             // Exit() is obsolete on iOS
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
+                || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
 #if !__IOS__
                 Game.Activity.MoveTaskToBack(true);
 #endif
             }
 
-            //wait for touch interaction
-            touchCollection = TouchPanel.GetState();
-
-            //Update of the GameStateManager
             GameStateManager.Instance.Update(gameTime);
 
-
-            if (touchCollection.Count > 0)
+            _touchCollection = TouchPanel.GetState();
+            if (_level == 0 && _touchCollection.Count > 0)
             {
-                GameStateManager.Instance.AddScreen(_level1);
+                // TODO: re-implement Start/Exit button touch...
+                GameStateManager.Instance.ChangeScreen(_level2);
+
+                _level = 1;
             }
 
-            _player.Update(gameTime);
+            if (_level != 0)
+            {
+                _mapRenderer.Update(_map, gameTime);
+                _player.Update(gameTime);
+
+                _playerCamera.Follow(_player);
+                _staticCamera.Follow(null);
+            }
 
             base.Update(gameTime);
         }
@@ -137,17 +176,39 @@ namespace CrawlIT
         /// <param name="gameTime">Provides a snapshot of timing values.</param>j
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-
-            GameStateManager.Instance.Draw(spriteBatch);
+            GraphicsDevice.Clear(Color.DarkSlateGray);
+        
+            GameStateManager.Instance.Draw(_spriteBatch);
 
             if (GameStateManager.Instance.GetCurrentState() == "Playing")
             {
-                spriteBatch.Begin(transformMatrix: _resolution.TransformationMatrix());
-                _player.Draw(spriteBatch);
-                spriteBatch.End();
+                _mapRenderer.Draw(_map, viewMatrix: _playerCamera.Transform);
+                _spriteBatch.Begin(SpriteSortMode.BackToFront,
+                                   BlendState.AlphaBlend,
+                                   SamplerState.PointClamp,
+                                   null, null, null,
+                                   _playerCamera.Transform);
+                _player.Draw(_spriteBatch);
+                _spriteBatch.End();
+
+                // Saving this here for future reference...
+                /*_spriteBatch.Begin(SpriteSortMode.BackToFront,
+                                  BlendState.AlphaBlend,
+                                  null, null, null, null,
+                                  _staticCamera.Transform);*/
             }
 
+            // FPS counter
+            var fps = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var fpsString = "FPS: " + Math.Ceiling(fps);
+            var stringDimensions = _font.MeasureString(fpsString);
+
+            var stringPosX = _resolution.ScreenArea.Width / 2 - stringDimensions.X / 2;
+            var stringPosY = _resolution.ScreenArea.Height - stringDimensions.Y / 2;
+
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Black);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
