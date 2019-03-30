@@ -12,6 +12,7 @@ using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using MonoGame.Extended;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
+using TiledSharp;
 
 using ResolutionBuddy;
 
@@ -55,9 +56,15 @@ namespace CrawlIT
 
         private SpriteFont _font;
 
-        private TiledMap _map;
-        private TiledMapRenderer _mapRenderer;
-        private RenderTarget2D _mapRenderTarget;
+        //private TiledMapRenderer _mapRenderer;
+        //private RenderTarget2D _mapRenderTarget;
+        private TmxMap _map;
+        Texture2D tileset;
+
+        int tileWidth;
+        int tileHeight;
+        int tilesetTilesWide;
+        int tilesetTilesHigh;
 
         public Game1()
         {
@@ -94,7 +101,7 @@ namespace CrawlIT
             // TODO: make this work
             // _gameStateManager.GameState = GameState.StartMenu;
 
-            _mapRenderer = new TiledMapRenderer(GraphicsDevice);
+            //_mapRenderer = new TiledMapRenderer(GraphicsDevice);
             
             // Repeat _backgroundSong on end
             XnaMediaPlayer.IsRepeating = true;
@@ -102,13 +109,13 @@ namespace CrawlIT
             base.Initialize();
 
             PresentationParameters pp = _graphics.GraphicsDevice.PresentationParameters;
-            _mapRenderTarget = new RenderTarget2D(GraphicsDevice,
-                                                  _graphics.PreferredBackBufferWidth,
-                                                  _graphics.PreferredBackBufferHeight,
-                                                  false, SurfaceFormat.Color,
-                                                  DepthFormat.None,
-                                                  pp.MultiSampleCount,
-                                                  RenderTargetUsage.DiscardContents);
+            //_mapRenderTarget = new RenderTarget2D(GraphicsDevice,
+                                                  //_graphics.PreferredBackBufferWidth,
+                                                  //_graphics.PreferredBackBufferHeight,
+                                                  //false, SurfaceFormat.Color,
+                                                  //DepthFormat.None,
+                                                  //pp.MultiSampleCount,
+                                                  //RenderTargetUsage.DiscardContents);
         }
 
         /// <summary>
@@ -122,7 +129,15 @@ namespace CrawlIT
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
             XnaMediaPlayer.Play(_backgroundSong);
 
-            _map = Content.Load<TiledMap>("Maps/test4");
+            //_map = Content.Load<TiledMap>("Maps/test4");
+            _map = new TmxMap("Maps/test.tmx");
+            tileset = Content.Load<Texture2D>(_map.Tilesets[0].Name.ToString());
+
+            tileWidth = _map.Tilesets[0].TileWidth;
+            tileHeight = _map.Tilesets[0].TileHeight;
+
+            tilesetTilesWide = tileset.Width / tileWidth;
+            tilesetTilesHigh = tileset.Height / tileHeight;
 
             _playerTexture = Content.Load<Texture2D>("Sprites/charactersheet");
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());
@@ -170,7 +185,7 @@ namespace CrawlIT
 
             if (GameStateManager.Instance.GetCurrentState().Equals(_gameStates.Playing))
             {
-                _mapRenderer.Update(_map, gameTime);
+                //_mapRenderer.Update(_map, gameTime);
                 _player.Update(gameTime);
 
                 _playerCamera.Follow(_player);
@@ -193,19 +208,19 @@ namespace CrawlIT
             if (GameStateManager.Instance.GetCurrentState().Equals(_gameStates.Playing))
             {
                 //Little trick to show the tiled map as PointClamp even though we don't use spritebatch to draw it
-                GraphicsDevice.SetRenderTarget(_mapRenderTarget);
-                GraphicsDevice.BlendState = BlendState.AlphaBlend;
-                GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-                GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-
-                _mapRenderer.Draw(_map, viewMatrix: _playerCamera.Transform);
-
-                GraphicsDevice.SetRenderTarget(null);
-                _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-                _spriteBatch.Draw(_mapRenderTarget,
-                                  destinationRectangle: new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
-                                  color: Color.White);
-                _spriteBatch.End();
+                //GraphicsDevice.SetRenderTarget(_mapRenderTarget);
+                //GraphicsDevice.BlendState = BlendState.AlphaBlend;
+                //GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+                //GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+                
+                //_mapRenderer.Draw(_map, viewMatrix: _playerCamera.Transform);
+                
+                //GraphicsDevice.SetRenderTarget(null);
+                //_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+                //_spriteBatch.Draw(_mapRenderTarget,
+                                  //destinationRectangle: new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
+                                  //color: Color.White);
+                //_spriteBatch.End();
                 //End of little trick
 
                 _spriteBatch.Begin(SpriteSortMode.BackToFront,
@@ -214,6 +229,32 @@ namespace CrawlIT
                                    null, null, null,
                                    _playerCamera.Transform);
                 _player.Draw(_spriteBatch);
+
+                for (var i = 0; i < _map.Layers[0].Tiles.Count; i++)
+                {
+                    int gid = _map.Layers[0].Tiles[i].Gid;
+
+                    // Empty tile, do nothing
+                    if (gid == 0)
+                    {
+
+                    }
+                    else
+                    {
+                        int tileFrame = gid - 1;
+                        int column = tileFrame % tilesetTilesWide;
+                        int row = (int)Math.Floor((double)tileFrame / (double)tilesetTilesWide);
+
+                        float x = (i % _map.Width) * _map.TileWidth;
+                        float y = (float)Math.Floor(i / (double)_map.Width) * _map.TileHeight;
+
+                        Rectangle tilesetRec = new Rectangle(tileWidth * column, tileHeight * row, tileWidth, tileHeight);
+
+                        _spriteBatch.Draw(tileset, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec, Color.White);
+                    }
+                }
+
+
                 _spriteBatch.End();
 
                 // Saving this here for future reference...

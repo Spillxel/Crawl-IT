@@ -32,6 +32,8 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
     <None Include="$(MSBuildThisFileDirectory)Content\Fonts\File.spritefont" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Maps\bluegrey.tsx" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Maps\test.tmx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Content\Audio\Investigations.mp3" />
@@ -44,5 +46,9 @@
     <Folder Include="$(MSBuildThisFileDirectory)Entity\" />
     <Folder Include="$(MSBuildThisFileDirectory)Animation\" />
     <Folder Include="$(MSBuildThisFileDirectory)GameStates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Content\Maps\maptiles.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Maps\PathAndObjects.png" />
   </ItemGroup>
 </Project>
