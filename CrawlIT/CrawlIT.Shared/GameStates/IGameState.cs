@@ -27,5 +27,7 @@ namespace CrawlIT.Shared.GameStates
 
         // Draws the game
         void Draw(SpriteBatch spriteBatch);
+
+        Point GetPosition(Texture2D button);
     }
 }
