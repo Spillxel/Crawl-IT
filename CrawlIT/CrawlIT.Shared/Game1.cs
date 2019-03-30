@@ -81,7 +81,10 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
-            _menu = new Menu(GraphicsDevice);
+            _menu = _graphics.PreferredBackBufferHeight > 1280
+                ? new Menu(GraphicsDevice, 6.0f)
+                : new Menu(GraphicsDevice, 3.0f);
+
             _menu.SetState(_gameStates.Menu);
 
             _level1 = new Level1(GraphicsDevice);
@@ -203,8 +206,8 @@ namespace CrawlIT
             var fpsString = "FPS: " + Math.Ceiling(fps);
             var stringDimensions = _font.MeasureString(fpsString);
 
-            var stringPosX = _resolution.ScreenArea.Width / 2 - stringDimensions.X / 2;
-            var stringPosY = _resolution.ScreenArea.Height - stringDimensions.Y / 2;
+            var stringPosX = _graphics.PreferredBackBufferWidth / 2 - stringDimensions.X / 2;
+            var stringPosY = _graphics.PreferredBackBufferHeight - stringDimensions.Y;
 
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Black);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Java.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,11 +17,14 @@ namespace CrawlIT.Shared.GameStates
         private Vector2 _startButtonPosition;
         private Vector2 _exitButtonPosition;
 
-        private Vector2 _scale;
+        private float _zoom;
 
-        public Menu(GraphicsDevice graphicsDevice)
+        private Vector2 _scale => new Vector2(_zoom, _zoom);
+
+        public Menu(GraphicsDevice graphicsDevice, float zoom)
         : base(graphicsDevice)
         {
+            _zoom = zoom;
         }
 
         public override void Initialize()
@@ -53,14 +57,14 @@ namespace CrawlIT.Shared.GameStates
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+
+            _startButtonPosition = new Vector2(_graphicsDevice.Viewport.Width / 2 - (_startButton.Width * _zoom) / 2,
+                                               _graphicsDevice.Viewport.Height * 0.8f);
+            _exitButtonPosition = new Vector2(_graphicsDevice.Viewport.Width / 2 - (_startButton.Width * _zoom) / 2,
+                                              _graphicsDevice.Viewport.Height * 0.9f);
+
             _graphicsDevice.Clear(Color.Aquamarine);
             spriteBatch.Begin();
-
-            _startButtonPosition = new Vector2(80, 800);
-            _exitButtonPosition = new Vector2(80, 1000);
-
-            _scale = new Vector2(6.0f, 6.0f);
-
             spriteBatch.Draw(texture: _startButton, position: _startButtonPosition, scale: _scale, color: Color.White);
             spriteBatch.Draw(texture: _exitButton, position: _exitButtonPosition, scale: _scale, color: Color.White);
             spriteBatch.End();
