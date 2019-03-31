@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\Level1.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\Menu.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\Level2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Map\Collision.cs" />
   </ItemGroup>
   <!--
   <ItemGroup>

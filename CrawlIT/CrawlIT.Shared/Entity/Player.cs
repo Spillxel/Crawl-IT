@@ -22,6 +22,17 @@ namespace CrawlIT.Shared.Entity
 
         private Matrix _scale;
 
+        public Vector2 CurrentVelocity { get; set; }
+        
+        //For collision
+        public Rectangle Rectangle
+        {
+	        get
+	        {
+		        return new Rectangle((int)PosX, (int)PosY, 16, 16);
+            }
+        }
+
         public Player(Texture2D texture, Matrix scale, float posx = 50, float posy = 50)
         {
             TextureSheet = texture;
@@ -70,6 +81,7 @@ namespace CrawlIT.Shared.Entity
         public override void Update(GameTime gameTime)
         {
             var velocity = GetVelocity();
+            CurrentVelocity = velocity;
 
             PosX += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
             PosY += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
