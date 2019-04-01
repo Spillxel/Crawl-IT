@@ -16,8 +16,6 @@ namespace CrawlIT.Shared.GameStates
 
         private ContentManager _content;
 
-        private string _state;
-
         public static GameStateManager Instance
         {
             get
@@ -37,9 +35,16 @@ namespace CrawlIT.Shared.GameStates
         }
 
         // Get the state of the current screen
-        public Enum GetCurrentState()
+        public bool IsState(Enum _state)
         {
-            return _screens.Peek().GetState();
+            if (_screens.Peek().GetState().Equals(_state))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // Adds a new screen to the stack 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -21,6 +22,21 @@ namespace CrawlIT.Shared.Entity
         private Animation.Animation _currentAnimation;
 
         private Matrix _scale;
+
+        private Rectangle currentCollision;
+
+        public List<Rectangle> CollisionObjects { get; set; }
+
+        public Vector2 CurrentVelocity { get; set; }
+
+        //For collision
+        public Rectangle Rectangle
+        {
+	        get
+	        {
+		        return new Rectangle((int)PosX, (int)PosY, 16, 16); //store frame size in separate + create rectangle outside
+            }
+        }
 
         public Player(Texture2D texture, Matrix scale, float posx = 50, float posy = 50)
         {
@@ -71,8 +87,33 @@ namespace CrawlIT.Shared.Entity
         {
             var velocity = GetVelocity();
 
+            var oldPosX = PosX;
+            var oldPosY = PosY;
+
             PosX += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
             PosY += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (Collides())
+            {
+                PosX = oldPosX;
+                PosY = oldPosY;
+
+                //if (_collision.IsCollisionTile(_player.Rectangle))
+                //{
+                //    if ((_player.CurrentVelocity.Y > 0 && _collision.HitsFromTheTop(_player)) ||
+                //        (_player.CurrentVelocity.Y < 0 && _collision.HitsFromTheBottom(_player)))
+                //    {
+                //        _player.CurrentVelocity = new Vector2(_player.CurrentVelocity.X, 0);
+                //    }
+
+                //    if ((_player.CurrentVelocity.X < 0 && _collision.HitsFromTheRight(_player) ||
+                //        _player.CurrentVelocity.X > 0 && _collision.HitsFromTheLeft(_player)))
+                //    {
+                //        _player.CurrentVelocity = new Vector2(0, _player.CurrentVelocity.Y);
+                //    }
+                //} 
+
+            }
 
             SetAnimaton(velocity);
 
@@ -139,5 +180,50 @@ namespace CrawlIT.Shared.Entity
         {
             return Vector2.Transform(vector, Matrix.Invert(_scale));
         }
-    }
+
+        public bool Collides()
+        {
+            foreach (Rectangle rect in CollisionObjects)
+                if (rect.Intersects(this.Rectangle))
+                {
+                    currentCollision = rect;
+                    return true;
+                }
+            return false;
+        }
+
+            //Player hits object from the top
+            //public bool HitsFromTheTop()
+            //{
+            //    return Rectangle.Bottom + CurrentVelocity.Y > this.CurrentCollision.Top &&
+            //           Rectangle.Top < .Right &&
+            //           Rectangle.Right > .Left &&
+            //           Rectangle.Left < .Right;
+            //}
+            //Player hits object from the bottom
+            //public bool HitsFromTheBottom()
+            //{
+            //    return player.Rectangle.Top + player.CurrentVelocity.Y < this.CurrentCollision.Bottom &&
+            //            player.Rectangle.Bottom > this.CurrentCollision.Bottom &&
+            //            player.Rectangle.Right > this.CurrentCollision.Left &&
+            //            player.Rectangle.Left < this.CurrentCollision.Right;
+            //}
+            ////Player hits object from the right
+            //public bool HitsFromTheRight()
+            //{
+            //    return player.Rectangle.Left + player.CurrentVelocity.X < this.CurrentCollision.Right &&
+            //            player.Rectangle.Right > this.CurrentCollision.Right &&
+            //            player.Rectangle.Bottom > this.CurrentCollision.Top &&
+            //            player.Rectangle.Top < this.CurrentCollision.Bottom;
+            //}
+            ////Player hits object from the left
+            //public bool HitsFromTheLeft()
+            //{
+            //    return player.Rectangle.Right + player.CurrentVelocity.X > this.CurrentCollision.Left &&
+            //           player.Rectangle.Left < this.CurrentCollision.Left &&
+            //           player.Rectangle.Bottom > this.CurrentCollision.Top &&
+            //           player.Rectangle.Top < this.CurrentCollision.Bottom;
+            //}
+
+        }
 }
