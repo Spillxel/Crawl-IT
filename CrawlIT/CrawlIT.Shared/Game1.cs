@@ -20,7 +20,7 @@ using CrawlIT.Shared.Entity;
 using CrawlIT.Shared.Camera;
 using Camera = CrawlIT.Shared.Camera.Camera;
 using CrawlIT.Shared.GameStates;
-using CrawlIT.Shared.Map;
+using System.Collections.Generic;
 
 #endregion
 
@@ -43,7 +43,6 @@ namespace CrawlIT
         private Player _player;
         private Camera _playerCamera;
         private Texture2D _playerTexture;
-        private Collision _collision;
 
         private GameState _menu;
         private GameState _level1;
@@ -137,7 +136,11 @@ namespace CrawlIT
 
             _staticCamera = new Camera(0, 0, 1.0f);
 
-            _collision = new Collision(_map);
+            //Fecthing list of collision objects in the map to check for collision
+            var collisionObjects = new List<Rectangle>();
+            foreach (var o in _map.ObjectLayers[0].Objects)
+                collisionObjects.Add(new Rectangle((int)o.Position.X, (int)o.Position.Y, (int)o.Size.Width, (int)o.Size.Height));
+            _player.CollisionObjects = collisionObjects;
 
             //Set the content to the GameStateManager to be able to use it
             GameStateManager.Instance.SetContent(Content);
@@ -177,20 +180,7 @@ namespace CrawlIT
             {
                 _mapRenderer.Update(_map, gameTime);
 
-                //TODO: Select currentCollision 
-                if ((_player.CurrentVelocity.Y > 0 && _collision.HitsFromTheTop(_player)) ||
-                    (_player.CurrentVelocity.Y < 0 && _collision.HitsFromTheBottom(_player)))
-                {
-                    _player.CurrentVelocity = new Vector2(_player.CurrentVelocity.X, 0);
-                }
-
-                if ((_player.CurrentVelocity.X < 0 && _collision.HitsFromTheRight(_player) ||
-                    _player.CurrentVelocity.X > 0 && _collision.HitsFromTheLeft(_player)))
-                {
-                    _player.CurrentVelocity = new Vector2(0, _player.CurrentVelocity.Y);
-                }
-
-                _player.Update(gameTime);
+                _player.Update(gameTime);                      
 
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
