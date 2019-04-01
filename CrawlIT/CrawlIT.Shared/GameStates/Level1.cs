@@ -48,5 +48,10 @@ namespace CrawlIT.Shared.GameStates
             //Draw the sprites
             spriteBatch.End();
         }
+
+        public override Point GetPosition(Texture2D button)
+        {
+            return new Point(0, 0);
+        }
     }
 }
