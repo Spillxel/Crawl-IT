@@ -95,9 +95,9 @@ namespace CrawlIT.Shared.Entity
 
             if (Collides())
             {
-                if (CollidesTop() || CollidesBottom())
+                if ((velocity.Y > 0 && CollidesTop()) || (velocity.Y < 0 && CollidesBottom()))
                     PosY = oldPosY;
-                if (CollidesLeft() || CollidesRight())
+                if ((velocity.X > 0 && CollidesLeft()) || (velocity.X < 0 && CollidesRight()))
                     PosX = oldPosX;
             }
 
@@ -106,109 +106,109 @@ namespace CrawlIT.Shared.Entity
             _currentAnimation.Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            Vector2 position = new Vector2(PosX, PosY);
-            var sourceRectangle = _currentAnimation.CurrentRectangle;
-            spriteBatch.Draw(TextureSheet, position, sourceRectangle, Color.White);
-        }
-
-        private Vector2 GetVelocity()
-        {
-            Vector2 velocity = new Vector2();
-
-            TouchCollection touchCollection = TouchPanel.GetState();
-
-            // if there is touch input
-            if (touchCollection.Count > 0)
-            {
-                var touchPoint = ScaleInput(touchCollection[0].Position);
-                velocity.X = touchPoint.X - (720 / 2);
-                velocity.Y = touchPoint.Y - (1280 / 2);
-
-                if (velocity.X != 0 || velocity.Y != 0)
-                {
-                    velocity.Normalize();
-                    const float desiredSpeed = 170;
-                    velocity *= desiredSpeed;
-                }
-            }
-
-            return velocity;
-        }
-
-        private void SetAnimaton(Vector2 velocity)
-        {
-            if (velocity != Vector2.Zero)
-            {
-                var movingHorizontally = Math.Abs(velocity.X) > Math.Abs(velocity.Y);
-                _currentAnimation =
-                    movingHorizontally
-                        ? (velocity.X > 0 ? _walkRight : _walkLeft)
-                        : (velocity.Y > 0 ? _walkDown : _walkUp);
-            }
-            else
-            {
-                if (_currentAnimation == _walkUp)
-                    _currentAnimation = _standUp;
-                else if (_currentAnimation == _walkDown)
-                    _currentAnimation = _standDown;
-                else if (_currentAnimation == _walkLeft)
-                    _currentAnimation = _standLeft;
-                else if (_currentAnimation == _walkRight)
-                    _currentAnimation = _standRight;
-                else if (_currentAnimation == null)
-                    _currentAnimation = _standDown;
-            }
-        }
-
-        private Vector2 ScaleInput(Vector2 vector)
-        {
-            return Vector2.Transform(vector, Matrix.Invert(_scale));
-        }
-
-        public bool Collides()
-        {
-            foreach (Rectangle rect in CollisionObjects)
-                if (rect.Intersects(this.Rectangle))
-                {
-                    currentCollision = rect;
-                    return true;
-                }
-            return false;
-        }
-
-        public bool CollidesTop()
-        {
-            return Rectangle.Bottom + CurrentVelocity.Y > currentCollision.Top &&
-                   Rectangle.Top < currentCollision.Right &&
-                   Rectangle.Right > currentCollision.Left &&
-                   Rectangle.Left < currentCollision.Right;
-        }
-
-        public bool CollidesBottom()
-        {
-            return Rectangle.Top + CurrentVelocity.Y < currentCollision.Bottom &&
-                   Rectangle.Bottom > currentCollision.Bottom &&
-                   Rectangle.Right > currentCollision.Left &&
-                   Rectangle.Left < currentCollision.Right;
-        }
-
-        public bool CollidesRight()
-        {
-            return Rectangle.Left + CurrentVelocity.X < currentCollision.Right &&
-                   Rectangle.Right > currentCollision.Right &&
-                   Rectangle.Bottom > currentCollision.Top &&
-                   Rectangle.Top < currentCollision.Bottom;
-        }
-
-        public bool CollidesLeft()
-        {
-            return Rectangle.Right + CurrentVelocity.X > currentCollision.Left &&
-                   Rectangle.Left < currentCollision.Left &&
-                   Rectangle.Bottom > currentCollision.Top &&
-                   Rectangle.Top < currentCollision.Bottom;
-        }
-
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        Vector2 position = new Vector2(PosX, PosY);
+        var sourceRectangle = _currentAnimation.CurrentRectangle;
+        spriteBatch.Draw(TextureSheet, position, sourceRectangle, Color.White);
     }
+
+    private Vector2 GetVelocity()
+    {
+        Vector2 velocity = new Vector2();
+
+        TouchCollection touchCollection = TouchPanel.GetState();
+
+        // if there is touch input
+        if (touchCollection.Count > 0)
+        {
+            var touchPoint = ScaleInput(touchCollection[0].Position);
+            velocity.X = touchPoint.X - (720 / 2);
+            velocity.Y = touchPoint.Y - (1280 / 2);
+
+            if (velocity.X != 0 || velocity.Y != 0)
+            {
+                velocity.Normalize();
+                const float desiredSpeed = 170;
+                velocity *= desiredSpeed;
+            }
+        }
+
+        return velocity;
+    }
+
+    private void SetAnimaton(Vector2 velocity)
+    {
+        if (velocity != Vector2.Zero)
+        {
+            var movingHorizontally = Math.Abs(velocity.X) > Math.Abs(velocity.Y);
+            _currentAnimation =
+                movingHorizontally
+                    ? (velocity.X > 0 ? _walkRight : _walkLeft)
+                    : (velocity.Y > 0 ? _walkDown : _walkUp);
+        }
+        else
+        {
+            if (_currentAnimation == _walkUp)
+                _currentAnimation = _standUp;
+            else if (_currentAnimation == _walkDown)
+                _currentAnimation = _standDown;
+            else if (_currentAnimation == _walkLeft)
+                _currentAnimation = _standLeft;
+            else if (_currentAnimation == _walkRight)
+                _currentAnimation = _standRight;
+            else if (_currentAnimation == null)
+                _currentAnimation = _standDown;
+        }
+    }
+
+    private Vector2 ScaleInput(Vector2 vector)
+    {
+        return Vector2.Transform(vector, Matrix.Invert(_scale));
+    }
+
+    public bool Collides()
+    {
+        foreach (Rectangle rect in CollisionObjects)
+            if (rect.Intersects(this.Rectangle))
+            {
+                currentCollision = rect;
+                return true;
+            }
+        return false;
+    }
+
+    public bool CollidesTop()
+    {
+        return Rectangle.Bottom + CurrentVelocity.Y > currentCollision.Top &&
+               Rectangle.Top < currentCollision.Top &&
+               Rectangle.Right > currentCollision.Left &&
+               Rectangle.Left < currentCollision.Right;
+    }
+
+    public bool CollidesBottom()
+    {
+        return Rectangle.Top + CurrentVelocity.Y < currentCollision.Bottom &&
+               Rectangle.Bottom > currentCollision.Bottom &&
+               Rectangle.Right > currentCollision.Left &&
+               Rectangle.Left < currentCollision.Right;
+    }
+
+    public bool CollidesRight()
+    {
+        return Rectangle.Left + CurrentVelocity.X < currentCollision.Right &&
+               Rectangle.Right > currentCollision.Right &&
+               Rectangle.Bottom > currentCollision.Top &&
+               Rectangle.Top < currentCollision.Bottom;
+    }
+
+    public bool CollidesLeft()
+    {
+        return Rectangle.Right + CurrentVelocity.X > currentCollision.Left &&
+               Rectangle.Left < currentCollision.Left &&
+               Rectangle.Bottom > currentCollision.Top &&
+               Rectangle.Top < currentCollision.Bottom;
+    }
+
+}
 }
