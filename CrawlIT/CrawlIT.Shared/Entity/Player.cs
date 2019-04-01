@@ -32,9 +32,9 @@ namespace CrawlIT.Shared.Entity
         //For collision
         public Rectangle Rectangle
         {
-	        get
-	        {
-		        return new Rectangle((int)PosX, (int)PosY, 16, 16); //store frame size in separate + create rectangle outside
+            get
+            {
+                return new Rectangle((int)PosX, (int)PosY, 16, 16); //store frame size in separate + create rectangle outside
             }
         }
 
@@ -95,24 +95,10 @@ namespace CrawlIT.Shared.Entity
 
             if (Collides())
             {
-                PosX = oldPosX;
-                PosY = oldPosY;
-
-                //if (_collision.IsCollisionTile(_player.Rectangle))
-                //{
-                //    if ((_player.CurrentVelocity.Y > 0 && _collision.HitsFromTheTop(_player)) ||
-                //        (_player.CurrentVelocity.Y < 0 && _collision.HitsFromTheBottom(_player)))
-                //    {
-                //        _player.CurrentVelocity = new Vector2(_player.CurrentVelocity.X, 0);
-                //    }
-
-                //    if ((_player.CurrentVelocity.X < 0 && _collision.HitsFromTheRight(_player) ||
-                //        _player.CurrentVelocity.X > 0 && _collision.HitsFromTheLeft(_player)))
-                //    {
-                //        _player.CurrentVelocity = new Vector2(0, _player.CurrentVelocity.Y);
-                //    }
-                //} 
-
+                if (CollidesTop() || CollidesBottom())
+                    PosY = oldPosY;
+                if (CollidesLeft() || CollidesRight())
+                    PosX = oldPosX;
             }
 
             SetAnimaton(velocity);
@@ -192,38 +178,37 @@ namespace CrawlIT.Shared.Entity
             return false;
         }
 
-            //Player hits object from the top
-            //public bool HitsFromTheTop()
-            //{
-            //    return Rectangle.Bottom + CurrentVelocity.Y > this.CurrentCollision.Top &&
-            //           Rectangle.Top < .Right &&
-            //           Rectangle.Right > .Left &&
-            //           Rectangle.Left < .Right;
-            //}
-            //Player hits object from the bottom
-            //public bool HitsFromTheBottom()
-            //{
-            //    return player.Rectangle.Top + player.CurrentVelocity.Y < this.CurrentCollision.Bottom &&
-            //            player.Rectangle.Bottom > this.CurrentCollision.Bottom &&
-            //            player.Rectangle.Right > this.CurrentCollision.Left &&
-            //            player.Rectangle.Left < this.CurrentCollision.Right;
-            //}
-            ////Player hits object from the right
-            //public bool HitsFromTheRight()
-            //{
-            //    return player.Rectangle.Left + player.CurrentVelocity.X < this.CurrentCollision.Right &&
-            //            player.Rectangle.Right > this.CurrentCollision.Right &&
-            //            player.Rectangle.Bottom > this.CurrentCollision.Top &&
-            //            player.Rectangle.Top < this.CurrentCollision.Bottom;
-            //}
-            ////Player hits object from the left
-            //public bool HitsFromTheLeft()
-            //{
-            //    return player.Rectangle.Right + player.CurrentVelocity.X > this.CurrentCollision.Left &&
-            //           player.Rectangle.Left < this.CurrentCollision.Left &&
-            //           player.Rectangle.Bottom > this.CurrentCollision.Top &&
-            //           player.Rectangle.Top < this.CurrentCollision.Bottom;
-            //}
-
+        public bool CollidesTop()
+        {
+            return Rectangle.Bottom + CurrentVelocity.Y > currentCollision.Top &&
+                   Rectangle.Top < currentCollision.Right &&
+                   Rectangle.Right > currentCollision.Left &&
+                   Rectangle.Left < currentCollision.Right;
         }
+
+        public bool CollidesBottom()
+        {
+            return Rectangle.Top + CurrentVelocity.Y < currentCollision.Bottom &&
+                   Rectangle.Bottom > currentCollision.Bottom &&
+                   Rectangle.Right > currentCollision.Left &&
+                   Rectangle.Left < currentCollision.Right;
+        }
+
+        public bool CollidesRight()
+        {
+            return Rectangle.Left + CurrentVelocity.X < currentCollision.Right &&
+                   Rectangle.Right > currentCollision.Right &&
+                   Rectangle.Bottom > currentCollision.Top &&
+                   Rectangle.Top < currentCollision.Bottom;
+        }
+
+        public bool CollidesLeft()
+        {
+            return Rectangle.Right + CurrentVelocity.X > currentCollision.Left &&
+                   Rectangle.Left < currentCollision.Left &&
+                   Rectangle.Bottom > currentCollision.Top &&
+                   Rectangle.Top < currentCollision.Bottom;
+        }
+
+    }
 }
