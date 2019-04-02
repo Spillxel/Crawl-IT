@@ -137,7 +137,7 @@ namespace CrawlIT
 
             _map = Content.Load<TiledMap>("Maps/test");
 
-            _playerTexture = Content.Load<Texture2D>("Sprites/charactersheet");
+            _playerTexture = Content.Load<Texture2D>("Sprites/playerspritesheet");
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());
             _playerCamera = new Camera(_graphics.PreferredBackBufferWidth,
                                        _graphics.PreferredBackBufferHeight,

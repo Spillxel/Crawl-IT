@@ -99,6 +99,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Sprites\playerspritesheet.png" />
     <None Include="app.config" />
     <None Include="Content\Fonts\File.spritefont" />
     <Content Include="Content\Maps\test.tmx">

@@ -23,18 +23,21 @@ namespace CrawlIT.Shared.Entity
 
         private Matrix _scale;
 
+        private int _frameWidth;
+        private int _frameHeight;
+
         private Rectangle currentCollision;
 
         public List<Rectangle> CollisionObjects { get; set; }
 
         public Vector2 CurrentVelocity { get; set; }
 
-        //For collision
+        // For collision
         public Rectangle Rectangle
         {
             get
             {
-                return new Rectangle((int)PosX, (int)PosY, 16, 16); //store frame size in separate + create rectangle outside
+                return new Rectangle((int)PosX, (int)PosY, _frameWidth, _frameHeight);
             }
         }
 
@@ -44,43 +47,61 @@ namespace CrawlIT.Shared.Entity
             PosX = posx;
             PosY = posy;
             _scale = scale;
+            _frameWidth = 23;
+            _frameHeight = 45;
 
-            // Rethink this animation frame setup, probably better ways to set this up
-            _walkUp = new Animation.Animation();
-            _walkUp.AddFrame(new Rectangle(144, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkUp.AddFrame(new Rectangle(160, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkUp.AddFrame(new Rectangle(144, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkUp.AddFrame(new Rectangle(176, 0, 16, 16), TimeSpan.FromSeconds(.25));
-
+            // TODO: rethink this animation frame setup, probably better ways to set this up
             _walkDown = new Animation.Animation();
-            _walkDown.AddFrame(new Rectangle(0, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkDown.AddFrame(new Rectangle(16, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkDown.AddFrame(new Rectangle(0, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkDown.AddFrame(new Rectangle(32, 0, 16, 16), TimeSpan.FromSeconds(.25));
+            _walkDown.AddFrame(new Rectangle(0, 0, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkDown.AddFrame(new Rectangle(_frameWidth, 0, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkDown.AddFrame(new Rectangle(_frameWidth * 2, 0, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkDown.AddFrame(new Rectangle(_frameWidth, 0, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkDown.AddFrame(new Rectangle(0, 0, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkDown.AddFrame(new Rectangle(_frameWidth * 3, 0, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkDown.AddFrame(new Rectangle(_frameWidth * 4, 0, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkDown.AddFrame(new Rectangle(_frameWidth * 3, 0, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+
+            _walkUp = new Animation.Animation();
+            _walkUp.AddFrame(new Rectangle(0, _frameHeight * 3, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkUp.AddFrame(new Rectangle(_frameWidth, _frameHeight * 3, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkUp.AddFrame(new Rectangle(_frameWidth * 2, _frameHeight * 3, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkUp.AddFrame(new Rectangle(_frameWidth, _frameHeight * 3, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkUp.AddFrame(new Rectangle(0, _frameHeight * 3, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkUp.AddFrame(new Rectangle(_frameWidth * 3, _frameHeight * 3, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkUp.AddFrame(new Rectangle(_frameWidth * 4, _frameHeight * 3, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkUp.AddFrame(new Rectangle(_frameWidth * 3, _frameHeight * 3, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
 
             _walkLeft = new Animation.Animation();
-            _walkLeft.AddFrame(new Rectangle(48, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkLeft.AddFrame(new Rectangle(64, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkLeft.AddFrame(new Rectangle(48, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkLeft.AddFrame(new Rectangle(80, 0, 16, 16), TimeSpan.FromSeconds(.25));
+            _walkLeft.AddFrame(new Rectangle(0, _frameHeight, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkLeft.AddFrame(new Rectangle(_frameWidth, _frameHeight, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkLeft.AddFrame(new Rectangle(_frameWidth * 2, _frameHeight, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkLeft.AddFrame(new Rectangle(_frameWidth, _frameHeight, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkLeft.AddFrame(new Rectangle(0, _frameHeight, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkLeft.AddFrame(new Rectangle(_frameWidth * 3, _frameHeight, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkLeft.AddFrame(new Rectangle(_frameWidth * 4, _frameHeight, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkLeft.AddFrame(new Rectangle(_frameWidth * 3, _frameHeight, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
 
             _walkRight = new Animation.Animation();
-            _walkRight.AddFrame(new Rectangle(96, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkRight.AddFrame(new Rectangle(112, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkRight.AddFrame(new Rectangle(96, 0, 16, 16), TimeSpan.FromSeconds(.25));
-            _walkRight.AddFrame(new Rectangle(128, 0, 16, 16), TimeSpan.FromSeconds(.25));
+            _walkRight.AddFrame(new Rectangle(0, _frameHeight * 2, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkRight.AddFrame(new Rectangle(_frameWidth, _frameHeight * 2, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkRight.AddFrame(new Rectangle(_frameWidth * 2, _frameHeight * 2, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkRight.AddFrame(new Rectangle(_frameWidth, _frameHeight * 2, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkRight.AddFrame(new Rectangle(0, _frameHeight * 2, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkRight.AddFrame(new Rectangle(_frameWidth * 3, _frameHeight * 2, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkRight.AddFrame(new Rectangle(_frameWidth * 4, _frameHeight * 2, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
+            _walkRight.AddFrame(new Rectangle(_frameWidth * 3, _frameHeight * 2, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
 
             _standUp = new Animation.Animation();
-            _standUp.AddFrame(new Rectangle(144, 0, 16, 16), TimeSpan.FromSeconds(.25));
+            _standUp.AddFrame(new Rectangle(0, _frameHeight * 3, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
 
             _standDown = new Animation.Animation();
-            _standDown.AddFrame(new Rectangle(0, 0, 16, 16), TimeSpan.FromSeconds(.25));
+            _standDown.AddFrame(new Rectangle(0, 0, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
 
             _standLeft = new Animation.Animation();
-            _standLeft.AddFrame(new Rectangle(48, 0, 16, 16), TimeSpan.FromSeconds(.25));
+            _standLeft.AddFrame(new Rectangle(0, _frameHeight, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
 
             _standRight = new Animation.Animation();
-            _standRight.AddFrame(new Rectangle(96, 0, 16, 16), TimeSpan.FromSeconds(.25));
+            _standRight.AddFrame(new Rectangle(0, _frameHeight * 2, _frameWidth, _frameHeight), TimeSpan.FromSeconds(.125));
         }
 
         public override void Update(GameTime gameTime)
