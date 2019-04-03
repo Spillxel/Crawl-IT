@@ -26,7 +26,7 @@ namespace CrawlIT
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class CrawlIt : Game
     {
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -34,8 +34,22 @@ namespace CrawlIT
 
         private readonly IResolution _resolution;
 
+        private float _zoom;
+        private Rectangle _touch;
+
+        private enum State
+        {
+            Menu,
+            Playing,
+            Fighting
+        }
+
         private Camera _staticCamera;
         private Song _backgroundSong;
+
+        private TiledMap _map;
+        private TiledMapRenderer _mapRenderer;
+        private RenderTarget2D _mapRenderTarget;
 
         private Player _player;
         private Camera _playerCamera;
@@ -45,31 +59,16 @@ namespace CrawlIT
         private GameState _level;
         private GameState _fight;
 
-        private Texture2D _startButton;
-        private Texture2D _exitButton;
-        private Texture2D _pauseButton;
         private Point _startSize;
+        private Texture2D _startButton;
         private Point _exitSize;
+        private Texture2D _exitButton;
         private Point _pauseSize;
-
-        private Rectangle _touch;
-
-        private enum GameState
-        {
-            Menu,
-            Playing,
-            Fighting
-        }
+        private Texture2D _pauseButton;
 
         private SpriteFont _font;
 
-        private TiledMapRenderer _mapRenderer;
-        private RenderTarget2D _mapRenderTarget;
-        private TiledMap _map;
-
-        private float _zoom;
-
-        public Game1()
+        public CrawlIt()
         {
             _graphics = new GraphicsDeviceManager(this)
             {   // Force orientation to be fullscreen portrait
@@ -93,18 +92,16 @@ namespace CrawlIT
         protected override void Initialize()
         {
             // TODO: think up a better way to zoom for different resolutions
-            _zoom = _graphics.PreferredBackBufferHeight > 1280
-                                                        ? 6.0f
-                                                        : 3.0f;
+            _zoom = _graphics.PreferredBackBufferHeight > 1280 ? 6.0f : 3.0f;
 
             _menu = new Menu(GraphicsDevice, _zoom);
-            _menu.SetState(GameState.Menu);
+            _menu.SetState(State.Menu);
 
             _level = new Level(GraphicsDevice);
-            _level.SetState(_gameStates.Playing);
+            _level.SetState(State.Playing);
 
             _fight = new Fight(GraphicsDevice);
-            _fight.SetState(_gameStates.Fighting);
+            _fight.SetState(State.Fighting);
 
             // TODO: make this work
             // _gameStateManager.GameState = GameState.StartMenu;
@@ -151,10 +148,8 @@ namespace CrawlIT
 
             _startSize = new Point(_startButton.Width * (int)_zoom,
                                    _startButton.Height * (int)_zoom);
-
             _exitSize = new Point(_exitButton.Width * (int)_zoom,
                                   _exitButton.Height * (int)_zoom);
-
             _pauseSize = new Point(_pauseButton.Width, _pauseButton.Height);
 
             _font = Content.Load<SpriteFont>("Fonts/File");
@@ -162,15 +157,14 @@ namespace CrawlIT
             _staticCamera = new Camera(0, 0, 1.0f);
 
             // Fetching list of collision objects in the map to check for collision
-            var collisionObjects = _map.ObjectLayers[0].Objects
-                                                       .Select(o => new Rectangle((int) o.Position.X, (int) o.Position.Y,
-                                                                                  (int) o.Size.Width, (int) o.Size.Height))
+            _player.CollisionObjects = _map.ObjectLayers[0].Objects
+                                                       .Select(o => new Rectangle(
+                                                                    (int) o.Position.X, (int) o.Position.Y,
+                                                                    (int) o.Size.Width, (int) o.Size.Height))
                                                        .ToList();
-            _player.CollisionObjects = collisionObjects;
 
             // Set the content to the GameStateManager to be able to use it
             GameStateManager.Instance.SetContent(Content);
-
             // Initialize by adding the Menu screen into the game
             GameStateManager.Instance.AddScreen(_menu);
         }
@@ -201,21 +195,19 @@ namespace CrawlIT
                                        (int)_touchCollection[0].Position.Y,
                                        5, 5);
 
-            if (GameStateManager.Instance.IsState(_gameStates.Menu))
+            if (GameStateManager.Instance.IsState(State.Menu))
             {
-                Rectangle _start = new Rectangle(_menu.GetPosition(_startButton), _startSize);
-
-                Rectangle _exit = new Rectangle(_menu.GetPosition(_exitButton), _exitSize);
-
-                if (_touch.Intersects(_start))
+                var start = new Rectangle(_menu.GetPosition(_startButton), _startSize);
+                if (_touch.Intersects(start))
                     GameStateManager.Instance.ChangeScreen(_level);
 
                 // TODO: remove exit button altogether (bad practice for mobile development)
-                if (_touch.Intersects(_exit))
+                var exit = new Rectangle(_menu.GetPosition(_exitButton), _exitSize);
+                if (_touch.Intersects(exit))
                     Game.Activity.MoveTaskToBack(true);
             }
 
-            if (GameStateManager.Instance.IsState(GameState.Playing))
+            if (GameStateManager.Instance.IsState(State.Playing))
             {
                 _mapRenderer.Update(_map, gameTime);
 
@@ -224,17 +216,15 @@ namespace CrawlIT
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
 
-                Rectangle _pause = new Rectangle(_level.GetPosition(_pauseButton), _pauseSize);
-
-                if (_touch.Intersects(_pause))
+                var pause = new Rectangle(_level.GetPosition(_pauseButton), _pauseSize);
+                if (_touch.Intersects(pause))
                     GameStateManager.Instance.AddScreen(_fight);
             }
 
-            if (GameStateManager.Instance.IsState(GameState.Fighting))
+            if (GameStateManager.Instance.IsState(State.Fighting))
             {
-                Rectangle _pause = new Rectangle(_fight.GetPosition(_pauseButton), _pauseSize);
-
-                if (_touch.Intersects(_pause))
+                var pause = new Rectangle(_fight.GetPosition(_pauseButton), _pauseSize);
+                if (_touch.Intersects(pause))
                     GameStateManager.Instance.RemoveScreen();
             }
 
@@ -251,9 +241,11 @@ namespace CrawlIT
 
             GameStateManager.Instance.Draw(_spriteBatch);
 
-            if (GameStateManager.Instance.IsState(GameState.Playing))
+            if (GameStateManager.Instance.IsState(State.Playing))
             {
-                //Little trick to show the tiled map as PointClamp even though we don't use spritebatch to draw it
+                #region Drawing Map
+
+                // Little trick to show the tiled map as PointClamp even though we don't use spritebatch to draw it
                 GraphicsDevice.SetRenderTarget(_mapRenderTarget);
                 GraphicsDevice.BlendState = BlendState.AlphaBlend;
                 GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
@@ -263,11 +255,16 @@ namespace CrawlIT
 
                 GraphicsDevice.SetRenderTarget(null);
                 _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-                _spriteBatch.Draw(_mapRenderTarget,
-                                  destinationRectangle: new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
-                                  color: Color.White);
+                var destinationRectangle = new Rectangle(0, 0,
+                                                         _graphics.PreferredBackBufferWidth,
+                                                         _graphics.PreferredBackBufferHeight);
+                _spriteBatch.Draw(_mapRenderTarget, destinationRectangle, Color.White);
                 _spriteBatch.End();
-                //End of little trick
+                // End of little trick
+
+                #endregion
+
+                #region Drawing Player
 
                 _spriteBatch.Begin(SpriteSortMode.BackToFront,
                                    BlendState.AlphaBlend,
@@ -277,6 +274,8 @@ namespace CrawlIT
                 _player.Draw(_spriteBatch);
                 _spriteBatch.End();
 
+                #endregion
+
                 // Saving this here for future reference...
                 /*_spriteBatch.Begin(SpriteSortMode.BackToFront,
                                   BlendState.AlphaBlend,
@@ -284,7 +283,8 @@ namespace CrawlIT
                                   _staticCamera.Transform);*/
             }
 
-            // FPS counter
+            #region FPS Counter
+
             var fps = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
             var fpsString = "FPS: " + Math.Ceiling(fps);
             var (stringDimensionX, stringDimensionY) = _font.MeasureString(fpsString);
@@ -292,12 +292,14 @@ namespace CrawlIT
             var stringPosX = (_graphics.PreferredBackBufferWidth - stringDimensionX) / 2;
             var stringPosY = _graphics.PreferredBackBufferHeight - stringDimensionY;
 
-            if (!GameStateManager.Instance.IsState(GameState.Fighting))
+            if (!GameStateManager.Instance.IsState(State.Fighting))
             {
                 _spriteBatch.Begin();
                 _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Black);
                 _spriteBatch.End();
             }
+            
+            #endregion
 
             base.Draw(gameTime);
         }
