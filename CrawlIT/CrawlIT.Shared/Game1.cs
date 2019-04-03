@@ -12,7 +12,6 @@ using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using MonoGame.Extended;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
-using TiledSharp;
 
 using ResolutionBuddy;
 
@@ -141,7 +140,7 @@ namespace CrawlIT
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());
             _playerCamera = new Camera(_graphics.PreferredBackBufferWidth,
                                        _graphics.PreferredBackBufferHeight,
-                                       8.0f);
+                                       3.0f);
 
             _startButton = Content.Load<Texture2D>(@"start");
             _exitButton = Content.Load<Texture2D>(@"exit");
