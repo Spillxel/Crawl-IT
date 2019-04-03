@@ -108,19 +108,16 @@ namespace CrawlIT.Shared.Entity
         {
             var velocity = GetVelocity();
 
-            var oldPosX = PosX;
-            var oldPosY = PosY;
-
-            PosX += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            PosY += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             if (Collides())
             {
                 if ((velocity.Y > 0 && CollidesTop()) || (velocity.Y < 0 && CollidesBottom()))
-                    PosY = oldPosY;
+                    velocity.Y = 0;
                 if ((velocity.X > 0 && CollidesLeft()) || (velocity.X < 0 && CollidesRight()))
-                    PosX = oldPosX;
+                    velocity.X = 0;
             }
+
+            PosX += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            PosY += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             SetAnimaton(velocity);
 
