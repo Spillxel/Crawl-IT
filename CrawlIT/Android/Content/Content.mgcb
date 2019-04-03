@@ -74,11 +74,6 @@
 /processor:TiledMapProcessor
 /build:Maps/test.tmx
 
-#begin Maps/test.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/test.tmx
-
 #begin pause.png
 /importer:TextureImporter
 /processor:TextureProcessor
