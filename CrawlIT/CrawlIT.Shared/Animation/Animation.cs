@@ -8,11 +8,11 @@ namespace CrawlIT.Shared.Animation
 {
     public class Animation
     {
-        private List<AnimationFrame> _animationFrames = new List<AnimationFrame>();
+        private readonly List<AnimationFrame> _animationFrames = new List<AnimationFrame>();
         private TimeSpan _timeIntoAnimation;
 
         // Define duration of our animation depending on frame durations
-        TimeSpan _duration
+        private TimeSpan Duration
         {
             get
             {
@@ -27,7 +27,7 @@ namespace CrawlIT.Shared.Animation
         // Add animation frames to our animation
         public void AddFrame(Rectangle rectangle, TimeSpan duration)
         {
-            AnimationFrame newFrame = new AnimationFrame()
+            var newFrame = new AnimationFrame()
             {
                 SourceRectangle = rectangle,
                 Duration = duration
@@ -43,7 +43,7 @@ namespace CrawlIT.Shared.Animation
                 _timeIntoAnimation.TotalSeconds
                 + gameTime.ElapsedGameTime.TotalSeconds;
 
-            var remainder = secondsIntoAnimation % _duration.TotalSeconds;
+            var remainder = secondsIntoAnimation % Duration.TotalSeconds;
 
             _timeIntoAnimation = TimeSpan.FromSeconds(remainder);
         }
