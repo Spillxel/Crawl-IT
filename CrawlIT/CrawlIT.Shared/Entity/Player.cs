@@ -1,45 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
-
 
 namespace CrawlIT.Shared.Entity
 {
     public class Player : Entity
     {
-        private Animation.Animation _walkUp;
-        private Animation.Animation _walkDown;
-        private Animation.Animation _walkLeft;
-        private Animation.Animation _walkRight;
+        private readonly Animation.Animation _walkUp;
+        private readonly Animation.Animation _walkDown;
+        private readonly Animation.Animation _walkLeft;
+        private readonly Animation.Animation _walkRight;
 
-        private Animation.Animation _standUp;
-        private Animation.Animation _standDown;
-        private Animation.Animation _standLeft;
-        private Animation.Animation _standRight;
+        private readonly Animation.Animation _standUp;
+        private readonly Animation.Animation _standDown;
+        private readonly Animation.Animation _standLeft;
+        private readonly Animation.Animation _standRight;
 
         private Animation.Animation _currentAnimation;
 
-        private Matrix _scale;
+        private readonly Matrix _scale;
 
-        private int _frameWidth;
-        private int _frameHeight;
+        private readonly int _frameWidth;
+        private readonly int _frameHeight;
+
+        private const float Speed = 170;
 
         public List<Rectangle> CollisionObjects { get; set; }
 
         public Vector2 CurrentVelocity { get; set; }
 
         // For collision
-        public Rectangle Rectangle
-        {
-            get
-            {
-                return new Rectangle((int)PosX, (int)PosY, _frameWidth, _frameHeight);
-            }
-        }
+        public Rectangle Rectangle => new Rectangle((int)PosX, (int)PosY, _frameWidth, _frameHeight);
 
-        public Player(Texture2D texture, Matrix scale, float posx = 50, float posy = 50)
+        public Player(Texture2D texture, Matrix scale, float posx = 50, float posy = 70)
         {
             TextureSheet = texture;
             PosX = posx;
@@ -108,7 +104,7 @@ namespace CrawlIT.Shared.Entity
 
             SetAnimaton(velocity);
 
-            foreach (Rectangle rect in CollisionObjects)
+            foreach (var rect in CollisionObjects)
             {
                 if ((velocity.Y > 0 && CollidesTop(rect)) || (velocity.Y < 0 && CollidesBottom(rect)))
                     velocity.Y = 0;
@@ -122,98 +118,91 @@ namespace CrawlIT.Shared.Entity
             _currentAnimation.Update(gameTime);
         }
 
-    public override void Draw(SpriteBatch spriteBatch)
-    {
-        Vector2 position = new Vector2(PosX, PosY);
-        var sourceRectangle = _currentAnimation.CurrentRectangle;
-        spriteBatch.Draw(TextureSheet, position, sourceRectangle, Color.White);
-    }
-
-    private Vector2 GetVelocity()
-    {
-        Vector2 velocity = new Vector2();
-
-        TouchCollection touchCollection = TouchPanel.GetState();
-
-        // if there is touch input
-        if (touchCollection.Count > 0)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            var touchPoint = ScaleInput(touchCollection[0].Position);
-            velocity.X = touchPoint.X - (720 / 2);
-            velocity.Y = touchPoint.Y - (1280 / 2);
+            var position = new Vector2(PosX, PosY);
+            var sourceRectangle = _currentAnimation.CurrentRectangle;
+            spriteBatch.Draw(TextureSheet, position, sourceRectangle, Color.White);
+        }
 
-            if (velocity.X != 0 || velocity.Y != 0)
+        private Vector2 GetVelocity()
+        {
+            var velocity = Vector2.Zero;
+
+            var touchCollection = TouchPanel.GetState();
+            if (touchCollection.Count <= 0)
+                return velocity;    // no input
+
+            var (touchPointX, touchPointY) = ScaleInput(touchCollection[0].Position);
+            velocity.X = touchPointX - (720 * 0.5f);
+            velocity.Y = touchPointY - (1280 * 0.5f);
+
+            if (velocity.X == 0 && velocity.Y == 0)
+                return velocity;    // no movement
+
+            // otherwise get new velocity
+            velocity.Normalize();
+            return velocity * Speed;
+        }
+
+        private void SetAnimaton(Vector2 velocity)
+        {
+            if (velocity != Vector2.Zero)
             {
-                velocity.Normalize();
-                const float desiredSpeed = 170;
-                velocity *= desiredSpeed;
+                var movingHorizontally = Math.Abs(velocity.X) > Math.Abs(velocity.Y);
+                _currentAnimation = movingHorizontally ? (velocity.X > 0 ? _walkRight : _walkLeft)
+                                                       : (velocity.Y > 0 ? _walkDown : _walkUp);
+            }
+            else
+            {
+                if (_currentAnimation == _walkUp)
+                    _currentAnimation = _standUp;
+                else if (_currentAnimation == _walkDown)
+                    _currentAnimation = _standDown;
+                else if (_currentAnimation == _walkLeft)
+                    _currentAnimation = _standLeft;
+                else if (_currentAnimation == _walkRight)
+                    _currentAnimation = _standRight;
+                else if (_currentAnimation == null)
+                    _currentAnimation = _standDown;
             }
         }
 
-        return velocity;
-    }
-
-    private void SetAnimaton(Vector2 velocity)
-    {
-        if (velocity != Vector2.Zero)
+        private Vector2 ScaleInput(Vector2 vector)
         {
-            var movingHorizontally = Math.Abs(velocity.X) > Math.Abs(velocity.Y);
-            _currentAnimation =
-                movingHorizontally
-                    ? (velocity.X > 0 ? _walkRight : _walkLeft)
-                    : (velocity.Y > 0 ? _walkDown : _walkUp);
+            return Vector2.Transform(vector, Matrix.Invert(_scale));
         }
-        else
+
+        public bool CollidesTop(Rectangle rect)
         {
-            if (_currentAnimation == _walkUp)
-                _currentAnimation = _standUp;
-            else if (_currentAnimation == _walkDown)
-                _currentAnimation = _standDown;
-            else if (_currentAnimation == _walkLeft)
-                _currentAnimation = _standLeft;
-            else if (_currentAnimation == _walkRight)
-                _currentAnimation = _standRight;
-            else if (_currentAnimation == null)
-                _currentAnimation = _standDown;
+            return Rectangle.Bottom + CurrentVelocity.Y > rect.Top &&
+                   Rectangle.Top < rect.Top &&
+                   Rectangle.Right > rect.Left &&
+                   Rectangle.Left < rect.Right;
+        }
+
+        public bool CollidesBottom(Rectangle rect)
+        {
+            return Rectangle.Top + CurrentVelocity.Y < rect.Bottom &&
+                   Rectangle.Bottom > rect.Bottom &&
+                   Rectangle.Right > rect.Left &&
+                   Rectangle.Left < rect.Right;
+        }
+
+        public bool CollidesRight(Rectangle rect)
+        {
+            return Rectangle.Left + CurrentVelocity.X < rect.Right &&
+                   Rectangle.Right > rect.Right &&
+                   Rectangle.Bottom > rect.Top &&
+                   Rectangle.Top < rect.Bottom;
+        }
+
+        public bool CollidesLeft(Rectangle rect)
+        {
+            return Rectangle.Right + CurrentVelocity.X > rect.Left &&
+                   Rectangle.Left < rect.Left &&
+                   Rectangle.Bottom > rect.Top &&
+                   Rectangle.Top < rect.Bottom;
         }
     }
-
-    private Vector2 ScaleInput(Vector2 vector)
-    {
-        return Vector2.Transform(vector, Matrix.Invert(_scale));
-    }
-
-    public bool CollidesTop(Rectangle rect)
-    {
-        return Rectangle.Bottom + CurrentVelocity.Y > rect.Top &&
-               Rectangle.Top < rect.Top &&
-               Rectangle.Right > rect.Left &&
-               Rectangle.Left < rect.Right;
-    }
-
-    public bool CollidesBottom(Rectangle rect)
-    {
-        return Rectangle.Top + CurrentVelocity.Y < rect.Bottom &&
-               Rectangle.Bottom > rect.Bottom &&
-               Rectangle.Right > rect.Left &&
-               Rectangle.Left < rect.Right;
-    }
-
-    public bool CollidesRight(Rectangle rect)
-    {
-        return Rectangle.Left + CurrentVelocity.X < rect.Right &&
-               Rectangle.Right > rect.Right &&
-               Rectangle.Bottom > rect.Top &&
-               Rectangle.Top < rect.Bottom;
-    }
-
-    public bool CollidesLeft(Rectangle rect)
-    {
-        return Rectangle.Right + CurrentVelocity.X > rect.Left &&
-               Rectangle.Left < rect.Left &&
-               Rectangle.Bottom > rect.Top &&
-               Rectangle.Top < rect.Bottom;
-    }
-
-}
 }
