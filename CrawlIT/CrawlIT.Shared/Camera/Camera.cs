@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using CrawlIT.Shared.Entity;
 
 namespace CrawlIT.Shared.Camera
@@ -9,9 +6,9 @@ namespace CrawlIT.Shared.Camera
     public class Camera
     {
         public Matrix Transform { get; set; }
-        private int _width;
-        private int _height;
-        private float _zoom;
+        private readonly int _width;
+        private readonly int _height;
+        private readonly float _zoom;
 
         public Camera(int width, int height, float zoom)
         {
