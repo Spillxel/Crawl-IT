@@ -43,13 +43,15 @@ namespace CrawlIT
         private Texture2D _playerTexture;
 
         private GameState _menu;
-        private GameState _level1;
-        private GameState _level2;
+        private GameState _level;
+        private GameState _fight;
 
         private Texture2D _startButton;
         private Texture2D _exitButton;
+        private Texture2D _pauseButton;
         private Point _startSize;
         private Point _exitSize;
+        private Point _pauseSize;
 
         enum _gameStates
         {
@@ -95,11 +97,11 @@ namespace CrawlIT
             _menu = new Menu(GraphicsDevice, _zoom);
             _menu.SetState(_gameStates.Menu);
 
-            _level1 = new Level1(GraphicsDevice);
-            _level1.SetState(_gameStates.Playing);
+            _level = new Level(GraphicsDevice);
+            _level.SetState(_gameStates.Playing);
 
-            _level2 = new Level2(GraphicsDevice);
-            _level2.SetState(_gameStates.Playing);
+            _fight = new Fight(GraphicsDevice);
+            _fight.SetState(_gameStates.Fighting);
 
             // TODO: make this work
             // _gameStateManager.GameState = GameState.StartMenu;
@@ -133,12 +135,16 @@ namespace CrawlIT
 
             _startButton = Content.Load<Texture2D>(@"start");
             _exitButton = Content.Load<Texture2D>(@"exit");
+            _pauseButton = Content.Load<Texture2D>(@"pause");
 
             _startSize = new Point((int)_startButton.Width * (int)_zoom, 
                                    (int)_startButton.Height * (int)_zoom);
 
             _exitSize = new Point((int)_exitButton.Width * (int)_zoom,
                                   (int)_exitButton.Height * (int)_zoom);
+
+            _pauseSize = new Point((int)_pauseButton.Width,
+                                   (int)_pauseButton.Height);
 
             _font = Content.Load<SpriteFont>("Fonts/File");
 
@@ -172,6 +178,7 @@ namespace CrawlIT
             GameStateManager.Instance.Update(gameTime);
 
             _touchCollection = TouchPanel.GetState();
+           
             if (GameStateManager.Instance.IsState(_gameStates.Menu) && _touchCollection.Count > 0)
             {
                 Rectangle _start = new Rectangle(_menu.GetPosition(_startButton), _startSize);
@@ -179,11 +186,11 @@ namespace CrawlIT
                 Rectangle _exit = new Rectangle(_menu.GetPosition(_exitButton), _exitSize);
 
                 Rectangle _touch = new Rectangle((int)_touchCollection[0].Position.X,
-                    (int)_touchCollection[0].Position.Y, 5, 5);
+                                                 (int)_touchCollection[0].Position.Y, 5, 5);
 
                 if(_touch.Intersects(_start))
                 {
-                    GameStateManager.Instance.ChangeScreen(_level1);
+                    GameStateManager.Instance.ChangeScreen(_level);
                 }
 
                 if(_touch.Intersects(_exit))
@@ -192,13 +199,23 @@ namespace CrawlIT
                 }
             }
 
-            if (GameStateManager.Instance.IsState(_gameStates.Playing))
+            if (GameStateManager.Instance.IsState(_gameStates.Playing) && _touchCollection.Count > 0)
             {
                 _mapRenderer.Update(_map, gameTime);
                 _player.Update(gameTime);
 
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
+
+                Rectangle _pause = new Rectangle(_level.GetPosition(_pauseButton), _pauseSize);
+
+                Rectangle _touch = new Rectangle((int)_touchCollection[0].Position.X,
+                                                 (int)_touchCollection[0].Position.Y, 5, 5);
+
+                if (_touch.Intersects(_pause))
+                {
+                    GameStateManager.Instance.ChangeScreen(_fight);
+                }
             }
 
             base.Update(gameTime);

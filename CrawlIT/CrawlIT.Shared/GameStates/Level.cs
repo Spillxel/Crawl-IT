@@ -6,11 +6,15 @@ using Microsoft.Xna.Framework.Media;
 
 namespace CrawlIT.Shared.GameStates
 {
-    public class Level1 : GameState
+    public class Level : GameState
     {
         private Enum _state;
 
-        public Level1(GraphicsDevice graphicsDevice)
+        private Texture2D _pauseButton;
+
+        private Vector2 _pauseButtonPosition;
+
+        public Level(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
         {
         }
@@ -21,6 +25,7 @@ namespace CrawlIT.Shared.GameStates
 
         public override void LoadContent(ContentManager content)
         {
+            _pauseButton = content.Load<Texture2D>(@"pause");
         }
 
         public override void SetState(Enum gameState)
@@ -43,15 +48,24 @@ namespace CrawlIT.Shared.GameStates
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            _pauseButtonPosition = new Vector2(10, 10);
+
             _graphicsDevice.Clear(Color.DarkSalmon);
             spriteBatch.Begin();
-            //Draw the sprites
+            spriteBatch.Draw(_pauseButton, _pauseButtonPosition, Color.White);
             spriteBatch.End();
         }
 
         public override Point GetPosition(Texture2D button)
         {
-            return new Point(0, 0);
+            if (button.Equals(_pauseButton))
+            {
+                return new Point((int)_pauseButtonPosition.X, (int)_pauseButtonPosition.Y);
+            }
+            else
+            {
+                return new Point(0, 0);
+            }
         }
     }
 }

@@ -18,9 +18,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\IGameState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\GameState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\GameStateManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Level1.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\Menu.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Level2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Level.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Fight.cs" />
   </ItemGroup>
   <!--
   <ItemGroup>
