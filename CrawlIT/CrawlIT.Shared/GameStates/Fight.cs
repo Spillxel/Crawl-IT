@@ -11,8 +11,13 @@ namespace CrawlIT.Shared.GameStates
         private Enum _state;
 
         private Texture2D _pauseButton;
+        private Texture2D _fight;
 
         private Vector2 _pauseButtonPosition;
+        private Vector2 _fightPosition;
+        private Vector2 _scale;
+
+        private float _zoom;
 
         public Fight(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
@@ -26,6 +31,7 @@ namespace CrawlIT.Shared.GameStates
         public override void LoadContent(ContentManager content)
         {
             _pauseButton = content.Load<Texture2D>(@"pause");
+            _fight = content.Load<Texture2D>(@"fight");
         }
 
         public override void SetState(Enum gameState)
@@ -48,11 +54,13 @@ namespace CrawlIT.Shared.GameStates
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _pauseButtonPosition = new Vector2(100, 100);
+            _pauseButtonPosition = new Vector2((_graphicsDevice.Viewport.Width - _pauseButton.Width - 10), 10);
+            _fightPosition = new Vector2(0, 0);
 
             _graphicsDevice.Clear(Color.DarkKhaki);
             spriteBatch.Begin();
-            //Draw the sprites
+            spriteBatch.Draw(_pauseButton, _pauseButtonPosition, Color.White);
+            spriteBatch.Draw(_fight, _graphicsDevice.Viewport.Bounds, color: Color.White);
             spriteBatch.End();
         }
 

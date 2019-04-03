@@ -38,6 +38,18 @@
 /processorParam:TextureFormat=Color
 /build:exit.png
 
+#begin fight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fight.png
+
 #begin Fonts/File.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -57,7 +69,7 @@
 /processorParam:TextureFormat=Color
 /build:logo.png
 
-#begin Maps/PathAndObjects.png
+#begin Maps/maptiles.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -67,12 +79,12 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Maps/PathAndObjects.png
+/build:Maps/maptiles.png
 
-#begin Maps/test2.tmx
+#begin Maps/test.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Maps/test2.tmx
+/build:Maps/test.tmx
 
 #begin pause.png
 /importer:TextureImporter
@@ -109,6 +121,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/charactersheet.png
+
+#begin Sprites/playerspritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/playerspritesheet.png
 
 #begin start.png
 /importer:TextureImporter
