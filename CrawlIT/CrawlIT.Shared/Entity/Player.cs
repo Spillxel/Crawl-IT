@@ -106,6 +106,8 @@ namespace CrawlIT.Shared.Entity
         {
             var velocity = GetVelocity();
 
+            SetAnimaton(velocity);
+
             foreach (Rectangle rect in CollisionObjects)
             {
                 if ((velocity.Y > 0 && CollidesTop(rect)) || (velocity.Y < 0 && CollidesBottom(rect)))
@@ -116,8 +118,6 @@ namespace CrawlIT.Shared.Entity
 
             PosX += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
             PosY += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            SetAnimaton(velocity);
 
             _currentAnimation.Update(gameTime);
         }
