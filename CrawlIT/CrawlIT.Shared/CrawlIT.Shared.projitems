@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Camera\Camera.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Game1.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)CrawlIT.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Entity.cs" />

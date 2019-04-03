@@ -7,11 +7,11 @@ namespace CrawlIT
     [Register("AppDelegate")]
     class Program : UIApplicationDelegate
     {
-        private static Game1 game;
+        private static global::CrawlIT game;
 
         internal static void RunGame()
         {
-            game = new Game1();
+            game = new CrawlIt();
             game.Run();
         }
 
