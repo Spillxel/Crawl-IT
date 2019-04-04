@@ -10,13 +10,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Camera\Camera.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Game1.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\Animation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CrawlIt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\IGameState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\GameState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameStates\GameStateManager.cs" />

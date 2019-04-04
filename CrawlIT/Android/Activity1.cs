@@ -20,7 +20,7 @@ namespace CrawlIT
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            var g = new Game1();
+            var g = new CrawlIt();
             _view = (View)g.Services.GetService(typeof(View));
             SetImmersive();
             SetContentView(_view);
