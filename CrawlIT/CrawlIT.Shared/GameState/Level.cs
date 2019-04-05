@@ -2,9 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 
-namespace CrawlIT.Shared.GameStates
+namespace CrawlIT.Shared.GameState
 {
     public class Level : GameState
     {
@@ -25,7 +24,7 @@ namespace CrawlIT.Shared.GameStates
 
         public override void LoadContent(ContentManager content)
         {
-            _pauseButton = content.Load<Texture2D>(@"pause");
+            _pauseButton = content.Load<Texture2D>("Buttons/pause");
         }
 
         public override void SetState(Enum gameState)
@@ -50,7 +49,7 @@ namespace CrawlIT.Shared.GameStates
         {
             _pauseButtonPosition = new Vector2(10, 10);
 
-            _graphicsDevice.Clear(Color.DarkSalmon);
+            GraphicsDevice.Clear(Color.DarkSalmon);
             spriteBatch.Begin();
             spriteBatch.Draw(_pauseButton, _pauseButtonPosition, Color.White);
             spriteBatch.End();

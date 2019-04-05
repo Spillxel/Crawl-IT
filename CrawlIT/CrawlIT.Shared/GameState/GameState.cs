@@ -3,15 +3,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CrawlIT.Shared.GameStates
+namespace CrawlIT.Shared.GameState
 {
-    public abstract class GameState : IGameState
+    public abstract class GameState
     {
-        protected GraphicsDevice _graphicsDevice;
+        protected GraphicsDevice GraphicsDevice;
 
-        public GameState(GraphicsDevice graphicsDevice)
+        protected GameState(GraphicsDevice graphicsDevice)
         {
-            _graphicsDevice = graphicsDevice;
+            GraphicsDevice = graphicsDevice;
         }
 
         public abstract void Initialize();
