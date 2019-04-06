@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sprites\playerspritesheet.png" />
+    <Content Include="Content\Sprites\tutorsprite.png" />
     <None Include="app.config" />
     <None Include="Content\Fonts\File.spritefont" />
     <Content Include="Content\Maps\test.tmx">
@@ -110,7 +111,6 @@
     <None Include="Assets\AboutAssets.txt" />
     <None Include="packages.config" />
     <None Include="Content\Audio\sneaky_snitch.mp3" />
-    <None Include="Content\Sprites\charactersheet.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Layout\" />

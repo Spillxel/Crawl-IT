@@ -14,11 +14,6 @@ namespace CrawlIT.Shared.Entity
         private readonly Animation.Animation _walkLeft;
         private readonly Animation.Animation _walkRight;
 
-        private readonly Animation.Animation _standUp;
-        private readonly Animation.Animation _standDown;
-        private readonly Animation.Animation _standLeft;
-        private readonly Animation.Animation _standRight;
-
         private Animation.Animation _currentAnimation;
 
         private readonly Matrix _scale;
@@ -26,9 +21,12 @@ namespace CrawlIT.Shared.Entity
         private const float Speed = 170;
 
         public List<Rectangle> CollisionObjects { get; set; }
+        public List<Enemy> Enemies { get; set; }
 
         public Vector2 CurrentVelocity { get; set; }
 
+        // For collision
+        public Rectangle Rectangle => new Rectangle((int)PosX, (int)PosY, FrameWidth, FrameHeight);
 
         public Player(Texture2D texture, Matrix scale, float posx = 50, float posy = 70)
         {
@@ -80,17 +78,17 @@ namespace CrawlIT.Shared.Entity
             _walkRight.AddFrame(new Rectangle(FrameWidth * 4, FrameHeight * 2, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
             _walkRight.AddFrame(new Rectangle(FrameWidth * 3, FrameHeight * 2, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
 
-            _standUp = new Animation.Animation();
-            _standUp.AddFrame(new Rectangle(0, FrameHeight * 3, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
+            StandUp = new Animation.Animation();
+            StandUp.AddFrame(new Rectangle(0, FrameHeight * 3, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
 
-            _standDown = new Animation.Animation();
-            _standDown.AddFrame(new Rectangle(0, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
+            StandDown = new Animation.Animation();
+            StandDown.AddFrame(new Rectangle(0, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
 
-            _standLeft = new Animation.Animation();
-            _standLeft.AddFrame(new Rectangle(0, FrameHeight, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
+            StandLeft = new Animation.Animation();
+            StandLeft.AddFrame(new Rectangle(0, FrameHeight, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
 
-            _standRight = new Animation.Animation();
-            _standRight.AddFrame(new Rectangle(0, FrameHeight * 2, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
+            StandRight = new Animation.Animation();
+            StandRight.AddFrame(new Rectangle(0, FrameHeight * 2, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
         }
 
         public override void Update(GameTime gameTime)
@@ -151,21 +149,28 @@ namespace CrawlIT.Shared.Entity
             else
             {
                 if (_currentAnimation == _walkUp)
-                    _currentAnimation = _standUp;
+                    _currentAnimation = StandUp;
                 else if (_currentAnimation == _walkDown)
-                    _currentAnimation = _standDown;
+                    _currentAnimation = StandDown;
                 else if (_currentAnimation == _walkLeft)
-                    _currentAnimation = _standLeft;
+                    _currentAnimation = StandLeft;
                 else if (_currentAnimation == _walkRight)
-                    _currentAnimation = _standRight;
+                    _currentAnimation = StandRight;
                 else if (_currentAnimation == null)
-                    _currentAnimation = _standDown;
+                    _currentAnimation = StandDown;
             }
         }
 
         private Vector2 ScaleInput(Vector2 vector)
         {
             return Vector2.Transform(vector, Matrix.Invert(_scale));
+        }
+
+        public bool Collides(Rectangle rectangle)
+        {
+            if (this.Rectangle.Intersects(rectangle))
+                return true;
+            return false;
         }
 
         public bool CollidesTop(Rectangle rect)

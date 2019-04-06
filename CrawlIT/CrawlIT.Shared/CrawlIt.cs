@@ -18,6 +18,7 @@ using CrawlIT.Shared.GameStates;
 
 using Camera = CrawlIT.Shared.Camera.Camera;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
+using System.Collections.Generic;
 
 #endregion
 
@@ -52,8 +53,10 @@ namespace CrawlIT
         private RenderTarget2D _mapRenderTarget;
 
         private Player _player;
+        private Enemy _tutor;
         private Camera _playerCamera;
         private Texture2D _playerTexture;
+        private Texture2D _tutorTexture;
 
         private GameState _menu;
         private GameState _level;
@@ -67,6 +70,8 @@ namespace CrawlIT
         private Texture2D _pauseButton;
 
         private SpriteFont _font;
+
+        private List<Enemy> _enemies;
 
         public CrawlIt()
         {
@@ -142,6 +147,9 @@ namespace CrawlIT
                                        _graphics.PreferredBackBufferHeight,
                                        _zoom);
 
+            _tutorTexture = Content.Load<Texture2D>("Sprites/tutorsprite");
+            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 3);
+
             _startButton = Content.Load<Texture2D>(@"start");
             _exitButton = Content.Load<Texture2D>(@"exit");
             _pauseButton = Content.Load<Texture2D>(@"pause");
@@ -162,6 +170,11 @@ namespace CrawlIT
                                                                     (int) o.Position.X, (int) o.Position.Y,
                                                                     (int) o.Size.Width, (int) o.Size.Height))
                                                        .ToList();
+            _player.CollisionObjects.Add(_tutor.Rectangle);
+            // Making list of collision enemies to check for combat
+            _enemies = new List<Enemy>();
+            _enemies.Add(_tutor);
+            _player.Enemies = _enemies;
 
             // Set the content to the GameStateManager to be able to use it
             GameStateManager.Instance.SetContent(Content);
@@ -212,6 +225,7 @@ namespace CrawlIT
                 _mapRenderer.Update(_map, gameTime);
 
                 _player.Update(gameTime);
+                _tutor.Update(gameTime);
 
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
@@ -219,6 +233,20 @@ namespace CrawlIT
                 var pause = new Rectangle(_level.GetPosition(_pauseButton), _pauseSize);
                 if (_touch.Intersects(pause))
                     GameStateManager.Instance.AddScreen(_fight);
+
+                // Launch fight screen if player collides with ennemy
+                foreach (var enemy in _player.Enemies)
+                {
+                    if (_player.Collides(enemy.Rectangle) && enemy.Rounds > 0)
+                    {
+                        GameStateManager.Instance.AddScreen(_fight);
+                        enemy.Rounds--;
+                    }
+                    else
+                    {
+                        //print I have no more questions for you!
+                    }
+                }
             }
 
             if (GameStateManager.Instance.IsState(State.Fighting))
@@ -271,8 +299,13 @@ namespace CrawlIT
                                    SamplerState.PointClamp,
                                    null, null, null,
                                    _playerCamera.Transform);
+                _tutor.Draw(_spriteBatch);
                 _player.Draw(_spriteBatch);
                 _spriteBatch.End();
+
+                #endregion
+
+                #region Drawing Ennemies
 
                 #endregion
 

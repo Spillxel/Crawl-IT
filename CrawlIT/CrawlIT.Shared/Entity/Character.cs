@@ -7,10 +7,12 @@ namespace CrawlIT.Shared.Entity
 {
     public abstract class Character : Entity
     {
-        public int FrameWidth;
-        public int FrameHeight;
+        public Animation.Animation StandUp;
+        public Animation.Animation StandDown;
+        public Animation.Animation StandLeft;
+        public Animation.Animation StandRight;
 
-        // For collision
-        public Rectangle Rectangle => new Rectangle((int)PosX, (int)PosY, FrameWidth, FrameHeight);
+        public int FrameWidth;
+        public int FrameHeight; 
     }
 }

@@ -9,7 +9,7 @@ namespace CrawlIT.Shared.Entity
         // point of this being static is to avoid loading the character sheet
         // multiple times, not sure whether it makes sense in the current
         // inheritance model... TODO
-        protected static Texture2D TextureSheet;
+        protected Texture2D TextureSheet;
 
         public float PosX { get; protected set; }
         public float PosY { get; protected set; }
