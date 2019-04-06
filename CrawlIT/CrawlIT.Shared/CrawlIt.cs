@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,6 +17,7 @@ using CrawlIT.Shared.GameState;
 
 using Camera = CrawlIT.Shared.Camera.Camera;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
+using InputManager = CrawlIT.Shared.Input.InputManager;
 
 #endregion
 
@@ -33,6 +33,8 @@ namespace CrawlIT
         private TouchCollection _touchCollection;
 
         private readonly IResolution _resolution;
+
+        private InputManager _inputManager;
 
         private float _zoom;
         private Rectangle _touch;
@@ -80,6 +82,7 @@ namespace CrawlIT
                                                   new Point(720, 1280), new Point(720, 1280),
                                                   true, false);
 
+            TouchPanel.EnabledGestures = GestureType.Pinch | GestureType.PinchComplete;
             Content.RootDirectory = "Content";
         }
 
@@ -164,6 +167,8 @@ namespace CrawlIT
                                                                     (int) o.Size.Width, (int) o.Size.Height))
                                                        .ToList();
 
+            _inputManager = new InputManager(_playerCamera);
+
             // Set the content to the GameStateManager to be able to use it
             GameStateManager.Instance.SetContent(Content);
             // Initialize by adding the Menu screen into the game
@@ -214,7 +219,11 @@ namespace CrawlIT
             {
                 _mapRenderer.Update(_map, gameTime);
 
-                _player.Update(gameTime);
+                _inputManager.Update(gameTime);
+                // TODO: better way of handling this...
+                if (!_inputManager.InPinch)
+                    _player.Update(gameTime);   // don't update player if in pinch
+
 
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
