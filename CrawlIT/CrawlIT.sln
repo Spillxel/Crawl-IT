@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CrawlIT.Shared", "CrawlIT.Shared\CrawlIT.Shared.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android.Android", "Android\Android.Android.csproj", "{410C0262-131C-4D0E-910D-D01B4F7143E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrawlIT.Android", "Android\CrawlIT.Android.csproj", "{410C0262-131C-4D0E-910D-D01B4F7143E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOS.iOS", "iOS\iOS.iOS.csproj", "{CA7AB65C-57DE-412C-AF42-E7E6EDDF2D5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrawlIT.iOS", "iOS\CrawlIT.iOS.csproj", "{CA7AB65C-57DE-412C-AF42-E7E6EDDF2D5F}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
