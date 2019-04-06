@@ -82,7 +82,9 @@ namespace CrawlIT
                                                   new Point(720, 1280), new Point(720, 1280),
                                                   true, false);
 
-            TouchPanel.EnabledGestures = GestureType.Pinch | GestureType.PinchComplete;
+            TouchPanel.EnabledGestures = GestureType.Pinch
+                                         | GestureType.PinchComplete;
+
             Content.RootDirectory = "Content";
         }
 
@@ -220,9 +222,8 @@ namespace CrawlIT
                 _mapRenderer.Update(_map, gameTime);
 
                 _inputManager.Update(gameTime);
-                // TODO: better way of handling this...
-                if (!_inputManager.InPinch)
-                    _player.Update(gameTime);   // don't update player if in pinch
+                _player.UpdateMovement(gameTime, _inputManager.CurrentInputState);   // update player if user is pressing
+                _player.Update(gameTime);
 
 
                 _playerCamera.Follow(_player);
