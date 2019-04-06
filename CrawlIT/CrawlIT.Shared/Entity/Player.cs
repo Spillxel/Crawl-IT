@@ -130,7 +130,7 @@ namespace CrawlIT.Shared.Entity
             velocity.X = touchPointX - (720 * 0.5f);
             velocity.Y = touchPointY - (1280 * 0.5f);
 
-            if (velocity.X == 0 && velocity.Y == 0)
+            if (Math.Abs(velocity.X) < 1 && Math.Abs(velocity.Y) < 1)
                 return velocity;    // no movement
 
             // otherwise get new velocity

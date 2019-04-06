@@ -14,7 +14,7 @@ using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
 
 using CrawlIT.Shared.Entity;
-using CrawlIT.Shared.GameStates;
+using CrawlIT.Shared.GameState;
 
 using Camera = CrawlIT.Shared.Camera.Camera;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
@@ -78,7 +78,7 @@ namespace CrawlIT
             _graphics = new GraphicsDeviceManager(this)
             {   // Force orientation to be fullscreen portrait
                 SupportedOrientations = DisplayOrientation.Portrait,
-                IsFullScreen = true
+                IsFullScreen = true,
             };
 
             _resolution = new ResolutionComponent(this, _graphics,
@@ -150,9 +150,9 @@ namespace CrawlIT
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorsprite");
             _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 3);
 
-            _startButton = Content.Load<Texture2D>(@"start");
-            _exitButton = Content.Load<Texture2D>(@"exit");
-            _pauseButton = Content.Load<Texture2D>(@"pause");
+            _startButton = Content.Load<Texture2D>("Buttons/start");
+            _exitButton = Content.Load<Texture2D>("Buttons/exit");
+            _pauseButton = Content.Load<Texture2D>("Buttons/pause");
 
             _startSize = new Point(_startButton.Width * (int)_zoom,
                                    _startButton.Height * (int)_zoom);
@@ -195,7 +195,7 @@ namespace CrawlIT
                 || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
 #if !__IOS__
-                Game.Activity.MoveTaskToBack(true);
+                Activity.MoveTaskToBack(true);
 #endif
             }
 
@@ -216,8 +216,10 @@ namespace CrawlIT
 
                 // TODO: remove exit button altogether (bad practice for mobile development)
                 var exit = new Rectangle(_menu.GetPosition(_exitButton), _exitSize);
+#if !__IOS__
                 if (_touch.Intersects(exit))
-                    Game.Activity.MoveTaskToBack(true);
+                    Activity.MoveTaskToBack(true);
+#endif
             }
 
             if (GameStateManager.Instance.IsState(State.Playing))

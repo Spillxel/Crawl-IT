@@ -2,9 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 
-namespace CrawlIT.Shared.GameStates
+namespace CrawlIT.Shared.GameState
 {
     public class Fight : GameState
     {
@@ -17,7 +16,7 @@ namespace CrawlIT.Shared.GameStates
         private Vector2 _fightPosition;
         private Vector2 _scale;
 
-        private float _zoom;
+        private readonly float _zoom;
 
         public Fight(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
@@ -30,8 +29,8 @@ namespace CrawlIT.Shared.GameStates
 
         public override void LoadContent(ContentManager content)
         {
-            _pauseButton = content.Load<Texture2D>(@"pause");
-            _fight = content.Load<Texture2D>(@"fight");
+            _pauseButton = content.Load<Texture2D>("Buttons/pause");
+            _fight = content.Load<Texture2D>("Images/fight");
         }
 
         public override void SetState(Enum gameState)
@@ -54,26 +53,21 @@ namespace CrawlIT.Shared.GameStates
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _pauseButtonPosition = new Vector2((_graphicsDevice.Viewport.Width - _pauseButton.Width - 10), 10);
+            _pauseButtonPosition = new Vector2((GraphicsDevice.Viewport.Width - _pauseButton.Width - 10), 10);
             _fightPosition = new Vector2(0, 0);
 
-            _graphicsDevice.Clear(Color.DarkKhaki);
+            GraphicsDevice.Clear(Color.DarkKhaki);
             spriteBatch.Begin();
             spriteBatch.Draw(_pauseButton, _pauseButtonPosition, Color.White);
-            spriteBatch.Draw(_fight, _graphicsDevice.Viewport.Bounds, color: Color.White);
+            spriteBatch.Draw(_fight, GraphicsDevice.Viewport.Bounds, color: Color.White);
             spriteBatch.End();
         }
 
         public override Point GetPosition(Texture2D button)
         {
-            if (button.Equals(_pauseButton))
-            {
-                return new Point((int)_pauseButtonPosition.X, (int)_pauseButtonPosition.Y);
-            }
-            else
-            {
-                return new Point(0, 0);
-            }
+            return button.Equals(_pauseButton) ? new Point((int)_pauseButtonPosition.X,
+                                                           (int)_pauseButtonPosition.Y)
+                                               : new Point(0, 0);
         }
     }
 }

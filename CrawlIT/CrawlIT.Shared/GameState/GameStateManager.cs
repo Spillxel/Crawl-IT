@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CrawlIT.Shared.GameStates
+namespace CrawlIT.Shared.GameState
 {
     public class GameStateManager
     {
@@ -12,21 +12,11 @@ namespace CrawlIT.Shared.GameStates
         private static GameStateManager _instance;
 
         // Stack for the screens     
-        private Stack<GameState> _screens = new Stack<GameState>();
+        private readonly Stack<GameState> _screens = new Stack<GameState>();
 
         private ContentManager _content;
 
-        public static GameStateManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new GameStateManager();
-                }
-                return _instance;
-            }
-        }
+        public static GameStateManager Instance => _instance ?? (_instance = new GameStateManager());
 
         // Sets the content manager
         public void SetContent(ContentManager content)
@@ -35,16 +25,9 @@ namespace CrawlIT.Shared.GameStates
         }
 
         // Get the state of the current screen
-        public bool IsState(Enum _state)
+        public bool IsState(Enum state)
         {
-            if (_screens.Peek().GetState().Equals(_state))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _screens.Peek().GetState().Equals(state);
         }
 
         // Adds a new screen to the stack 
@@ -64,24 +47,21 @@ namespace CrawlIT.Shared.GameStates
             }
             catch (Exception ex)
             {
-                // Log the exception
+                Console.WriteLine(ex.StackTrace);
             }
         }
 
         // Removes the top screen from the stack
         public void RemoveScreen()
         {
-            if (_screens.Count > 0)
+            if (_screens.Count <= 0) return;
+            try
             {
-                try
-                {
-                    var screen = _screens.Peek();
-                    _screens.Pop();
-                }
-                catch (Exception ex)
-                {
-                    // Log the exception
-                }
+                _screens.Pop();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
             }
         }
 
@@ -90,9 +70,7 @@ namespace CrawlIT.Shared.GameStates
         public void ClearScreens()
         {
             while (_screens.Count > 0)
-            {
                 _screens.Pop();
-            }
         }
 
 
@@ -106,7 +84,7 @@ namespace CrawlIT.Shared.GameStates
             }
             catch (Exception ex)
             {
-                // Log the exception
+                Console.WriteLine(ex.StackTrace);
             }
         }
 
@@ -122,7 +100,7 @@ namespace CrawlIT.Shared.GameStates
             }
             catch (Exception ex)
             {
-                //Log the exception
+                Console.WriteLine(ex.StackTrace);
             }
         }
 
@@ -138,14 +116,14 @@ namespace CrawlIT.Shared.GameStates
             }
             catch (Exception ex)
             {
-                //Log the exception
+                Console.WriteLine(ex.StackTrace);
             }
         }
 
         // Unloads the content from the screen
         public void UnloadContent()
         {
-            foreach (GameState state in _screens)
+            foreach (var state in _screens)
             {
                 state.UnloadContent();
             }

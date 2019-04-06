@@ -17,12 +17,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\Animation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CrawlIt.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameStates\IGameState.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameStates\GameState.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameStates\GameStateManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Menu.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Level.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameStates\Fight.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameState\GameState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameState\GameStateManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameState\Menu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameState\Level.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameState\Fight.cs" />
   </ItemGroup>
   <!--
   <ItemGroup>
@@ -32,7 +31,6 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
     <None Include="$(MSBuildThisFileDirectory)Content\Fonts\File.spritefont" />
-    <None Include="$(MSBuildThisFileDirectory)Content\Maps\bluegrey.tsx" />
     <None Include="$(MSBuildThisFileDirectory)Content\Maps\test.tmx" />
   </ItemGroup>
   <ItemGroup>
@@ -44,10 +42,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Animation\" />
-    <Folder Include="$(MSBuildThisFileDirectory)GameStates\" />
+    <Folder Include="$(MSBuildThisFileDirectory)GameState\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Content\Maps\maptiles.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Content\Maps\PathAndObjects.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Buttons\exit.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Buttons\pause.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Buttons\resume.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Buttons\start.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Images\fight.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Images\logo.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Maps\maptiles.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Sprites\playerspritesheet.png" />
   </ItemGroup>
 </Project>

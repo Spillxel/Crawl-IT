@@ -101,12 +101,18 @@
   <ItemGroup>
     <Content Include="Content\Sprites\playerspritesheet.png" />
     <Content Include="Content\Sprites\tutorsprite.png" />
+    <None Include="Content\Buttons\exit.png" />
+    <None Include="Content\Buttons\pause.png" />
+    <None Include="Content\Buttons\resume.png" />
+    <None Include="Content\Buttons\start.png" />
+    <None Include="Content\Images\fight.png" />
+    <None Include="Content\Images\logo.png" />
+    <None Include="Content\Sprites\playerspritesheet.png" />
     <None Include="app.config" />
     <None Include="Content\Fonts\File.spritefont" />
-    <Content Include="Content\Maps\test.tmx">
+    <None Include="Content\Maps\test.tmx">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="packages.config" />
@@ -124,6 +130,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </MonoGameContentReference>
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
@@ -131,9 +138,7 @@
     <None Include="Content\Audio\Investigations.mp3" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Maps\maptiles.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="Content\Maps\maptiles.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
