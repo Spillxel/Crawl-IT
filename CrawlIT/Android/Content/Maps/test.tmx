@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="30" height="28" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="36">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="30" height="28" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="43">
  <tileset firstgid="1" name="maptiles" tilewidth="32" tileheight="32" tilecount="3" columns="3">
   <image source="maptiles.png" width="96" height="32"/>
+ </tileset>
+ <tileset firstgid="4" name="enemy" tilewidth="23" tileheight="45" tilecount="20" columns="5">
+  <image source="../Sprites/playerspritesheet.png" width="115" height="180"/>
  </tileset>
  <layer id="3" name="Ground" width="30" height="28">
   <data encoding="csv">
@@ -47,6 +50,5 @@
   <object id="25" x="928" y="0" width="32" height="896"/>
   <object id="26" x="0" y="864" width="960" height="32"/>
   <object id="34" x="0" y="0" width="960" height="64"/>
-  <object id="35" x="1052" y="90.6667"/>
  </objectgroup>
 </map>

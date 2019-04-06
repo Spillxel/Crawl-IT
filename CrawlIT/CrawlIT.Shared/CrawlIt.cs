@@ -2,6 +2,8 @@
 
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using Android.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,8 +18,10 @@ using CrawlIT.Shared.Entity;
 using CrawlIT.Shared.GameState;
 
 using Camera = CrawlIT.Shared.Camera.Camera;
+using Color = Microsoft.Xna.Framework.Color;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using InputManager = CrawlIT.Shared.Input.InputManager;
+using Point = Microsoft.Xna.Framework.Point;
 
 #endregion
 
@@ -54,8 +58,10 @@ namespace CrawlIT
         private RenderTarget2D _mapRenderTarget;
 
         private Player _player;
+        private Enemy _tutor;
         private Camera _playerCamera;
         private Texture2D _playerTexture;
+        private Texture2D _tutorTexture;
 
         private GameState _menu;
         private GameState _level;
@@ -69,6 +75,8 @@ namespace CrawlIT
         private Texture2D _pauseButton;
 
         private SpriteFont _font;
+
+        private List<Enemy> _enemies;
 
         public CrawlIt()
         {
@@ -147,9 +155,11 @@ namespace CrawlIT
                                        _graphics.PreferredBackBufferHeight,
                                        _zoom);
 
+            _tutorTexture = Content.Load<Texture2D>("Sprites/tutorsprite");
+            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 3);
+
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
-            _pauseButton = Content.Load<Texture2D>("Buttons/pause");
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
 
             _startSize = new Point(_startButton.Width * (int)_zoom,
@@ -168,6 +178,13 @@ namespace CrawlIT
                                                                     (int) o.Position.X, (int) o.Position.Y,
                                                                     (int) o.Size.Width, (int) o.Size.Height))
                                                        .ToList();
+            var tutorRectangle = new Rectangle((int)_tutor.PosX, (int)_tutor.PosY,
+                                               _tutor.FrameWidth, (int)(_tutor.FrameHeight / 1.5 - 5));
+            _player.CollisionObjects.Add(tutorRectangle);
+            // Making list of collision enemies to check for combat
+            _enemies = new List<Enemy>();
+            _enemies.Add(_tutor);
+            _player.Enemies = _enemies;
 
             _inputManager = new InputManager(_playerCamera);
 
@@ -192,6 +209,7 @@ namespace CrawlIT
 #if !__IOS__
                 Activity.MoveTaskToBack(true);
 #endif
+
             }
 
             GameStateManager.Instance.Update(gameTime);
@@ -222,9 +240,11 @@ namespace CrawlIT
                 _mapRenderer.Update(_map, gameTime);
 
                 _inputManager.Update(gameTime);
-                _player.UpdateMovement(gameTime, _inputManager.CurrentInputState);   // update player if user is pressing
+                
+                _player.UpdateMovement(gameTime, _inputManager.CurrentInputState);
                 _player.Update(gameTime);
-
+                
+                _tutor.Update(gameTime);
 
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
@@ -232,6 +252,20 @@ namespace CrawlIT
                 var pause = new Rectangle(_level.GetPosition(_pauseButton), _pauseSize);
                 if (_touch.Intersects(pause))
                     GameStateManager.Instance.AddScreen(_fight);
+
+                // Launch fight screen if player collides with ennemy
+                foreach (var enemy in _player.Enemies)
+                {
+                    if (_player.Collides(enemy.Rectangle) && enemy.Rounds > 0)
+                    {
+                        GameStateManager.Instance.AddScreen(_fight);
+                        enemy.Rounds--;
+                    }
+                    else
+                    {
+                        //print I have no more questions for you!
+                    }
+                }
             }
 
             if (GameStateManager.Instance.IsState(State.Fighting))
@@ -284,8 +318,13 @@ namespace CrawlIT
                                    SamplerState.PointClamp,
                                    null, null, null,
                                    _playerCamera.Transform);
+                _tutor.Draw(_spriteBatch);
                 _player.Draw(_spriteBatch);
                 _spriteBatch.End();
+
+                #endregion
+
+                #region Drawing Ennemies
 
                 #endregion
 
