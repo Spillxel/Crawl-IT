@@ -147,7 +147,7 @@ namespace CrawlIT
                                        _graphics.PreferredBackBufferHeight,
                                        _zoom);
 
-            _tutorTexture = Content.Load<Texture2D>("Sprites/tutorsprite");
+            _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
             _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 3);
 
             _startButton = Content.Load<Texture2D>("Buttons/start");
