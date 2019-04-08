@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,8 +18,10 @@ using CrawlIT.Shared.Entity;
 using CrawlIT.Shared.GameState;
 
 using Camera = CrawlIT.Shared.Camera.Camera;
+using Color = Microsoft.Xna.Framework.Color;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
-using System.Collections.Generic;
+using InputManager = CrawlIT.Shared.Input.InputManager;
+using Point = Microsoft.Xna.Framework.Point;
 
 #endregion
 
@@ -34,6 +37,8 @@ namespace CrawlIT
         private TouchCollection _touchCollection;
 
         private readonly IResolution _resolution;
+
+        private InputManager _inputManager;
 
         private float _zoom;
         private Rectangle _touch;
@@ -84,6 +89,9 @@ namespace CrawlIT
             _resolution = new ResolutionComponent(this, _graphics,
                                                   new Point(720, 1280), new Point(720, 1280),
                                                   true, false);
+
+            TouchPanel.EnabledGestures = GestureType.Pinch
+                                         | GestureType.PinchComplete;
 
             Content.RootDirectory = "Content";
         }
@@ -170,11 +178,15 @@ namespace CrawlIT
                                                                     (int) o.Position.X, (int) o.Position.Y,
                                                                     (int) o.Size.Width, (int) o.Size.Height))
                                                        .ToList();
-            _player.CollisionObjects.Add(_tutor.Rectangle);
+            var tutorRectangle = new Rectangle((int)_tutor.PosX, (int)_tutor.PosY,
+                                               _tutor.FrameWidth, (int)(_tutor.FrameHeight / 1.5 - 5));
+            _player.CollisionObjects.Add(tutorRectangle);
             // Making list of collision enemies to check for combat
             _enemies = new List<Enemy>();
             _enemies.Add(_tutor);
             _player.Enemies = _enemies;
+
+            _inputManager = new InputManager(_playerCamera);
 
             // Set the content to the GameStateManager to be able to use it
             GameStateManager.Instance.SetContent(Content);
@@ -197,6 +209,7 @@ namespace CrawlIT
 #if !__IOS__
                 Activity.MoveTaskToBack(true);
 #endif
+
             }
 
             GameStateManager.Instance.Update(gameTime);
@@ -226,7 +239,11 @@ namespace CrawlIT
             {
                 _mapRenderer.Update(_map, gameTime);
 
+                _inputManager.Update(gameTime);
+                
+                _player.UpdateMovement(gameTime, _inputManager.CurrentInputState);
                 _player.Update(gameTime);
+                
                 _tutor.Update(gameTime);
 
                 _playerCamera.Follow(_player);

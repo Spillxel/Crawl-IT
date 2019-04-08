@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 
+using InputState = CrawlIT.Shared.Input.InputManager.InputState;
+
 namespace CrawlIT.Shared.Entity
 {
     public class Player : Character
@@ -23,7 +25,7 @@ namespace CrawlIT.Shared.Entity
         public List<Rectangle> CollisionObjects { get; set; }
         public List<Enemy> Enemies { get; set; }
 
-        public Vector2 CurrentVelocity { get; set; }
+        private Vector2 _currentVelocity;
 
         // For collision
         public Rectangle Rectangle => new Rectangle((int)PosX, (int)PosY, FrameWidth, FrameHeight);
@@ -93,22 +95,31 @@ namespace CrawlIT.Shared.Entity
 
         public override void Update(GameTime gameTime)
         {
-            var velocity = GetVelocity();
+            
 
-            SetAnimaton(velocity);
+            _currentAnimation.Update(gameTime);
+        }
+
+        public void UpdateMovement(GameTime gameTime, InputState inputState)
+        {
+            _currentVelocity = inputState != InputState.Idle ? Vector2.Zero
+                                                             : GetVelocity(gameTime);
+
+            SetAnimaton(_currentVelocity);
+
+            if (_currentVelocity == Vector2.Zero)
+                return;
 
             foreach (var rect in CollisionObjects)
             {
-                if ((velocity.Y > 0 && CollidesTop(rect)) || (velocity.Y < 0 && CollidesBottom(rect)))
-                    velocity.Y = 0;
-                if ((velocity.X > 0 && CollidesLeft(rect)) || (velocity.X < 0 && CollidesRight(rect)))
-                    velocity.X = 0;
+                if ((_currentVelocity.Y > 0 && CollidesTop(rect)) || (_currentVelocity.Y < 0 && CollidesBottom(rect)))
+                    _currentVelocity.Y = 0;
+                if ((_currentVelocity.X > 0 && CollidesLeft(rect)) || (_currentVelocity.X < 0 && CollidesRight(rect)))
+                    _currentVelocity.X = 0;
             }
 
-            PosX += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            PosY += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            _currentAnimation.Update(gameTime);
+            PosX += _currentVelocity.X;
+            PosY += _currentVelocity.Y;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -118,7 +129,7 @@ namespace CrawlIT.Shared.Entity
             spriteBatch.Draw(TextureSheet, position, sourceRectangle, Color.White);
         }
 
-        private Vector2 GetVelocity()
+        private Vector2 GetVelocity(GameTime gameTime)
         {
             var velocity = Vector2.Zero;
 
@@ -135,7 +146,7 @@ namespace CrawlIT.Shared.Entity
 
             // otherwise get new velocity
             velocity.Normalize();
-            return velocity * Speed;
+            return velocity * Speed  * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         private void SetAnimaton(Vector2 velocity)
@@ -168,14 +179,12 @@ namespace CrawlIT.Shared.Entity
 
         public bool Collides(Rectangle rectangle)
         {
-            if (this.Rectangle.Intersects(rectangle))
-                return true;
-            return false;
+            return Rectangle.Intersects(rectangle);
         }
 
         public bool CollidesTop(Rectangle rect)
         {
-            return Rectangle.Bottom + CurrentVelocity.Y > rect.Top &&
+            return Rectangle.Bottom + _currentVelocity.Y > rect.Top &&
                    Rectangle.Top < rect.Top &&
                    Rectangle.Right > rect.Left &&
                    Rectangle.Left < rect.Right;
@@ -183,7 +192,7 @@ namespace CrawlIT.Shared.Entity
 
         public bool CollidesBottom(Rectangle rect)
         {
-            return Rectangle.Top + CurrentVelocity.Y < rect.Bottom &&
+            return Rectangle.Top + _currentVelocity.Y < rect.Bottom &&
                    Rectangle.Bottom > rect.Bottom &&
                    Rectangle.Right > rect.Left &&
                    Rectangle.Left < rect.Right;
@@ -191,7 +200,7 @@ namespace CrawlIT.Shared.Entity
 
         public bool CollidesRight(Rectangle rect)
         {
-            return Rectangle.Left + CurrentVelocity.X < rect.Right &&
+            return Rectangle.Left + _currentVelocity.X < rect.Right &&
                    Rectangle.Right > rect.Right &&
                    Rectangle.Bottom > rect.Top &&
                    Rectangle.Top < rect.Bottom;
@@ -199,7 +208,7 @@ namespace CrawlIT.Shared.Entity
 
         public bool CollidesLeft(Rectangle rect)
         {
-            return Rectangle.Right + CurrentVelocity.X > rect.Left &&
+            return Rectangle.Right + _currentVelocity.X > rect.Left &&
                    Rectangle.Left < rect.Left &&
                    Rectangle.Bottom > rect.Top &&
                    Rectangle.Top < rect.Bottom;

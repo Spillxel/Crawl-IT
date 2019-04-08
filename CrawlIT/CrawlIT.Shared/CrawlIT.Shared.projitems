@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameState\Menu.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameState\Level.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameState\Fight.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Input\InputManager.cs" />
   </ItemGroup>
   <!--
   <ItemGroup>
