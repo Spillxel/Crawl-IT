@@ -96,5 +96,10 @@ namespace CrawlIT.Shared.GameState
             }
         }
 
+        public override void ChangeTexture(SpriteBatch spriteBatch)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

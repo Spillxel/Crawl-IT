@@ -29,5 +29,7 @@ namespace CrawlIT.Shared.GameState
         public abstract void Draw(SpriteBatch spriteBatch);
 
         public abstract Point GetPosition(Texture2D button);
+
+        public abstract void ChangeTexture(SpriteBatch spriteBatch);
     }
 }

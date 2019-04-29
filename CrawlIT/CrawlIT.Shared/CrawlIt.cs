@@ -73,6 +73,8 @@ namespace CrawlIT
         private Texture2D _exitButton;
         private Point _pauseSize;
         private Texture2D _pauseButton;
+        private Point _answerSize;
+        private Texture2D _answerButton;
 
         private SpriteFont _font;
 
@@ -116,6 +118,11 @@ namespace CrawlIT
             _fight = new Fight(GraphicsDevice);
             _fight.SetState(State.Fighting);
 
+            //Creation of the texture of one button
+            _answerButton = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2,
+                                    GraphicsDevice.Viewport.Height / 10 * 2);
+            _answerSize = new Point(_answerButton.Width, _answerButton.Height);
+           
             // TODO: make this work
             // _gameStateManager.GameState = GameState.StartMenu;
 
@@ -175,8 +182,8 @@ namespace CrawlIT
             // Fetching list of collision objects in the map to check for collision
             _player.CollisionObjects = _map.ObjectLayers[0].Objects
                                                        .Select(o => new Rectangle(
-                                                                    (int) o.Position.X, (int) o.Position.Y,
-                                                                    (int) o.Size.Width, (int) o.Size.Height))
+                                                                    (int)o.Position.X, (int)o.Position.Y,
+                                                                    (int)o.Size.Width, (int)o.Size.Height))
                                                        .ToList();
             var tutorRectangle = new Rectangle((int)_tutor.PosX, (int)_tutor.PosY,
                                                _tutor.FrameWidth, (int)(_tutor.FrameHeight / 1.5 - 5));
@@ -240,10 +247,10 @@ namespace CrawlIT
                 _mapRenderer.Update(_map, gameTime);
 
                 _inputManager.Update(gameTime);
-                
+
                 _player.UpdateMovement(gameTime, _inputManager.CurrentInputState);
                 _player.Update(gameTime);
-                
+
                 _tutor.Update(gameTime);
 
                 _playerCamera.Follow(_player);
@@ -273,6 +280,7 @@ namespace CrawlIT
                 var pause = new Rectangle(_fight.GetPosition(_pauseButton), _pauseSize);
                 if (_touch.Intersects(pause))
                     GameStateManager.Instance.RemoveScreen();
+
             }
 
             base.Update(gameTime);
@@ -335,6 +343,13 @@ namespace CrawlIT
                                   _staticCamera.Transform);*/
             }
 
+            if (GameStateManager.Instance.IsState(State.Fighting))
+            {
+                var answer = new Rectangle(_fight.GetPosition(_answerButton), _answerSize);
+                if (_touch.Intersects(answer))
+                    _fight.ChangeTexture(_spriteBatch);
+            }
+
             #region FPS Counter
 
             var fps = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -350,7 +365,7 @@ namespace CrawlIT
                 _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Black);
                 _spriteBatch.End();
             }
-            
+
             #endregion
 
             base.Draw(gameTime);

@@ -30,9 +30,9 @@
   </ItemGroup>
 -->
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
     <None Include="$(MSBuildThisFileDirectory)Content\Fonts\File.spritefont" />
     <None Include="$(MSBuildThisFileDirectory)Content\Maps\test.tmx" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Content\Audio\Investigations.mp3" />
