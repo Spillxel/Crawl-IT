@@ -28,7 +28,7 @@ namespace CrawlIT.Shared.Entity
         private Vector2 _currentVelocity;
 
         // For collision
-        public Rectangle Rectangle => new Rectangle((int)PosX, (int)PosY, FrameWidth, FrameHeight);
+        public Rectangle CollisionRectangle => new Rectangle((int)PosX, (int)PosY, FrameWidth, FrameHeight);
 
         public Player(Texture2D texture, Matrix scale, float posx = 50, float posy = 70)
         {
@@ -95,8 +95,6 @@ namespace CrawlIT.Shared.Entity
 
         public override void Update(GameTime gameTime)
         {
-            
-
             _currentAnimation.Update(gameTime);
         }
 
@@ -104,7 +102,6 @@ namespace CrawlIT.Shared.Entity
         {
             _currentVelocity = inputState != InputState.Idle ? Vector2.Zero
                                                              : GetVelocity(gameTime);
-
             SetAnimaton(_currentVelocity);
 
             if (_currentVelocity == Vector2.Zero)
@@ -116,6 +113,22 @@ namespace CrawlIT.Shared.Entity
                     _currentVelocity.Y = 0;
                 if ((_currentVelocity.X > 0 && CollidesLeft(rect)) || (_currentVelocity.X < 0 && CollidesRight(rect)))
                     _currentVelocity.X = 0;
+            }
+
+            foreach (var enemy in Enemies)
+            {
+                // Also try with else if maybe
+                if (_currentVelocity.Y > 0 && CollidesTop(enemy.CombatRectangle))
+                    enemy.CurrentAnimation = StandUp;
+
+                if (_currentVelocity.Y < 0 && CollidesBottom(enemy.CombatRectangle))
+                    enemy.CurrentAnimation = StandDown;
+
+                if (_currentVelocity.X > 0 && CollidesLeft(enemy.CombatRectangle))
+                    enemy.CurrentAnimation = StandLeft;
+
+                if (_currentVelocity.X < 0 && CollidesRight(enemy.CombatRectangle))
+                    enemy.CurrentAnimation = StandRight;
             }
 
             PosX += _currentVelocity.X;
@@ -146,7 +159,7 @@ namespace CrawlIT.Shared.Entity
 
             // otherwise get new velocity
             velocity.Normalize();
-            return velocity * Speed  * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            return velocity * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         private void SetAnimaton(Vector2 velocity)
@@ -179,39 +192,39 @@ namespace CrawlIT.Shared.Entity
 
         public bool Collides(Rectangle rectangle)
         {
-            return Rectangle.Intersects(rectangle);
+            return CollisionRectangle.Intersects(rectangle);
         }
 
         public bool CollidesTop(Rectangle rect)
         {
-            return Rectangle.Bottom + _currentVelocity.Y > rect.Top &&
-                   Rectangle.Top < rect.Top &&
-                   Rectangle.Right > rect.Left &&
-                   Rectangle.Left < rect.Right;
+            return CollisionRectangle.Bottom + _currentVelocity.Y > rect.Top &&
+                   CollisionRectangle.Top < rect.Top &&
+                   CollisionRectangle.Right > rect.Left &&
+                   CollisionRectangle.Left < rect.Right;
         }
 
         public bool CollidesBottom(Rectangle rect)
         {
-            return Rectangle.Top + _currentVelocity.Y < rect.Bottom &&
-                   Rectangle.Bottom > rect.Bottom &&
-                   Rectangle.Right > rect.Left &&
-                   Rectangle.Left < rect.Right;
+            return CollisionRectangle.Top + _currentVelocity.Y < rect.Bottom &&
+                   CollisionRectangle.Bottom > rect.Bottom &&
+                   CollisionRectangle.Right > rect.Left &&
+                   CollisionRectangle.Left < rect.Right;
         }
 
         public bool CollidesRight(Rectangle rect)
         {
-            return Rectangle.Left + _currentVelocity.X < rect.Right &&
-                   Rectangle.Right > rect.Right &&
-                   Rectangle.Bottom > rect.Top &&
-                   Rectangle.Top < rect.Bottom;
+            return CollisionRectangle.Left + _currentVelocity.X < rect.Right &&
+                   CollisionRectangle.Right > rect.Right &&
+                   CollisionRectangle.Bottom > rect.Top &&
+                   CollisionRectangle.Top < rect.Bottom;
         }
 
         public bool CollidesLeft(Rectangle rect)
         {
-            return Rectangle.Right + _currentVelocity.X > rect.Left &&
-                   Rectangle.Left < rect.Left &&
-                   Rectangle.Bottom > rect.Top &&
-                   Rectangle.Top < rect.Bottom;
+            return CollisionRectangle.Right + _currentVelocity.X > rect.Left &&
+                   CollisionRectangle.Left < rect.Left &&
+                   CollisionRectangle.Bottom > rect.Top &&
+                   CollisionRectangle.Top < rect.Bottom;
         }
     }
 }

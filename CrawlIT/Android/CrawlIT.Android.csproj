@@ -99,8 +99,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Sprites\playerspritesheet.png" />
-    <Content Include="Content\Sprites\tutorsprite.png" />
     <None Include="Content\Buttons\exit.png" />
     <None Include="Content\Buttons\pause.png" />
     <None Include="Content\Buttons\resume.png" />
@@ -139,6 +137,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Maps\maptiles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sprites\tutorspritesheet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
