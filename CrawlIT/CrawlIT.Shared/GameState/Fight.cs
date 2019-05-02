@@ -143,11 +143,11 @@ namespace CrawlIT.Shared.GameState
             spriteBatch.Draw(_answer, _answer2Position, Color.White);
             spriteBatch.Draw(_answer, _answer3Position, Color.White);
             spriteBatch.Draw(_answer, _answer4Position, Color.White);
-            DrawString(spriteBatch, _font, test, _questionRec);
-            DrawString(spriteBatch, _font, test1, _answer1Rec);
-            DrawString(spriteBatch, _font, test2, _answer2Rec);
-            DrawString(spriteBatch, _font, test3, _answer3Rec);
-            DrawString(spriteBatch, _font, test4, _answer4Rec);
+            DrawString(spriteBatch, _font, test, _questionRec, Color.Black);
+            DrawString(spriteBatch, _font, test1, _answer1Rec, Color.Black);
+            DrawString(spriteBatch, _font, test2, _answer2Rec, Color.Black);
+            DrawString(spriteBatch, _font, test3, _answer3Rec, Color.Black);
+            DrawString(spriteBatch, _font, test4, _answer4Rec, Color.Black);
             spriteBatch.End();
         }
 
@@ -183,24 +183,39 @@ namespace CrawlIT.Shared.GameState
             spriteBatch.Draw(_incorrect, _answer2Position, Color.White);
             spriteBatch.Draw(_correct, _answer3Position, Color.White);
             spriteBatch.Draw(_incorrect, _answer4Position, Color.White);
-            DrawString(spriteBatch, _font, test1, _answer1Rec);
-            DrawString(spriteBatch, _font, test2, _answer2Rec);
-            DrawString(spriteBatch, _font, test3, _answer3Rec);
-            DrawString(spriteBatch, _font, test4, _answer4Rec);
+            DrawString(spriteBatch, _font, test1, _answer1Rec, Color.Red);
+            DrawString(spriteBatch, _font, test2, _answer2Rec, Color.Red);
+            DrawString(spriteBatch, _font, test3, _answer3Rec, Color.Black);
+            DrawString(spriteBatch, _font, test4, _answer4Rec, Color.Red);
             spriteBatch.End();
         }
 
 
-        /// Draws the given string inside the boundaries Rectangle without going outside of it.
-        /// 
-        /// If the string is not a perfect match inside of the boundaries (which it would rarely be), then
-        /// the string will be absolutely-centered inside of the boundaries.
-        /// 
-        public void DrawString(SpriteBatch spriteBatch, SpriteFont font, string strToDraw, Rectangle boundaries)
+        // Draws the given string inside the boundaries Rectangle without going outside of it.
+        // 
+        // If the string is not a perfect match inside of the boundaries (which it would rarely be), then
+        // the string will be absolutely-centered inside of the boundaries.
+        public void DrawString(SpriteBatch spriteBatch, SpriteFont font, string strToDraw, Rectangle boundaries, Color color)
         {
+            // Code for parsing the text depending on the width of the screen
+            String line = String.Empty;
+            String returnString = String.Empty;
+            String[] wordArray = strToDraw.Split(' ');
+            foreach (String word in wordArray)
+            {
+                if (_font.MeasureString(line + word).Length() > boundaries.Width / _scale)
+                {
+                    returnString = returnString + line + '\n';
+                    line = String.Empty;
+                }
+
+                line = line + word + ' ';
+            }
+            returnString += line;
+
             Vector2 size = font.MeasureString(strToDraw);
 
-            String[] lines = parseText(strToDraw, boundaries.Width).Split('\n');
+            String[] lines = returnString.Split('\n');
 
             // Figure out the location to absolutely-center it in the boundaries rectangle.
             int strWidth = (int)Math.Round(size.X * _scale);
@@ -215,42 +230,15 @@ namespace CrawlIT.Shared.GameState
             float spriteLayer = 0.0f; // all the way in the front
             SpriteEffects spriteEffects = new SpriteEffects();
 
-            if (lines.Length == 1)
+            for (int i = 0; i < lines.Length; i++)
             {
-                spriteBatch.DrawString(font, parseText(strToDraw, boundaries.Width), position, Color.Black, rotation, spriteOrigin, _scale, spriteEffects, spriteLayer);
+                Vector2 lineSize = font.MeasureString(lines[i]);
+                int lineWidth = (int)Math.Round(lineSize.X * _scale);
+                position.X = ((boundaries.Width - lineWidth) / 2) + boundaries.X + 5;
+                spriteBatch.DrawString(font, lines[i], position, color, rotation, spriteOrigin, _scale, spriteEffects, spriteLayer);
+                position.Y += strHeight;
             }
-            else
-            {
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    Vector2 lineSize = font.MeasureString(lines[i]);
-                    int lineWidth = (int)Math.Round(lineSize.X * _scale);
-                    position.X = ((boundaries.Width - lineWidth) / 2) + boundaries.X + 5;
-                    spriteBatch.DrawString(font, lines[i], position, Color.Black, rotation, spriteOrigin, _scale, spriteEffects, spriteLayer);
-                    position.Y += strHeight;
-                }
-            }
+
         }
-
-        private String parseText(String text, float width)
-        {
-            String line = String.Empty;
-            String returnString = String.Empty;
-            String[] wordArray = text.Split(' ');
-
-            foreach (String word in wordArray)
-            {
-                if (_font.MeasureString(line + word).Length() > width / _scale)
-                {
-                    returnString = returnString + line + '\n';
-                    line = String.Empty;
-                }
-
-                line = line + word + ' ';
-            }
-
-            return returnString + line;
-        }
-
     }
 }
