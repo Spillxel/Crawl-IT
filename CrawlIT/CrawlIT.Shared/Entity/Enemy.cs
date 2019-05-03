@@ -20,8 +20,6 @@ namespace CrawlIT.Shared.Entity
 
         public Rectangle CollisionRectangle;
 
-        //public Rectangle CombatRectangle; 
-
         public Enemy(Texture2D texture, Matrix scale, float posx, float posy, int rounds)
         {
             TextureSheet = texture;
@@ -34,8 +32,6 @@ namespace CrawlIT.Shared.Entity
             Rounds = rounds;
 
             CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
-
-            //CombatRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth + 1, FrameHeight + 1);
 
             StandUp = new Animation.Animation();
             StandUp.AddFrame(new Rectangle(FrameWidth * 3, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
