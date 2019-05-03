@@ -107,28 +107,27 @@ namespace CrawlIT.Shared.Entity
             if (_currentVelocity == Vector2.Zero)
                 return;
 
+            foreach (var enemy in Enemies)
+            {
+                if (_currentVelocity.Y > 0 && CollidesTop(enemy.CollisionRectangle))
+                    enemy.CurrentAnimation = enemy.StandUp;
+
+                else if (_currentVelocity.Y < 0 && CollidesBottom(enemy.CollisionRectangle))
+                    enemy.CurrentAnimation = enemy.StandDown;
+
+                else if (_currentVelocity.X > 0 && CollidesLeft(enemy.CollisionRectangle))
+                    enemy.CurrentAnimation = enemy.StandLeft;
+
+                else if (_currentVelocity.X < 0 && CollidesRight(enemy.CollisionRectangle))
+                    enemy.CurrentAnimation = enemy.StandRight;
+            }
+
             foreach (var rect in CollisionObjects)
             {
                 if ((_currentVelocity.Y > 0 && CollidesTop(rect)) || (_currentVelocity.Y < 0 && CollidesBottom(rect)))
                     _currentVelocity.Y = 0;
                 if ((_currentVelocity.X > 0 && CollidesLeft(rect)) || (_currentVelocity.X < 0 && CollidesRight(rect)))
                     _currentVelocity.X = 0;
-            }
-
-            foreach (var enemy in Enemies)
-            {
-                // Also try with else if maybe
-                if (_currentVelocity.Y > 0 && CollidesTop(enemy.CombatRectangle))
-                    enemy.CurrentAnimation = StandUp;
-
-                if (_currentVelocity.Y < 0 && CollidesBottom(enemy.CombatRectangle))
-                    enemy.CurrentAnimation = StandDown;
-
-                if (_currentVelocity.X > 0 && CollidesLeft(enemy.CombatRectangle))
-                    enemy.CurrentAnimation = StandLeft;
-
-                if (_currentVelocity.X < 0 && CollidesRight(enemy.CombatRectangle))
-                    enemy.CurrentAnimation = StandRight;
             }
 
             PosX += _currentVelocity.X;

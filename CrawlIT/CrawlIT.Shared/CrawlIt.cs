@@ -259,7 +259,7 @@ namespace CrawlIT
                 // Launch fight screen if player collides with ennemy
                 foreach (var enemy in _player.Enemies)
                 {
-                    if (_player.Collides(enemy.CombatRectangle) && enemy.Rounds > 0)
+                    if (_player.Collides(enemy.CollisionRectangle) && enemy.Rounds > 0)
                     {
                         //GameStateManager.Instance.AddScreen(_fight);
                         //enemy.Rounds--;
