@@ -22,6 +22,9 @@ using Color = Microsoft.Xna.Framework.Color;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using InputManager = CrawlIT.Shared.Input.InputManager;
 using Point = Microsoft.Xna.Framework.Point;
+using Newtonsoft.Json;
+using System.IO;
+using CrawlIT.Shared.Combat;
 
 #endregion
 
@@ -104,6 +107,26 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
+            //static void loadJson()
+            //{
+                Dictionary<string, Question> questionDict = new Dictionary<string, Question>();
+                string jsonString = File.ReadAllText(@"C:\Users\Laurence\source\repos\crawlit\CrawlIT\CrawlIT.Shared\questions.json");
+                dynamic questions = JsonConvert.DeserializeObject(jsonString);
+            
+            foreach (dynamic q in questions.objects)
+            {
+                questionDict.Add(q.QuestionSubject, new Question(q.QuestionSubject, q.QuestionDifficulty, q.QuestionText, q.Answer1, q.Answer2, q.Answer3, q.Answer4));
+            }
+
+            var questionsample = questionDict["Algorithms"];
+            //Console.WriteLine(questionsample.QuestionText);
+            //Console.WriteLine(Environment.NewLine);
+            //Console.WriteLine(questionsample.Answer1);
+            //Console.WriteLine(questionsample.Answer2);
+            //Console.WriteLine(questionsample.Answer3);
+            //Console.WriteLine(questionsample.Answer4);
+            //}
+
             // TODO: think up a better way to zoom for different resolutions
             _zoom = _graphics.PreferredBackBufferHeight > 1280 ? 6.0f : 3.0f;
 

@@ -1,0 +1,40 @@
+﻿{
+  "questions": {
+    "question1": {
+      "QuestionSubject": "Maths",
+      "QuestionDifficulty": "easy",
+      "QuestionText": "What is the Maths teacher's name?",
+      "Answer1": "Rothkugel",
+      "Answer2": "Müller",
+      "Answer3": "Zampunieris",
+      "Answer4": "Franck"
+    },
+    "question2": {
+      "QuestionSubject": "Algorithms",
+      "QuestionDifficulty": "easy",
+      "QuestionText": "What is the Algo teacher's name?",
+      "Answer1": "Rothkugel",
+      "Answer2": "Müller",
+      "Answer3": "Zampunieris",
+      "Answer4": "Franck"
+    },
+    "question3": {
+      "QuestionSubject": "Programming",
+      "QuestionDifficulty": "easy",
+      "QuestionText": "What is the Progra teacher's name?",
+      "Answer1": "Schommer",
+      "Answer2": "Müller",
+      "Answer3": "Zampunieris",
+      "Answer4": "Khan"
+    },
+    "question4": {
+      "QuestionSubject": "Database",
+      "QuestionDifficulty": "easy",
+      "QuestionText": "What is the DB teacher's name?",
+      "Answer1": "Rothkugel",
+      "Answer2": "Müller",
+      "Answer3": "Schommer",
+      "Answer4": "Franck"
+    }
+  }
+} 
