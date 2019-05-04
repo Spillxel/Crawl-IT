@@ -122,6 +122,9 @@
 /processor:TiledMapProcessor
 /build:Maps/test.tmx
 
+#begin questions.json
+/copy:questions.json
+
 #begin Sprites/playerspritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor

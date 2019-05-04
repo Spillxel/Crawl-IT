@@ -54,8 +54,8 @@
     <None Include="$(MSBuildThisFileDirectory)Content\Sprites\playerspritesheet.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)questions.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="$(MSBuildThisFileDirectory)Content\questions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 </Project>

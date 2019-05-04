@@ -4,6 +4,11 @@ using System.Text;
 
 namespace CrawlIT.Shared.Combat
 {
+    public class QuestionList
+    {
+        public List<Question> Questions { get; set; }
+    }
+
     public class Question
     {
         //public enum Subject { Maths, Programming, Algorithms, Security, Networks, Database };

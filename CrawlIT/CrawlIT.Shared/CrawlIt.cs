@@ -107,25 +107,26 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
-            //static void loadJson()
-            //{
-                Dictionary<string, Question> questionDict = new Dictionary<string, Question>();
-                string jsonString = File.ReadAllText(@"C:\Users\Laurence\source\repos\crawlit\CrawlIT\CrawlIT.Shared\questions.json");
-                dynamic questions = JsonConvert.DeserializeObject(jsonString);
+            var questionDict = new Dictionary<string, Question>();
+            var filePath = Path.Combine(Content.RootDirectory, "questions.json");
             
-            foreach (dynamic q in questions.objects)
-            {
-                questionDict.Add(q.QuestionSubject, new Question(q.QuestionSubject, q.QuestionDifficulty, q.QuestionText, q.Answer1, q.Answer2, q.Answer3, q.Answer4));
-            }
+            string jsonString;
+            using (var stream = TitleContainer.OpenStream(filePath))
+                using (var reader = new StreamReader(stream))
+                    jsonString = reader.ReadToEnd();
 
-            var questionsample = questionDict["Algorithms"];
-            //Console.WriteLine(questionsample.QuestionText);
-            //Console.WriteLine(Environment.NewLine);
-            //Console.WriteLine(questionsample.Answer1);
-            //Console.WriteLine(questionsample.Answer2);
-            //Console.WriteLine(questionsample.Answer3);
-            //Console.WriteLine(questionsample.Answer4);
-            //}
+            var questionList = JsonConvert.DeserializeObject<QuestionList>(jsonString);
+            
+            foreach (var q in questionList.Questions)
+                questionDict.Add(q.QuestionSubject, q);
+
+            var questionSample = questionDict["Algorithms"];
+            Console.WriteLine(questionSample.QuestionText);
+            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine(questionSample.Answer1);
+            Console.WriteLine(questionSample.Answer2);
+            Console.WriteLine(questionSample.Answer3);
+            Console.WriteLine(questionSample.Answer4);
 
             // TODO: think up a better way to zoom for different resolutions
             _zoom = _graphics.PreferredBackBufferHeight > 1280 ? 6.0f : 3.0f;

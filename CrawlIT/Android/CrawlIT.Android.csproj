@@ -106,6 +106,9 @@
     <None Include="Content\Buttons\start.png" />
     <None Include="Content\Images\fight.png" />
     <None Include="Content\Images\logo.png" />
+    <Content Include="Content\questions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\Sprites\playerspritesheet.png" />
     <None Include="app.config" />
     <None Include="Content\Fonts\File.spritefont" />
