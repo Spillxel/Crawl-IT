@@ -143,6 +143,7 @@
     <None Include="Content\Maps\maptiles.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Sprites\surgecrystal.png" />
     <Content Include="Content\Sprites\tutorspritesheet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

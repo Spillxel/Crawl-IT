@@ -57,5 +57,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Content\questions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\surgecrystal.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorspritesheet.png" />
   </ItemGroup>
 </Project>
