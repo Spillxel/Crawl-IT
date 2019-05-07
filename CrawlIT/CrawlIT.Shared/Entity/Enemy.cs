@@ -54,7 +54,6 @@ namespace CrawlIT.Shared.Entity
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //var position = new Vector2(PosX, PosY);
             var sourceRectangle = CurrentAnimation.CurrentRectangle;
             spriteBatch.Draw(TextureSheet, _position, sourceRectangle, Color.White);
         }

@@ -229,10 +229,16 @@ namespace CrawlIT.Shared.Entity
                    CollisionRectangle.Top < rect.Bottom;
         }
 
-        public void Move(float posX, float posY)
+        public void MoveBack(Enemy currentEnemy)
         {
-            PosX = posX;
-            PosY = posY;
+            if (currentEnemy.CurrentAnimation == currentEnemy.StandDown)
+                PosY += 15;
+            else if (currentEnemy.CurrentAnimation == currentEnemy.StandUp)
+                PosY -= 15;
+            else if (currentEnemy.CurrentAnimation == currentEnemy.StandRight)
+                PosX += 15;
+            else if (currentEnemy.CurrentAnimation == currentEnemy.StandLeft)
+                PosX -= 15;
         }
     }
 }

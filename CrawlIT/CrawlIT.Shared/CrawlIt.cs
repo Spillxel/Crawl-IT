@@ -326,7 +326,7 @@ namespace CrawlIT
                     win = false;
                     Thread.Sleep(5000);
                     GameStateManager.Instance.RemoveScreen();
-                    _player.Move(_player.PosX + 15, _player.PosY + 15); // TODO: Replace with enemy position + something
+                    _player.MoveBack(_tutor);
                 }
             }
             base.Update(gameTime);
