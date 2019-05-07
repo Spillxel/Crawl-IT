@@ -23,6 +23,10 @@ using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using InputManager = CrawlIT.Shared.Input.InputManager;
 using Point = Microsoft.Xna.Framework.Point;
 using System.Threading;
+using Newtonsoft.Json;
+using System.IO;
+using CrawlIT.Shared.Combat;
+using System.Diagnostics;
 
 #endregion
 
@@ -111,6 +115,28 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
+            var questionDict = new Dictionary<string, Question>();
+            var filePath = Path.Combine(Content.RootDirectory, "questions.json");
+            
+            string jsonString;
+            using (var stream = TitleContainer.OpenStream(filePath))
+                using (var reader = new StreamReader(stream))
+                    jsonString = reader.ReadToEnd();
+
+            var questionList = JsonConvert.DeserializeObject<QuestionList>(jsonString);
+            
+            foreach (var q in questionList.Questions)
+                questionDict.Add(q.QuestionSubject, q);
+
+            var questionSample = questionDict["Algorithms"];
+
+            Debug.WriteLine(questionSample.QuestionText);
+            Debug.WriteLine(Environment.NewLine);
+            Debug.WriteLine(questionSample.Answer1);
+            Debug.WriteLine(questionSample.Answer2);
+            Debug.WriteLine(questionSample.Answer3);
+            Debug.WriteLine(questionSample.Answer4);
+
             // TODO: think up a better way to zoom for different resolutions
             _zoom = _graphics.PreferredBackBufferHeight > 1280 ? 6.0f : 3.0f;
 

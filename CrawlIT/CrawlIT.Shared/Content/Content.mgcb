@@ -134,6 +134,9 @@
 /processor:TiledMapProcessor
 /build:Maps/test.tmx
 
+#begin questions.json
+/copy:questions.json
+
 #begin Sprites/playerspritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -145,6 +148,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/playerspritesheet.png
+
+#begin Sprites/surgecrystal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/surgecrystal.png
 
 #begin Sprites/tutorspritesheet.png
 /importer:TextureImporter

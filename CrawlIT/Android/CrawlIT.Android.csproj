@@ -47,19 +47,14 @@
     <NoWarn>CS0436</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Android" />
     <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Extended.1.1.0\lib\portable-net45+win8+wpa81\MonoGame.Extended.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Extended.Graphics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Extended.Graphics.1.1.0\lib\portable-net45+win8+wpa81\MonoGame.Extended.Graphics.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Extended.Tiled, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Extended.Tiled.1.1.0\lib\portable-net45+win8+wpa81\MonoGame.Extended.Tiled.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -105,6 +100,9 @@
     <None Include="Content\Buttons\start.png" />
     <None Include="Content\Images\fight.png" />
     <None Include="Content\Images\logo.png" />
+    <Content Include="Content\questions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\Sprites\playerspritesheet.png" />
     <None Include="app.config" />
     <None Include="Content\Fonts\File.spritefont" />
@@ -139,6 +137,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </MonoGameContentReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sprites\surgecrystal.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sprites\tutorspritesheet.png" />
