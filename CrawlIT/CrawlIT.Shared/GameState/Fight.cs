@@ -12,6 +12,7 @@ namespace CrawlIT.Shared.GameState
         private Texture2D _question;
         private Texture2D _answer;
         private Texture2D _crystal;
+        private Texture2D _enemy;
 
         private Vector2 _questionPosition;
         private Vector2 _answer1Position;
@@ -19,13 +20,16 @@ namespace CrawlIT.Shared.GameState
         private Vector2 _answer3Position;
         private Vector2 _answer4Position;
         private Vector2 _crystalPosition;
+        private Vector2 _enemyPosition;
         private Vector2 _crystalScale;
+        private Vector2 _enemyScale;
 
         private Rectangle _questionRec;
         private Rectangle _answer1Rec;
         private Rectangle _answer2Rec;
         private Rectangle _answer3Rec;
         private Rectangle _answer4Rec;
+        private Rectangle _enemyRec;
 
         private String _questionString;
         private String _firstAnswer;
@@ -45,7 +49,7 @@ namespace CrawlIT.Shared.GameState
 
         public override void Initialize()
         {
-            _questionString = "What is the Maths teacher's name?";
+            _questionString = "What is the SEP teacher's name?";
             _firstAnswer = "Rothkugel";
             _secondAnswer = "Zampunieris";
             _thirdAnswer = "Muller";
@@ -81,6 +85,7 @@ namespace CrawlIT.Shared.GameState
         {
             _font = content.Load<SpriteFont>("Fonts/File");
             _crystal = content.Load<Texture2D>("Sprites/surgecrystal");
+            _enemy = content.Load<Texture2D>("Sprites/tutorfight");
         }
 
         public override void SetState(Enum gameState)
@@ -111,11 +116,15 @@ namespace CrawlIT.Shared.GameState
             _answer4Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 3, (GraphicsDevice.Viewport.Height / 10 * 8) + 3);
             _crystalPosition = new Vector2(((GraphicsDevice.Viewport.Width / 2) - (_crystal.Width * _crystalRatio / 2)),
                                            ((GraphicsDevice.Viewport.Height / 10 * 8) - (_crystal.Height * _crystalRatio / 2)));
+            _enemyPosition = new Vector2(0, 0);
             _crystalScale = new Vector2(_crystalRatio, _crystalRatio);
+            _enemyScale = new Vector2((float)1.75, (float)1.75);
+
 
             //Initialization of the size of the question and answers
             Point _questionPoint = new Point(_question.Width, _question.Height);
             Point _answerPoint = new Point(_answer.Width, _answer.Height);
+            Point _enemyPoint = new Point(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 2);
 
             //Initialization of the rectangles using the initial position and the size of the question and answers
             _questionRec = new Rectangle(_questionPosition.ToPoint(), _questionPoint);
@@ -123,8 +132,16 @@ namespace CrawlIT.Shared.GameState
             _answer2Rec = new Rectangle(_answer2Position.ToPoint(), _answerPoint);
             _answer3Rec = new Rectangle(_answer3Position.ToPoint(), _answerPoint);
             _answer4Rec = new Rectangle(_answer4Position.ToPoint(), _answerPoint);
+            _enemyRec = new Rectangle(_enemyPosition.ToPoint(), _enemyPoint); 
 
             GraphicsDevice.Clear(Color.Black);
+
+            // Render enemy screenshot
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
+            spriteBatch.Draw(texture: _enemy, position: _enemyPosition, scale: _enemyScale);
+            spriteBatch.End();
+
+            // Render question and answers
             spriteBatch.Begin();
             spriteBatch.Draw(_question, _questionPosition, Color.White);
             spriteBatch.Draw(_answer, _answer1Position, Color.White);

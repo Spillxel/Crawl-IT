@@ -115,6 +115,8 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
+            #region Load questions from JSON file
+
             var questionDict = new Dictionary<string, Question>();
             var filePath = Path.Combine(Content.RootDirectory, "questions.json");
             
@@ -130,12 +132,7 @@ namespace CrawlIT
 
             var questionSample = questionDict["Algorithms"];
 
-            Debug.WriteLine(questionSample.QuestionText);
-            Debug.WriteLine(Environment.NewLine);
-            Debug.WriteLine(questionSample.Answer1);
-            Debug.WriteLine(questionSample.Answer2);
-            Debug.WriteLine(questionSample.Answer3);
-            Debug.WriteLine(questionSample.Answer4);
+            #endregion
 
             // TODO: think up a better way to zoom for different resolutions
             _zoom = _graphics.PreferredBackBufferHeight > 1280 ? 6.0f : 3.0f;
@@ -204,7 +201,7 @@ namespace CrawlIT
                                        _zoom);
 
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
-            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 3);
+            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10);
 
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
@@ -240,7 +237,6 @@ namespace CrawlIT
                 _player.CollisionObjects.Add(enemy.CollisionRectangle);
             }
                 
-
             _inputManager = new InputManager(_playerCamera);
 
             // Set the content to the GameStateManager to be able to use it
@@ -274,7 +270,7 @@ namespace CrawlIT
             if (_touchCollection.Count > 0)
                 _touch = new Rectangle((int)_touchCollection[0].Position.X,
                                        (int)_touchCollection[0].Position.Y,
-                                       5, 5);
+                                       5, 5);         
 
             if (GameStateManager.Instance.IsState(State.Menu))
             {
@@ -308,17 +304,17 @@ namespace CrawlIT
                 if (_touch.Intersects(pause))
                     GameStateManager.Instance.AddScreen(_fight);
 
-                // Launch fight screen if player collides with ennemy
-                foreach (var enemy in _player.Enemies)
+                foreach (var enemy in _enemies)
                 {
-                    if (_player.Collides(enemy.CollisionRectangle) && enemy.Rounds > 0)
+                    if (_player.Collides(enemy.FightRectangle) && enemy.Rounds > 0)
                     {
-                        //GameStateManager.Instance.AddScreen(_fight);
-                        //enemy.Rounds--;
+                        Thread.Sleep(2000);
+                        GameStateManager.Instance.AddScreen(_fight);
+                        enemy.Rounds--;
                     }
                     else
                     {
-                        //print I have no more questions for you!
+                        // Display textbox "I have no more questions for you!"
                     }
                 }
             }
@@ -330,10 +326,9 @@ namespace CrawlIT
                     win = false;
                     Thread.Sleep(5000);
                     GameStateManager.Instance.RemoveScreen();
+                    _player.Move(_player.PosX + 15, _player.PosY + 15); // TODO: Replace with enemy position + something
                 }
-
             }
-
             base.Update(gameTime);
         }
 

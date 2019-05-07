@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using CrawlIT.Shared.GameState;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -191,7 +191,10 @@ namespace CrawlIT.Shared.Entity
 
         public bool Collides(Rectangle rectangle)
         {
-            return CollisionRectangle.Intersects(rectangle);
+            return (CollidesLeft(rectangle) ||
+                   CollidesRight(rectangle) ||
+                   CollidesTop(rectangle) ||
+                   CollidesBottom(rectangle));
         }
 
         public bool CollidesTop(Rectangle rect)
@@ -224,6 +227,12 @@ namespace CrawlIT.Shared.Entity
                    CollisionRectangle.Left < rect.Left &&
                    CollisionRectangle.Bottom > rect.Top &&
                    CollisionRectangle.Top < rect.Bottom;
+        }
+
+        public void Move(float posX, float posY)
+        {
+            PosX = posX;
+            PosY = posY;
         }
     }
 }

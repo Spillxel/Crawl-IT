@@ -58,6 +58,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\surgecrystal.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorfight.PNG" />
     <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorspritesheet.png" />
   </ItemGroup>
 </Project>
