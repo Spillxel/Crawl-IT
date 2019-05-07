@@ -80,8 +80,8 @@ namespace CrawlIT
         private Texture2D _pauseButton;
         private Point _answerSize;
         private Texture2D _answerButton;
-        private Point _crystalSize;
-        private Texture2D _crystalButton;
+        private Point _surgeCrystalSize;
+        private Texture2D _surgeCrystal;
 
         private Boolean win;
 
@@ -209,7 +209,7 @@ namespace CrawlIT
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
-            _crystalButton = Content.Load<Texture2D>("crystal");
+            _surgeCrystal = Content.Load<Texture2D>("Sprites/surgecrystal");
 
             _startSize = new Point(_startButton.Width * (int)_zoom,
                                    _startButton.Height * (int)_zoom);
@@ -217,7 +217,8 @@ namespace CrawlIT
                                   _exitButton.Height * (int)_zoom);
             _pauseSize = new Point(_pauseButton.Width, _pauseButton.Height);
 
-            _crystalSize = new Point(_crystalButton.Width / 10, _crystalButton.Height / 10);
+            _surgeCrystalSize = new Point(_surgeCrystal.Width * GraphicsDevice.Viewport.Width / 200,
+                                          _surgeCrystal.Height * GraphicsDevice.Viewport.Width / 200);
 
             _font = Content.Load<SpriteFont>("Fonts/File");
 
@@ -395,7 +396,7 @@ namespace CrawlIT
 
             if (GameStateManager.Instance.IsState(State.Fighting))
             {
-                var crystal = new Rectangle(_fight.GetPosition(_crystalButton), _crystalSize);
+                var crystal = new Rectangle(_fight.GetPosition(_surgeCrystal), _surgeCrystalSize);
                 var answer = new Rectangle(_fight.GetPosition(_answerButton), _answerSize);
                 if (_touch.Intersects(crystal))
                     _fight.Help(_spriteBatch);

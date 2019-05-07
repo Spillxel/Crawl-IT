@@ -36,6 +36,7 @@ namespace CrawlIT.Shared.GameState
         private SpriteFont _font;
 
         private float _scale;
+        private float _crystalRatio;
 
         public Fight(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
@@ -44,17 +45,17 @@ namespace CrawlIT.Shared.GameState
 
         public override void Initialize()
         {
-            _questionString = "Who is the best programmer in this project?";
-            _firstAnswer = "Jason :S";
-            _secondAnswer = "Laurence :B";
-            _thirdAnswer = "Pedro :)";
-            _fourthAnswer = "Jiada :|";
+            _questionString = "What is the Maths teacher's name?";
+            _firstAnswer = "Rothkugel";
+            _secondAnswer = "Zampunieris";
+            _thirdAnswer = "Muller";
+            _fourthAnswer = "Franck";
 
             _question = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
                                       GraphicsDevice.Viewport.Height / 10);
 
-            _answer = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2,
-                                    GraphicsDevice.Viewport.Height / 10 * 2);
+            _answer = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2 - 3,
+                                    GraphicsDevice.Viewport.Height / 10 * 2 - 3);
 
             Color[] data1 = new Color[_question.Width * _question.Height];
             Color[] data2 = new Color[_answer.Width * _answer.Height];
@@ -72,12 +73,14 @@ namespace CrawlIT.Shared.GameState
             _answer.SetData(data2);
 
             _scale = GraphicsDevice.Viewport.Width / 1200f;
+
+            _crystalRatio = GraphicsDevice.Viewport.Width / 200;
         }
 
         public override void LoadContent(ContentManager content)
         {
             _font = content.Load<SpriteFont>("Fonts/File");
-            _crystal = content.Load<Texture2D>("crystal");
+            _crystal = content.Load<Texture2D>("Sprites/surgecrystal");
         }
 
         public override void SetState(Enum gameState)
@@ -101,14 +104,14 @@ namespace CrawlIT.Shared.GameState
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Initialization of the vectors responsible of the initial position of the question and answers
-            _questionPosition = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 5) - 5);
+            _questionPosition = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 5) - 6);
             _answer1Position = new Vector2(0, GraphicsDevice.Viewport.Height / 10 * 6);
-            _answer2Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 5, GraphicsDevice.Viewport.Height / 10 * 6);
-            _answer3Position = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 8) + 5);
-            _answer4Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 5, (GraphicsDevice.Viewport.Height / 10 * 8) + 5);
-            _crystalPosition = new Vector2(((GraphicsDevice.Viewport.Width / 2) - (_crystal.Width / 20)), 
-                                           ((GraphicsDevice.Viewport.Height / 10 * 8) - (_crystal.Height / 20)));
-            _crystalScale = new Vector2(0.1f, 0.1f);
+            _answer2Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 3, GraphicsDevice.Viewport.Height / 10 * 6);
+            _answer3Position = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 8) + 3);
+            _answer4Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 3, (GraphicsDevice.Viewport.Height / 10 * 8) + 3);
+            _crystalPosition = new Vector2(((GraphicsDevice.Viewport.Width / 2) - (_crystal.Width * _crystalRatio / 2)),
+                                           ((GraphicsDevice.Viewport.Height / 10 * 8) - (_crystal.Height * _crystalRatio / 2)));
+            _crystalScale = new Vector2(_crystalRatio, _crystalRatio);
 
             //Initialization of the size of the question and answers
             Point _questionPoint = new Point(_question.Width, _question.Height);
