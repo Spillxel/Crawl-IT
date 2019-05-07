@@ -139,6 +139,7 @@
     </MonoGameContentReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Sprites\screentexture.png" />
     <Content Include="Content\Sprites\surgecrystal.png" />
   </ItemGroup>
   <ItemGroup>

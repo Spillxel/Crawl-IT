@@ -86,6 +86,7 @@ namespace CrawlIT.Shared.GameState
             _font = content.Load<SpriteFont>("Fonts/File");
             _crystal = content.Load<Texture2D>("Sprites/surgecrystal");
             _enemy = content.Load<Texture2D>("Sprites/tutorfight");
+            _answer = content.Load<Texture2D>("Sprites/screentexture");
         }
 
         public override void SetState(Enum gameState)
@@ -138,16 +139,16 @@ namespace CrawlIT.Shared.GameState
 
             // Render enemy screenshot
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
-            spriteBatch.Draw(texture: _enemy, position: _enemyPosition, scale: _enemyScale);
+            spriteBatch.Draw(_enemy, _enemyRec, Color.White);
             spriteBatch.End();
 
             // Render question and answers
             spriteBatch.Begin();
             spriteBatch.Draw(_question, _questionPosition, Color.White);
-            spriteBatch.Draw(_answer, _answer1Position, Color.White);
-            spriteBatch.Draw(_answer, _answer2Position, Color.White);
-            spriteBatch.Draw(_answer, _answer3Position, Color.White);
-            spriteBatch.Draw(_answer, _answer4Position, Color.White);
+            spriteBatch.Draw(texture: _answer, position: _answer1Position, color: Color.White, scale: new Vector2((float)1.27, (float)1.26));
+            spriteBatch.Draw(texture: _answer, position: _answer2Position, color: Color.White, scale: new Vector2((float)1.27, (float)1.26));
+            spriteBatch.Draw(texture: _answer, position: _answer3Position, color: Color.White, scale: new Vector2((float)1.27, (float)1.26));
+            spriteBatch.Draw(texture: _answer, position: _answer4Position, color: Color.White, scale: new Vector2((float)1.27, (float)1.26));
             DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Black);
             DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Black);
             DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Black);
