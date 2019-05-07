@@ -22,6 +22,7 @@ using Color = Microsoft.Xna.Framework.Color;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using InputManager = CrawlIT.Shared.Input.InputManager;
 using Point = Microsoft.Xna.Framework.Point;
+using System.Threading;
 
 #endregion
 
@@ -78,6 +79,8 @@ namespace CrawlIT
         private Point _crystalSize;
         private Texture2D _crystalButton;
 
+        private Boolean win;
+
         private SpriteFont _font;
 
         private List<Enemy> _enemies;
@@ -132,6 +135,8 @@ namespace CrawlIT
                 data1[i] = Color.LightGray;
             }
             _answerButton.SetData(data1);
+
+            win = false;
 
             // TODO: make this work
             // _gameStateManager.GameState = GameState.StartMenu;
@@ -293,9 +298,12 @@ namespace CrawlIT
 
             if (GameStateManager.Instance.IsState(State.Fighting))
             {
-                var pause = new Rectangle(_fight.GetPosition(_pauseButton), _pauseSize);
-                if (_touch.Intersects(pause))
+                if (win)
+                {
+                    win = false;
+                    Thread.Sleep(5000);
                     GameStateManager.Instance.RemoveScreen();
+                }
 
             }
 
@@ -366,7 +374,10 @@ namespace CrawlIT
                 if (_touch.Intersects(crystal))
                     _fight.Help(_spriteBatch);
                 else if (_touch.Intersects(answer) && !_touch.Intersects(crystal))
+                {
                     _fight.ChangeTexture(_spriteBatch);
+                    win = true;
+                }
             }
 
             #region FPS Counter

@@ -9,12 +9,10 @@ namespace CrawlIT.Shared.GameState
     {
         private Enum _state;
 
-        private Texture2D _pauseButton;
         private Texture2D _question;
         private Texture2D _answer;
         private Texture2D _crystal;
 
-        private Vector2 _pauseButtonPosition;
         private Vector2 _questionPosition;
         private Vector2 _answer1Position;
         private Vector2 _answer2Position;
@@ -78,7 +76,6 @@ namespace CrawlIT.Shared.GameState
 
         public override void LoadContent(ContentManager content)
         {
-            _pauseButton = content.Load<Texture2D>("Buttons/pause");
             _font = content.Load<SpriteFont>("Fonts/File");
             _crystal = content.Load<Texture2D>("crystal");
         }
@@ -104,7 +101,6 @@ namespace CrawlIT.Shared.GameState
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Initialization of the vectors responsible of the initial position of the question and answers
-            _pauseButtonPosition = new Vector2((GraphicsDevice.Viewport.Width - _pauseButton.Width - 10), 10);
             _questionPosition = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 5) - 5);
             _answer1Position = new Vector2(0, GraphicsDevice.Viewport.Height / 10 * 6);
             _answer2Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 5, GraphicsDevice.Viewport.Height / 10 * 6);
@@ -127,7 +123,6 @@ namespace CrawlIT.Shared.GameState
 
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            spriteBatch.Draw(_pauseButton, _pauseButtonPosition, Color.White);
             spriteBatch.Draw(_question, _questionPosition, Color.White);
             spriteBatch.Draw(_answer, _answer1Position, Color.White);
             spriteBatch.Draw(_answer, _answer2Position, Color.White);
@@ -144,12 +139,7 @@ namespace CrawlIT.Shared.GameState
 
         public override Point GetPosition(Texture2D button)
         {
-            if (button.Equals(_pauseButton))
-            {
-                return new Point((int)_pauseButtonPosition.X,
-                                 (int)_pauseButtonPosition.Y);
-            }
-            else if (button.Equals(_answer))
+            if (button.Equals(_answer))
             {
                 return new Point((int)_answer3Position.X,
                                  (int)_answer3Position.Y);
