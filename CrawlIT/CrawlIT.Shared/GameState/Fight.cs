@@ -131,12 +131,16 @@ namespace CrawlIT.Shared.GameState
             spriteBatch.Draw(_answer, _answer2Position, Color.White);
             spriteBatch.Draw(_answer, _answer3Position, Color.White);
             spriteBatch.Draw(_answer, _answer4Position, Color.White);
-            spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
             DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Black);
             DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Black);
             DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Black);
             DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Black);
             DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Black);
+            spriteBatch.End();
+
+            // Render crystal sprite
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp);
+            spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
             spriteBatch.End();
         }
 
