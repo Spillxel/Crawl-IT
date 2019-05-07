@@ -3,9 +3,6 @@
  <tileset firstgid="1" name="maptiles" tilewidth="32" tileheight="32" tilecount="3" columns="3">
   <image source="maptiles.png" width="96" height="32"/>
  </tileset>
- <tileset firstgid="4" name="enemy" tilewidth="23" tileheight="45" tilecount="20" columns="5">
-  <image source="../Sprites/playerspritesheet.png" width="115" height="180"/>
- </tileset>
  <layer id="3" name="Ground" width="30" height="28">
   <data encoding="csv">
 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,

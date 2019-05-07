@@ -162,7 +162,7 @@ namespace CrawlIT
                                        _graphics.PreferredBackBufferHeight,
                                        _zoom);
 
-            _tutorTexture = Content.Load<Texture2D>("Sprites/tutorsprite");
+            _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
             _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 3);
 
             _startButton = Content.Load<Texture2D>("Buttons/start");
@@ -185,13 +185,16 @@ namespace CrawlIT
                                                                     (int)o.Position.X, (int)o.Position.Y,
                                                                     (int)o.Size.Width, (int)o.Size.Height))
                                                        .ToList();
-            var tutorRectangle = new Rectangle((int)_tutor.PosX, (int)_tutor.PosY,
-                                               _tutor.FrameWidth, (int)(_tutor.FrameHeight / 1.5 - 5));
-            _player.CollisionObjects.Add(tutorRectangle);
+
             // Making list of collision enemies to check for combat
             _enemies = new List<Enemy>();
             _enemies.Add(_tutor);
             _player.Enemies = _enemies;
+            foreach (var enemy in _enemies)
+            {
+                _player.CollisionObjects.Add(enemy.CollisionRectangle);
+            }
+                
 
             _inputManager = new InputManager(_playerCamera);
 
@@ -263,10 +266,10 @@ namespace CrawlIT
                 // Launch fight screen if player collides with ennemy
                 foreach (var enemy in _player.Enemies)
                 {
-                    if (_player.Collides(enemy.Rectangle) && enemy.Rounds > 0)
+                    if (_player.Collides(enemy.CollisionRectangle) && enemy.Rounds > 0)
                     {
-                        GameStateManager.Instance.AddScreen(_fight);
-                        enemy.Rounds--;
+                        //GameStateManager.Instance.AddScreen(_fight);
+                        //enemy.Rounds--;
                     }
                     else
                     {

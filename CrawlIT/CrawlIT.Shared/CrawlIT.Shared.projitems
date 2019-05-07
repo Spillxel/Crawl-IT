@@ -39,9 +39,6 @@
     <None Include="$(MSBuildThisFileDirectory)Content\Audio\sneaky_snitch.mp3" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Content\Sprites\charactersheet.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Animation\" />
     <Folder Include="$(MSBuildThisFileDirectory)GameState\" />
   </ItemGroup>

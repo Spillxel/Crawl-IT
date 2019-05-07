@@ -179,13 +179,13 @@ namespace CrawlIT.Shared.GameState
             String test4 = "Jiada :|";
 
             spriteBatch.Begin();
-            spriteBatch.Draw(_incorrect, _answer1Position, Color.White);
-            spriteBatch.Draw(_incorrect, _answer2Position, Color.White);
-            spriteBatch.Draw(_correct, _answer3Position, Color.White);
-            spriteBatch.Draw(_incorrect, _answer4Position, Color.White);
+            //spriteBatch.Draw(_incorrect, _answer1Position, Color.White);
+            //spriteBatch.Draw(_incorrect, _answer2Position, Color.White);
+            //spriteBatch.Draw(_correct, _answer3Position, Color.White);
+            //spriteBatch.Draw(_incorrect, _answer4Position, Color.White);
             DrawString(spriteBatch, _font, test1, _answer1Rec, Color.Red);
             DrawString(spriteBatch, _font, test2, _answer2Rec, Color.Red);
-            DrawString(spriteBatch, _font, test3, _answer3Rec, Color.Black);
+            DrawString(spriteBatch, _font, test3, _answer3Rec, Color.Green);
             DrawString(spriteBatch, _font, test4, _answer4Rec, Color.Red);
             spriteBatch.End();
         }

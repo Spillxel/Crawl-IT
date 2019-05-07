@@ -10,7 +10,7 @@ namespace CrawlIT.Shared.Entity
 
     public class Enemy : Character
     {
-        private Animation.Animation _currentAnimation;
+        public Animation.Animation CurrentAnimation;
 
         private readonly Matrix _scale;
 
@@ -18,8 +18,7 @@ namespace CrawlIT.Shared.Entity
 
         public int Rounds;
 
-        // For collision
-        public Rectangle Rectangle;
+        public Rectangle CollisionRectangle;
 
         public Enemy(Texture2D texture, Matrix scale, float posx, float posy, int rounds)
         {
@@ -32,24 +31,32 @@ namespace CrawlIT.Shared.Entity
             _scale = scale;
             Rounds = rounds;
 
-            Rectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
+            CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
+
+            StandUp = new Animation.Animation();
+            StandUp.AddFrame(new Rectangle(FrameWidth * 3, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
 
             StandDown = new Animation.Animation();
             StandDown.AddFrame(new Rectangle(0, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
 
-            _currentAnimation = StandDown;
+            StandLeft = new Animation.Animation();
+            StandLeft.AddFrame(new Rectangle(FrameWidth, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
+
+            StandRight = new Animation.Animation();
+            StandRight.AddFrame(new Rectangle(FrameWidth * 2, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
+
+            CurrentAnimation = StandDown;
         }
 
         public override void Update(GameTime gameTime)
         {
-
+            CurrentAnimation.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             //var position = new Vector2(PosX, PosY);
-           
-            var sourceRectangle = _currentAnimation.CurrentRectangle;
+            var sourceRectangle = CurrentAnimation.CurrentRectangle;
             spriteBatch.Draw(TextureSheet, _position, sourceRectangle, Color.White);
         }
     }
