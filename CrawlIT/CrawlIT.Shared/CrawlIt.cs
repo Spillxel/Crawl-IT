@@ -25,6 +25,7 @@ using Point = Microsoft.Xna.Framework.Point;
 using Newtonsoft.Json;
 using System.IO;
 using CrawlIT.Shared.Combat;
+using System.Diagnostics;
 
 #endregion
 
@@ -121,12 +122,13 @@ namespace CrawlIT
                 questionDict.Add(q.QuestionSubject, q);
 
             var questionSample = questionDict["Algorithms"];
-            Console.WriteLine(questionSample.QuestionText);
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine(questionSample.Answer1);
-            Console.WriteLine(questionSample.Answer2);
-            Console.WriteLine(questionSample.Answer3);
-            Console.WriteLine(questionSample.Answer4);
+
+            Debug.WriteLine(questionSample.QuestionText);
+            Debug.WriteLine(Environment.NewLine);
+            Debug.WriteLine(questionSample.Answer1);
+            Debug.WriteLine(questionSample.Answer2);
+            Debug.WriteLine(questionSample.Answer3);
+            Debug.WriteLine(questionSample.Answer4);
 
             // TODO: think up a better way to zoom for different resolutions
             _zoom = _graphics.PreferredBackBufferHeight > 1280 ? 6.0f : 3.0f;
