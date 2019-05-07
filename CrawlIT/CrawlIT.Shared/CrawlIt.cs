@@ -75,6 +75,8 @@ namespace CrawlIT
         private Texture2D _pauseButton;
         private Point _answerSize;
         private Texture2D _answerButton;
+        private Point _crystalSize;
+        private Texture2D _crystalButton;
 
         private SpriteFont _font;
 
@@ -118,11 +120,19 @@ namespace CrawlIT
             _fight = new Fight(GraphicsDevice);
             _fight.SetState(State.Fighting);
 
-            //Creation of the texture of one button
             _answerButton = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2,
                                     GraphicsDevice.Viewport.Height / 10 * 2);
+
             _answerSize = new Point(_answerButton.Width, _answerButton.Height);
-           
+
+            Color[] data1 = new Color[_answerButton.Width * _answerButton.Height];
+
+            for (int i = 0; i < data1.Length; ++i)
+            {
+                data1[i] = Color.LightGray;
+            }
+            _answerButton.SetData(data1);
+
             // TODO: make this work
             // _gameStateManager.GameState = GameState.StartMenu;
 
@@ -168,12 +178,15 @@ namespace CrawlIT
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
+            _crystalButton = Content.Load<Texture2D>("crystal");
 
             _startSize = new Point(_startButton.Width * (int)_zoom,
                                    _startButton.Height * (int)_zoom);
             _exitSize = new Point(_exitButton.Width * (int)_zoom,
                                   _exitButton.Height * (int)_zoom);
             _pauseSize = new Point(_pauseButton.Width, _pauseButton.Height);
+
+            _crystalSize = new Point(_crystalButton.Width / 10, _crystalButton.Height / 10);
 
             _font = Content.Load<SpriteFont>("Fonts/File");
 
@@ -348,8 +361,11 @@ namespace CrawlIT
 
             if (GameStateManager.Instance.IsState(State.Fighting))
             {
+                var crystal = new Rectangle(_fight.GetPosition(_crystalButton), _crystalSize);
                 var answer = new Rectangle(_fight.GetPosition(_answerButton), _answerSize);
-                if (_touch.Intersects(answer))
+                if (_touch.Intersects(crystal))
+                    _fight.Help(_spriteBatch);
+                else if (_touch.Intersects(answer) && !_touch.Intersects(crystal))
                     _fight.ChangeTexture(_spriteBatch);
             }
 

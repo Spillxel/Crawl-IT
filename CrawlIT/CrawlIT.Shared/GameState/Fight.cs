@@ -12,8 +12,7 @@ namespace CrawlIT.Shared.GameState
         private Texture2D _pauseButton;
         private Texture2D _question;
         private Texture2D _answer;
-        private Texture2D _correct;
-        private Texture2D _incorrect;
+        private Texture2D _crystal;
 
         private Vector2 _pauseButtonPosition;
         private Vector2 _questionPosition;
@@ -21,12 +20,20 @@ namespace CrawlIT.Shared.GameState
         private Vector2 _answer2Position;
         private Vector2 _answer3Position;
         private Vector2 _answer4Position;
+        private Vector2 _crystalPosition;
+        private Vector2 _crystalScale;
 
         private Rectangle _questionRec;
         private Rectangle _answer1Rec;
         private Rectangle _answer2Rec;
         private Rectangle _answer3Rec;
         private Rectangle _answer4Rec;
+
+        private String _questionString;
+        private String _firstAnswer;
+        private String _secondAnswer;
+        private String _thirdAnswer;
+        private String _fourthAnswer;
 
         private SpriteFont _font;
 
@@ -39,22 +46,20 @@ namespace CrawlIT.Shared.GameState
 
         public override void Initialize()
         {
+            _questionString = "Who is the best programmer in this project?";
+            _firstAnswer = "Jason :S";
+            _secondAnswer = "Laurence :B";
+            _thirdAnswer = "Pedro :)";
+            _fourthAnswer = "Jiada :|";
+
             _question = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
                                       GraphicsDevice.Viewport.Height / 10);
 
             _answer = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2,
                                     GraphicsDevice.Viewport.Height / 10 * 2);
 
-            _correct = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2,
-                                    GraphicsDevice.Viewport.Height / 10 * 2);
-
-            _incorrect = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2,
-                                    GraphicsDevice.Viewport.Height / 10 * 2);
-
             Color[] data1 = new Color[_question.Width * _question.Height];
             Color[] data2 = new Color[_answer.Width * _answer.Height];
-            Color[] data3 = new Color[_correct.Width * _correct.Height];
-            Color[] data4 = new Color[_incorrect.Width * _incorrect.Height];
 
             for (int i = 0; i < data1.Length; ++i)
             {
@@ -68,18 +73,6 @@ namespace CrawlIT.Shared.GameState
             }
             _answer.SetData(data2);
 
-            for (int i = 0; i < data3.Length; ++i)
-            {
-                data3[i] = Color.Green;
-            }
-            _correct.SetData(data3);
-
-            for (int i = 0; i < data4.Length; ++i)
-            {
-                data4[i] = Color.Red;
-            }
-            _incorrect.SetData(data4);
-
             _scale = GraphicsDevice.Viewport.Width / 1200f;
         }
 
@@ -87,6 +80,7 @@ namespace CrawlIT.Shared.GameState
         {
             _pauseButton = content.Load<Texture2D>("Buttons/pause");
             _font = content.Load<SpriteFont>("Fonts/File");
+            _crystal = content.Load<Texture2D>("crystal");
         }
 
         public override void SetState(Enum gameState)
@@ -116,24 +110,20 @@ namespace CrawlIT.Shared.GameState
             _answer2Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 5, GraphicsDevice.Viewport.Height / 10 * 6);
             _answer3Position = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 8) + 5);
             _answer4Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 5, (GraphicsDevice.Viewport.Height / 10 * 8) + 5);
+            _crystalPosition = new Vector2(((GraphicsDevice.Viewport.Width / 2) - (_crystal.Width / 20)), 
+                                           ((GraphicsDevice.Viewport.Height / 10 * 8) - (_crystal.Height / 20)));
+            _crystalScale = new Vector2(0.1f, 0.1f);
 
             //Initialization of the size of the question and answers
             Point _questionPoint = new Point(_question.Width, _question.Height);
             Point _answerPoint = new Point(_answer.Width, _answer.Height);
 
             //Initialization of the rectangles using the initial position and the size of the question and answers
-            _questionRec = new Rectangle((int)_questionPosition.X, (int)_questionPosition.Y, _questionPoint.X, _questionPoint.Y);
-            _answer1Rec = new Rectangle((int)_answer1Position.X, (int)_answer1Position.Y, _answerPoint.X, _answerPoint.Y);
-            _answer2Rec = new Rectangle((int)_answer2Position.X, (int)_answer2Position.Y, _answerPoint.X, _answerPoint.Y);
-            _answer3Rec = new Rectangle((int)_answer3Position.X, (int)_answer3Position.Y, _answerPoint.X, _answerPoint.Y);
-            _answer4Rec = new Rectangle((int)_answer4Position.X, (int)_answer4Position.Y, _answerPoint.X, _answerPoint.Y);
-
-            String test = "Who is the best programmer in this project?";
-            //String test = GraphicsDevice.Viewport.Width.ToString();
-            String test1 = "Jason :S";
-            String test2 = "Laurence :B";
-            String test3 = "Pedro :)";
-            String test4 = "Jiada :|";
+            _questionRec = new Rectangle(_questionPosition.ToPoint(), _questionPoint);
+            _answer1Rec = new Rectangle(_answer1Position.ToPoint(), _answerPoint);
+            _answer2Rec = new Rectangle(_answer2Position.ToPoint(), _answerPoint);
+            _answer3Rec = new Rectangle(_answer3Position.ToPoint(), _answerPoint);
+            _answer4Rec = new Rectangle(_answer4Position.ToPoint(), _answerPoint);
 
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
@@ -143,11 +133,12 @@ namespace CrawlIT.Shared.GameState
             spriteBatch.Draw(_answer, _answer2Position, Color.White);
             spriteBatch.Draw(_answer, _answer3Position, Color.White);
             spriteBatch.Draw(_answer, _answer4Position, Color.White);
-            DrawString(spriteBatch, _font, test, _questionRec, Color.Black);
-            DrawString(spriteBatch, _font, test1, _answer1Rec, Color.Black);
-            DrawString(spriteBatch, _font, test2, _answer2Rec, Color.Black);
-            DrawString(spriteBatch, _font, test3, _answer3Rec, Color.Black);
-            DrawString(spriteBatch, _font, test4, _answer4Rec, Color.Black);
+            spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
+            DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Black);
+            DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Black);
+            DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Black);
+            DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Black);
+            DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Black);
             spriteBatch.End();
         }
 
@@ -163,6 +154,11 @@ namespace CrawlIT.Shared.GameState
                 return new Point((int)_answer3Position.X,
                                  (int)_answer3Position.Y);
             }
+            else if (button.Equals(_crystal))
+            {
+                return new Point((int)_crystalPosition.X,
+                                 (int)_crystalPosition.Y);
+            }
             else
             {
                 //return new Point(0, 0);
@@ -173,20 +169,23 @@ namespace CrawlIT.Shared.GameState
 
         public override void ChangeTexture(SpriteBatch spriteBatch)
         {
-            String test1 = "Jason :S";
-            String test2 = "Laurence :B";
-            String test3 = "Pedro :)";
-            String test4 = "Jiada :|";
+            spriteBatch.Begin();
+            DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Red);
+            DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Red);
+            DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Green);
+            DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Red);
+            spriteBatch.End();
+        }
+
+        public override void Help(SpriteBatch spriteBatch)
+        {
+            _fourthAnswer = "";
 
             spriteBatch.Begin();
-            //spriteBatch.Draw(_incorrect, _answer1Position, Color.White);
-            //spriteBatch.Draw(_incorrect, _answer2Position, Color.White);
-            //spriteBatch.Draw(_correct, _answer3Position, Color.White);
-            //spriteBatch.Draw(_incorrect, _answer4Position, Color.White);
-            DrawString(spriteBatch, _font, test1, _answer1Rec, Color.Red);
-            DrawString(spriteBatch, _font, test2, _answer2Rec, Color.Red);
-            DrawString(spriteBatch, _font, test3, _answer3Rec, Color.Green);
-            DrawString(spriteBatch, _font, test4, _answer4Rec, Color.Red);
+            DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Black);
+            DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Black);
+            DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Black);
+            DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Black);
             spriteBatch.End();
         }
 

@@ -101,5 +101,10 @@ namespace CrawlIT.Shared.GameState
             throw new NotImplementedException();
         }
 
+        public override void Help(SpriteBatch spriteBatch)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
