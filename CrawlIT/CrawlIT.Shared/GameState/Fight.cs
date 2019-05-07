@@ -52,7 +52,7 @@ namespace CrawlIT.Shared.GameState
             _questionString = "What is the SEP teacher's name?";
             _firstAnswer = "Rothkugel";
             _secondAnswer = "Zampunieris";
-            _thirdAnswer = "Muller";
+            _thirdAnswer = "Müller";
             _fourthAnswer = "Franck";
 
             _question = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
