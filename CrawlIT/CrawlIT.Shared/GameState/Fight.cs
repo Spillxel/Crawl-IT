@@ -124,7 +124,8 @@ namespace CrawlIT.Shared.GameState
 
             //Initialization of the size of the question and answers
             Point _questionPoint = new Point(_question.Width, _question.Height);
-            Point _answerPoint = new Point(_answer.Width, _answer.Height);
+            Point _answerPoint = new Point(GraphicsDevice.Viewport.Width / 2 - 3,
+                                           GraphicsDevice.Viewport.Height / 10 * 2 - 3);
             Point _enemyPoint = new Point(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 2);
 
             //Initialization of the rectangles using the initial position and the size of the question and answers
@@ -140,24 +141,22 @@ namespace CrawlIT.Shared.GameState
             // Render enemy screenshot
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
             spriteBatch.Draw(_enemy, _enemyRec, Color.White);
-            spriteBatch.End();
-
             // Render question and answers
-            spriteBatch.Begin();
             spriteBatch.Draw(_question, _questionPosition, Color.White);
-            spriteBatch.Draw(texture: _answer, position: _answer1Position, color: Color.White, scale: new Vector2((float)1.27, (float)1.26));
-            spriteBatch.Draw(texture: _answer, position: _answer2Position, color: Color.White, scale: new Vector2((float)1.27, (float)1.26));
-            spriteBatch.Draw(texture: _answer, position: _answer3Position, color: Color.White, scale: new Vector2((float)1.27, (float)1.26));
-            spriteBatch.Draw(texture: _answer, position: _answer4Position, color: Color.White, scale: new Vector2((float)1.27, (float)1.26));
-            DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Black);
-            DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Black);
-            DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Black);
-            DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Black);
-            DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Black);
+            spriteBatch.Draw(_answer, _answer1Rec, Color.White);
+            spriteBatch.Draw(_answer, _answer2Rec, Color.White);
+            spriteBatch.Draw(_answer, _answer3Rec, Color.White);
+            spriteBatch.Draw(_answer, _answer4Rec, Color.White);
             spriteBatch.End();
-
+            spriteBatch.Begin();
+            DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Black);
+            DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Cyan);
+            DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Cyan);
+            DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Cyan);
+            DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Cyan);
+            spriteBatch.End();
             // Render crystal sprite
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
             spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
             spriteBatch.End();
         }
@@ -197,10 +196,10 @@ namespace CrawlIT.Shared.GameState
             _fourthAnswer = "";
 
             spriteBatch.Begin();
-            DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Black);
-            DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Black);
-            DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Black);
-            DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Black);
+            DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Cyan);
+            DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Cyan);
+            DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Cyan);
+            DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Cyan);
             spriteBatch.End();
         }
 
