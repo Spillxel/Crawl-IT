@@ -10,9 +10,10 @@ namespace CrawlIT.Shared.GameState
         private Enum _state;
 
         private Texture2D _question;
-        private Texture2D _answer;
+        private Texture2D _screen;
         private Texture2D _crystal;
         private Texture2D _enemy;
+        private Texture2D _blackscreen;
 
         private Vector2 _questionPosition;
         private Vector2 _answer1Position;
@@ -58,11 +59,11 @@ namespace CrawlIT.Shared.GameState
             _question = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
                                       GraphicsDevice.Viewport.Height / 10);
 
-            _answer = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2 - 3,
+            _screen = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2 - 3,
                                     GraphicsDevice.Viewport.Height / 10 * 2 - 3);
 
             Color[] data1 = new Color[_question.Width * _question.Height];
-            Color[] data2 = new Color[_answer.Width * _answer.Height];
+            Color[] data2 = new Color[_screen.Width * _screen.Height];
 
             for (int i = 0; i < data1.Length; ++i)
             {
@@ -74,7 +75,7 @@ namespace CrawlIT.Shared.GameState
             {
                 data2[i] = Color.White;
             }
-            _answer.SetData(data2);
+            _screen.SetData(data2);
 
             _scale = GraphicsDevice.Viewport.Width / 1200f;
 
@@ -86,7 +87,8 @@ namespace CrawlIT.Shared.GameState
             _font = content.Load<SpriteFont>("Fonts/File");
             _crystal = content.Load<Texture2D>("Sprites/surgecrystal");
             _enemy = content.Load<Texture2D>("Sprites/tutorfight");
-            _answer = content.Load<Texture2D>("Sprites/screentexture");
+            _screen = content.Load<Texture2D>("Sprites/screentexture");
+            _blackscreen = content.Load<Texture2D>("Sprites/blackscreentexture");
         }
 
         public override void SetState(Enum gameState)
@@ -143,10 +145,10 @@ namespace CrawlIT.Shared.GameState
             spriteBatch.Draw(_enemy, _enemyRec, Color.White);
             // Render question and answers
             spriteBatch.Draw(_question, _questionPosition, Color.White);
-            spriteBatch.Draw(_answer, _answer1Rec, Color.White);
-            spriteBatch.Draw(_answer, _answer2Rec, Color.White);
-            spriteBatch.Draw(_answer, _answer3Rec, Color.White);
-            spriteBatch.Draw(_answer, _answer4Rec, Color.White);
+            spriteBatch.Draw(_screen, _answer1Rec, Color.White);
+            spriteBatch.Draw(_screen, _answer2Rec, Color.White);
+            spriteBatch.Draw(_screen, _answer3Rec, Color.White);
+            spriteBatch.Draw(_screen, _answer4Rec, Color.White);
             spriteBatch.End();
             spriteBatch.Begin();
             DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Black);
@@ -163,7 +165,7 @@ namespace CrawlIT.Shared.GameState
 
         public override Point GetPosition(Texture2D button)
         {
-            if (button.Equals(_answer))
+            if (button.Equals(_screen))
             {
                 return new Point((int)_answer3Position.X,
                                  (int)_answer3Position.Y);
@@ -183,6 +185,11 @@ namespace CrawlIT.Shared.GameState
 
         public override void ChangeTexture(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
+            spriteBatch.Draw(_blackscreen, _answer4Rec, Color.White);
+            spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
+            spriteBatch.End();
+
             spriteBatch.Begin();
             DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Red);
             DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Red);
@@ -194,6 +201,11 @@ namespace CrawlIT.Shared.GameState
         public override void Help(SpriteBatch spriteBatch)
         {
             _fourthAnswer = "";
+
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
+            spriteBatch.Draw(_blackscreen, _answer4Rec, Color.White);
+            spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
+            spriteBatch.End();
 
             spriteBatch.Begin();
             DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Cyan);
