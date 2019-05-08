@@ -87,7 +87,7 @@ namespace CrawlIT.Shared.GameState
             _font = content.Load<SpriteFont>("Fonts/File");
             _crystal = content.Load<Texture2D>("Sprites/surgecrystal");
             _enemy = content.Load<Texture2D>("Sprites/tutorfight");
-            _screen = content.Load<Texture2D>("Sprites/screentexture");
+            _screen = content.Load<Texture2D>("Sprites/newscreentexture");
             _blackscreen = content.Load<Texture2D>("Sprites/blackscreentexture");
         }
 
