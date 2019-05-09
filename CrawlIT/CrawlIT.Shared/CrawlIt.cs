@@ -64,9 +64,11 @@ namespace CrawlIT
 
         private Player _player;
         private Enemy _tutor;
+        private UIIcon _lifeBar; 
         private Camera _playerCamera;
         private Texture2D _playerTexture;
         private Texture2D _tutorTexture;
+        private Texture2D _lifeBarTexture;
 
         private GameState _menu;
         private GameState _level;
@@ -206,7 +208,11 @@ namespace CrawlIT
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
+
             _surgeCrystal = Content.Load<Texture2D>("Sprites/surgecrystal");
+
+            _lifeBarTexture = Content.Load<Texture2D>("Sprites/lifebar");
+            _lifeBar = new UIIcon(_lifeBarTexture, _resolution.TransformationMatrix(), 50, 50);
 
             _startSize = new Point(_startButton.Width * (int)_zoom,
                                    _startButton.Height * (int)_zoom);
@@ -361,7 +367,6 @@ namespace CrawlIT
                                                          _graphics.PreferredBackBufferHeight);
                 _spriteBatch.Draw(_mapRenderTarget, destinationRectangle, Color.White);
                 _spriteBatch.End();
-                // End of little trick
 
                 #endregion
 
@@ -381,6 +386,17 @@ namespace CrawlIT
                 #region Drawing Ennemies
 
                 #endregion
+
+                #region Drawing UI
+
+                _spriteBatch.Begin(SpriteSortMode.BackToFront,
+                                  BlendState.AlphaBlend,
+                                  SamplerState.PointClamp, null, null, null,
+                                  _staticCamera.Transform);
+                _lifeBar.Draw(_spriteBatch);
+                _spriteBatch.End();
+
+                #endregion 
 
                 // Saving this here for future reference...
                 /*_spriteBatch.Begin(SpriteSortMode.BackToFront,
