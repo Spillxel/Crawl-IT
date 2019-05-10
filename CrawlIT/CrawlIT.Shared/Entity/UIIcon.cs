@@ -7,7 +7,7 @@ namespace CrawlIT.Shared.Entity
     public class UIIcon : Entity
     {
         private readonly Vector2 _position;
-        static readonly Vector2 _scale = new Vector2(5, 5);
+        static readonly Vector2 _scale = new Vector2(3, 3);
 
         public UIIcon(Texture2D texture, Matrix scale, float posx, float posy)
         {

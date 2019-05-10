@@ -14,7 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Character.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Entity.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entity\Item.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\UIIcon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\Animation.cs" />

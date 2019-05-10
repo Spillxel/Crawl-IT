@@ -64,7 +64,8 @@ namespace CrawlIT
 
         private Player _player;
         private Enemy _tutor;
-        private UIIcon _lifeBar; 
+        private UIIcon _lifeBar;
+        private UIIcon _surgeCrystal;
         private Camera _playerCamera;
         private Texture2D _playerTexture;
         private Texture2D _tutorTexture;
@@ -83,7 +84,7 @@ namespace CrawlIT
         private Point _answerSize;
         private Texture2D _answerButton;
         private Point _surgeCrystalSize;
-        private Texture2D _surgeCrystal;
+        private Texture2D _surgeCrystalTexture;
 
         private Boolean win;
 
@@ -209,7 +210,9 @@ namespace CrawlIT
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
 
-            _surgeCrystal = Content.Load<Texture2D>("Sprites/surgecrystal");
+            _surgeCrystalTexture = Content.Load<Texture2D>("Sprites/surgecrystal");
+            // 210 = 32 (texture width) * 5 (zoom) + 50 (margin)
+            _surgeCrystal = new UIIcon(_surgeCrystalTexture, _resolution.TransformationMatrix(), _graphics.PreferredBackBufferWidth - (32 * 3 + 50), 50);
 
             _lifeBarTexture = Content.Load<Texture2D>("Sprites/lifebar");
             _lifeBar = new UIIcon(_lifeBarTexture, _resolution.TransformationMatrix(), 50, 50);
@@ -220,8 +223,8 @@ namespace CrawlIT
                                   _exitButton.Height * (int)_zoom);
             _pauseSize = new Point(_pauseButton.Width, _pauseButton.Height);
 
-            _surgeCrystalSize = new Point(_surgeCrystal.Width * GraphicsDevice.Viewport.Width / 200,
-                                          _surgeCrystal.Height * GraphicsDevice.Viewport.Width / 200);
+            _surgeCrystalSize = new Point(_surgeCrystalTexture.Width * GraphicsDevice.Viewport.Width / 200,
+                                          _surgeCrystalTexture.Height * GraphicsDevice.Viewport.Width / 200);
 
             _font = Content.Load<SpriteFont>("Fonts/File");
 
@@ -394,20 +397,15 @@ namespace CrawlIT
                                   SamplerState.PointClamp, null, null, null,
                                   _staticCamera.Transform);
                 _lifeBar.Draw(_spriteBatch);
+                _surgeCrystal.Draw(_spriteBatch);
                 _spriteBatch.End();
 
                 #endregion 
-
-                // Saving this here for future reference...
-                /*_spriteBatch.Begin(SpriteSortMode.BackToFront,
-                                  BlendState.AlphaBlend,
-                                  null, null, null, null,
-                                  _staticCamera.Transform);*/
             }
 
             if (GameStateManager.Instance.IsState(State.Fighting))
             {
-                var crystal = new Rectangle(_fight.GetPosition(_surgeCrystal), _surgeCrystalSize);
+                var crystal = new Rectangle(_fight.GetPosition(_surgeCrystalTexture), _surgeCrystalSize);
                 var answer = new Rectangle(_fight.GetPosition(_answerButton), _answerSize);
                 if (_touch.Intersects(crystal))
                     _fight.Help(_spriteBatch);
