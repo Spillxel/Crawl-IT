@@ -212,10 +212,9 @@ namespace CrawlIT
 
             _surgeCrystalTexture = Content.Load<Texture2D>("Sprites/surgecrystal");
             // 210 = 32 (texture width) * 5 (zoom) + 50 (margin)
-            _surgeCrystal = new UIIcon(_surgeCrystalTexture, _resolution.TransformationMatrix(), _graphics.PreferredBackBufferWidth - (32 * 3 + 50), 50);
+            _surgeCrystal = new UIIcon(_surgeCrystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), 50);
 
             _lifeBarTexture = Content.Load<Texture2D>("Sprites/lifebar");
-            _lifeBar = new UIIcon(_lifeBarTexture, _resolution.TransformationMatrix(), 50, 50);
 
             _startSize = new Point(_startButton.Width * (int)_zoom,
                                    _startButton.Height * (int)_zoom);
@@ -229,6 +228,7 @@ namespace CrawlIT
             _font = Content.Load<SpriteFont>("Fonts/File");
 
             _staticCamera = new Camera(0, 0, 1.0f);
+            _lifeBar = new UIIcon(_lifeBarTexture, _zoom, 50, 50);
 
             // Fetching list of collision objects in the map to check for collision
             _player.CollisionObjects = _map.ObjectLayers[0].Objects
@@ -386,7 +386,7 @@ namespace CrawlIT
 
                 #endregion
 
-                #region Drawing Ennemies
+                #region Drawing Enemies
 
                 #endregion
 
