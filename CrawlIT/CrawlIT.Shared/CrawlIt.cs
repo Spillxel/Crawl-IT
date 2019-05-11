@@ -55,6 +55,7 @@ namespace CrawlIT
             Fighting
         }
 
+        private Camera _playerCamera;
         private Camera _staticCamera;
         private Song _backgroundSong;
 
@@ -64,14 +65,21 @@ namespace CrawlIT
 
         private Player _player;
         private Enemy _tutor;
+
         private UIIcon _lifeBar;
         private UIIcon _surgeCrystal;
         private UIIcon _save;
-        private Camera _playerCamera;
+        private UIIcon _inventory;
+        private UIIcon _help;
+        private UIIcon _badges;
+
         private Texture2D _playerTexture;
         private Texture2D _tutorTexture;
         private Texture2D _lifeBarTexture;
         private Texture2D _saveTexture;
+        private Texture2D _inventoryTexture;
+        private Texture2D _helpTexture;
+        private Texture2D _badgeTexture;
 
         private GameState _menu;
         private GameState _level;
@@ -215,6 +223,9 @@ namespace CrawlIT
             _surgeCrystalTexture = Content.Load<Texture2D>("Sprites/surgecrystal");
             _lifeBarTexture = Content.Load<Texture2D>("Sprites/lifebar");
             _saveTexture = Content.Load<Texture2D>("Sprites/save");
+            _inventoryTexture = Content.Load<Texture2D>("Sprites/iconplaceholder");
+            _helpTexture = Content.Load<Texture2D>("Sprites/iconplaceholder");
+            _badgeTexture = Content.Load<Texture2D>("Sprites/iconplaceholder");
 
             _startSize = new Point(_startButton.Width * (int)_zoom,
                                    _startButton.Height * (int)_zoom);
@@ -229,9 +240,13 @@ namespace CrawlIT
 
             _staticCamera = new Camera(0, 0, 1.0f);
 
+            //Initialize Exploration UI object here
             _lifeBar = new UIIcon(_lifeBarTexture, _zoom, 50, 50);
             _surgeCrystal = new UIIcon(_surgeCrystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), 50);
             _save = new UIIcon(_saveTexture, _zoom, 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            _inventory = new UIIcon(_inventoryTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            _help = new UIIcon(_helpTexture, _zoom, (_graphics.PreferredBackBufferWidth / 4) + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            _badges = new UIIcon(_badgeTexture, _zoom, (_graphics.PreferredBackBufferWidth / 2) + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
 
             // Fetching list of collision objects in the map to check for collision
             _player.CollisionObjects = _map.ObjectLayers[0].Objects
@@ -395,6 +410,18 @@ namespace CrawlIT
 
                 #region Drawing UI
 
+                var levelString = "Semester 1";
+                var (levelStringDimensionX, levelStringDimensionY) = _font.MeasureString(levelString);
+                var levelStringPosX = (_graphics.PreferredBackBufferWidth - levelStringDimensionX) / 2;
+                var levelStringPosY = 50;
+
+                if (!GameStateManager.Instance.IsState(State.Fighting))
+                {
+                    _spriteBatch.Begin();
+                    _spriteBatch.DrawString(_font, levelString, new Vector2(levelStringPosX, levelStringPosY), Color.White);
+                    _spriteBatch.End();
+                }
+
                 _spriteBatch.Begin(SpriteSortMode.BackToFront,
                                   BlendState.AlphaBlend,
                                   SamplerState.PointClamp, null, null, null,
@@ -402,6 +429,9 @@ namespace CrawlIT
                 _lifeBar.Draw(_spriteBatch);
                 _surgeCrystal.Draw(_spriteBatch);
                 _save.Draw(_spriteBatch);
+                _inventory.Draw(_spriteBatch);
+                _help.Draw(_spriteBatch);
+                _badges.Draw(_spriteBatch);
                 _spriteBatch.End();
 
                 #endregion 
@@ -432,7 +462,7 @@ namespace CrawlIT
             if (!GameStateManager.Instance.IsState(State.Fighting))
             {
                 _spriteBatch.Begin();
-                _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Black);
+                _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Red);
                 _spriteBatch.End();
             }
 

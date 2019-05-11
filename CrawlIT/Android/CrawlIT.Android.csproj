@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sprites\blackscreentexture.png" />
+    <Content Include="Content\Sprites\iconplaceholder.png" />
     <Content Include="Content\Sprites\lifebar.png" />
     <Content Include="Content\Sprites\newscreentexture.png" />
     <Content Include="Content\Sprites\save.png" />
