@@ -66,10 +66,12 @@ namespace CrawlIT
         private Enemy _tutor;
         private UIIcon _lifeBar;
         private UIIcon _surgeCrystal;
+        private UIIcon _save;
         private Camera _playerCamera;
         private Texture2D _playerTexture;
         private Texture2D _tutorTexture;
         private Texture2D _lifeBarTexture;
+        private Texture2D _saveTexture;
 
         private GameState _menu;
         private GameState _level;
@@ -211,10 +213,8 @@ namespace CrawlIT
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
 
             _surgeCrystalTexture = Content.Load<Texture2D>("Sprites/surgecrystal");
-            // 210 = 32 (texture width) * 5 (zoom) + 50 (margin)
-            _surgeCrystal = new UIIcon(_surgeCrystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), 50);
-
             _lifeBarTexture = Content.Load<Texture2D>("Sprites/lifebar");
+            _saveTexture = Content.Load<Texture2D>("Sprites/save");
 
             _startSize = new Point(_startButton.Width * (int)_zoom,
                                    _startButton.Height * (int)_zoom);
@@ -228,7 +228,10 @@ namespace CrawlIT
             _font = Content.Load<SpriteFont>("Fonts/File");
 
             _staticCamera = new Camera(0, 0, 1.0f);
+
             _lifeBar = new UIIcon(_lifeBarTexture, _zoom, 50, 50);
+            _surgeCrystal = new UIIcon(_surgeCrystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), 50);
+            _save = new UIIcon(_saveTexture, _zoom, 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
 
             // Fetching list of collision objects in the map to check for collision
             _player.CollisionObjects = _map.ObjectLayers[0].Objects
@@ -398,6 +401,7 @@ namespace CrawlIT
                                   _staticCamera.Transform);
                 _lifeBar.Draw(_spriteBatch);
                 _surgeCrystal.Draw(_spriteBatch);
+                _save.Draw(_spriteBatch);
                 _spriteBatch.End();
 
                 #endregion 
