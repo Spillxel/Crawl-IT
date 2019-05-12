@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\Animation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CrawlIt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\ExplorationUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameState\GameState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameState\GameStateManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameState\Menu.cs" />
@@ -43,6 +44,7 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Animation\" />
     <Folder Include="$(MSBuildThisFileDirectory)GameState\" />
+    <Folder Include="$(MSBuildThisFileDirectory)UI\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Content\Buttons\exit.png" />
