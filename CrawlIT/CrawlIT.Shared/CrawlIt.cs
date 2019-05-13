@@ -119,25 +119,6 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
-            #region Load questions from JSON file
-
-            var questionDict = new Dictionary<string, Question>();
-            var filePath = Path.Combine(Content.RootDirectory, "questions.json");
-            
-            string jsonString;
-            using (var stream = TitleContainer.OpenStream(filePath))
-                using (var reader = new StreamReader(stream))
-                    jsonString = reader.ReadToEnd();
-
-            var questionList = JsonConvert.DeserializeObject<QuestionList>(jsonString);
-            
-            foreach (var q in questionList.Questions)
-                questionDict.Add(q.QuestionSubject, q);
-
-            var questionSample = questionDict["Algorithms"];
-
-            #endregion
-
             // TODO: think up a better way to zoom for different resolutions
             _zoom = _graphics.PreferredBackBufferHeight > 1280 ? 6.0f : 3.0f;
 

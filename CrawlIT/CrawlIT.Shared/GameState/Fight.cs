@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using CrawlIT.Shared.Combat;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 
 namespace CrawlIT.Shared.GameState
 {
@@ -50,12 +54,6 @@ namespace CrawlIT.Shared.GameState
 
         public override void Initialize()
         {
-            _questionString = "What is the SEP teacher's name?";
-            _firstAnswer = "Rothkugel";
-            _secondAnswer = "Zampunieris";
-            _thirdAnswer = "Müller";
-            _fourthAnswer = "Franck";
-
             _question = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
                                       GraphicsDevice.Viewport.Height / 10);
 
@@ -84,6 +82,27 @@ namespace CrawlIT.Shared.GameState
 
         public override void LoadContent(ContentManager content)
         {
+            var questionDict = new Dictionary<string, Question>();
+            var filePath = Path.Combine(content.RootDirectory, "questions.json");
+
+            string jsonString;
+            using (var stream = TitleContainer.OpenStream(filePath))
+            using (var reader = new StreamReader(stream))
+                jsonString = reader.ReadToEnd();
+
+            var questionList = JsonConvert.DeserializeObject<QuestionList>(jsonString);
+
+            foreach (var q in questionList.Questions)
+                questionDict.Add(q.QuestionSubject, q);
+
+            var questionSample = questionDict["Programming"];
+
+            _questionString = questionSample.QuestionText;
+            _firstAnswer = questionSample.Answer1;
+            _secondAnswer = questionSample.Answer2;
+            _thirdAnswer = questionSample.Answer3;
+            _fourthAnswer = questionSample.Answer4;
+
             _font = content.Load<SpriteFont>("Fonts/File");
             _crystal = content.Load<Texture2D>("Sprites/surgecrystal");
             _enemy = content.Load<Texture2D>("Sprites/tutorfight");
@@ -185,15 +204,18 @@ namespace CrawlIT.Shared.GameState
 
         public override void ChangeTexture(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
-            spriteBatch.Draw(_blackscreen, _answer4Rec, Color.White);
-            spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
-            spriteBatch.End();
+            if(_fourthAnswer=="")
+            {
+                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
+                spriteBatch.Draw(_blackscreen, _answer4Rec, Color.White);
+                spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
+                spriteBatch.End();
+            }
 
             spriteBatch.Begin();
             DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Red);
             DrawString(spriteBatch, _font, _secondAnswer, _answer2Rec, Color.Red);
-            DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Green);
+            DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.LimeGreen);
             DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Red);
             spriteBatch.End();
         }
