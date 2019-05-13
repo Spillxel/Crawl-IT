@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using CrawlIT.Shared.Combat;
@@ -27,7 +28,6 @@ namespace CrawlIT.Shared.GameState
         private Vector2 _crystalPosition;
         private Vector2 _enemyPosition;
         private Vector2 _crystalScale;
-        private Vector2 _enemyScale;
 
         private Rectangle _questionRec;
         private Rectangle _answer1Rec;
@@ -35,6 +35,7 @@ namespace CrawlIT.Shared.GameState
         private Rectangle _answer3Rec;
         private Rectangle _answer4Rec;
         private Rectangle _enemyRec;
+        private List<Rectangle> _answerRec = new List<Rectangle>();
 
         private String _questionString;
         private String _firstAnswer;
@@ -43,6 +44,8 @@ namespace CrawlIT.Shared.GameState
         private String _fourthAnswer;
 
         private SpriteFont _font;
+
+        private Random rnd = new Random();
 
         private float _scale;
         private float _crystalRatio;
@@ -57,23 +60,13 @@ namespace CrawlIT.Shared.GameState
             _question = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
                                       GraphicsDevice.Viewport.Height / 10);
 
-            _screen = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2 - 3,
-                                    GraphicsDevice.Viewport.Height / 10 * 2 - 3);
-
             Color[] data1 = new Color[_question.Width * _question.Height];
-            Color[] data2 = new Color[_screen.Width * _screen.Height];
 
             for (int i = 0; i < data1.Length; ++i)
             {
                 data1[i] = Color.LightGray;
             }
             _question.SetData(data1);
-
-            for (int i = 0; i < data2.Length; ++i)
-            {
-                data2[i] = Color.White;
-            }
-            _screen.SetData(data2);
 
             _scale = GraphicsDevice.Viewport.Width / 1200f;
 
@@ -82,6 +75,7 @@ namespace CrawlIT.Shared.GameState
 
         public override void LoadContent(ContentManager content)
         {
+            #region
             var questionDict = new Dictionary<string, Question>();
             var filePath = Path.Combine(content.RootDirectory, "questions.json");
 
@@ -94,8 +88,9 @@ namespace CrawlIT.Shared.GameState
 
             foreach (var q in questionList.Questions)
                 questionDict.Add(q.QuestionSubject, q);
+            #endregion
 
-            var questionSample = questionDict["Programming"];
+            Question questionSample = questionDict["Maths"];
 
             _questionString = questionSample.QuestionText;
             _firstAnswer = questionSample.Answer1;
@@ -140,8 +135,6 @@ namespace CrawlIT.Shared.GameState
                                            ((GraphicsDevice.Viewport.Height / 10 * 8) - (_crystal.Height * _crystalRatio / 2)));
             _enemyPosition = new Vector2(0, 0);
             _crystalScale = new Vector2(_crystalRatio, _crystalRatio);
-            _enemyScale = new Vector2((float)1.75, (float)1.75);
-
 
             //Initialization of the size of the question and answers
             Point _questionPoint = new Point(_question.Width, _question.Height);
@@ -155,7 +148,9 @@ namespace CrawlIT.Shared.GameState
             _answer2Rec = new Rectangle(_answer2Position.ToPoint(), _answerPoint);
             _answer3Rec = new Rectangle(_answer3Position.ToPoint(), _answerPoint);
             _answer4Rec = new Rectangle(_answer4Position.ToPoint(), _answerPoint);
-            _enemyRec = new Rectangle(_enemyPosition.ToPoint(), _enemyPoint); 
+            _enemyRec = new Rectangle(_enemyPosition.ToPoint(), _enemyPoint);
+
+            _answerRec.Add(_answer1Rec);
 
             GraphicsDevice.Clear(Color.Black);
 
@@ -169,6 +164,8 @@ namespace CrawlIT.Shared.GameState
             spriteBatch.Draw(_screen, _answer3Rec, Color.White);
             spriteBatch.Draw(_screen, _answer4Rec, Color.White);
             spriteBatch.End();
+
+            // Draw the text on the rectangles of the answers
             spriteBatch.Begin();
             DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Black);
             DrawString(spriteBatch, _font, _firstAnswer, _answer1Rec, Color.Cyan);
@@ -176,6 +173,7 @@ namespace CrawlIT.Shared.GameState
             DrawString(spriteBatch, _font, _thirdAnswer, _answer3Rec, Color.Cyan);
             DrawString(spriteBatch, _font, _fourthAnswer, _answer4Rec, Color.Cyan);
             spriteBatch.End();
+
             // Render crystal sprite
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
             spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
@@ -202,9 +200,14 @@ namespace CrawlIT.Shared.GameState
             }
         }
 
-        public override void ChangeTexture(SpriteBatch spriteBatch)
+        public override Point GetRectangle(Rectangle touch)
         {
-            if(_fourthAnswer=="")
+            return new Point(0, 0);
+        }
+
+        public override void ChangeColour(SpriteBatch spriteBatch)
+        {
+            if (_fourthAnswer == "")
             {
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
                 spriteBatch.Draw(_blackscreen, _answer4Rec, Color.White);
