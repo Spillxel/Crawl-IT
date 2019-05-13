@@ -266,11 +266,11 @@ namespace CrawlIT.Shared.GameState
             spriteBatch.End();
         }
 
-
-        // Draws the given string inside the boundaries Rectangle without going outside of it.
-        // 
-        // If the string is not a perfect match inside of the boundaries (which it would rarely be), then
-        // the string will be absolutely-centered inside of the boundaries.
+        /// <summary>
+        /// Draws the given string inside the boundaries
+        /// </summary>
+        /// If the string is not a perfect match inside of the boundaries (which it would rarely be), then
+        /// the string will be absolutely-centered inside of the boundaries.
         public void DrawString(SpriteBatch spriteBatch, SpriteFont font, string strToDraw, Rectangle boundaries, Color color)
         {
             // Code for parsing the text depending on the width of the screen
