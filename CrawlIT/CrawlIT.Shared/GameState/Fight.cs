@@ -15,6 +15,7 @@ namespace CrawlIT.Shared.GameState
         private Enum _state;
 
         private Texture2D _question;
+        private Texture2D _questionTexture;
         private Texture2D _screen;
         private Texture2D _crystal;
         private Texture2D _enemy;
@@ -46,6 +47,14 @@ namespace CrawlIT.Shared.GameState
         private SpriteFont _font;
 
         private Random rnd = new Random();
+        private int _questionFrameWidth;
+        private int _questionFrameHeight;
+
+        private readonly Animation.Animation _noAnswer;
+        private readonly Animation.Animation _correctAnswer;
+        private readonly Animation.Animation _wrongAnswer;
+
+        private Animation.Animation _questionCurrentAnimation;
 
         private float _scale;
         private float _crystalRatio;
@@ -53,12 +62,25 @@ namespace CrawlIT.Shared.GameState
         public Fight(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
         {
+            _questionFrameWidth = 600;
+            _questionFrameHeight = 150;
+
+            _noAnswer = new Animation.Animation();
+            _noAnswer.AddFrame(new Rectangle(0, 0, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
+
+            _correctAnswer = new Animation.Animation();
+            _noAnswer.AddFrame(new Rectangle(0, _questionFrameHeight, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
+
+            _wrongAnswer = new Animation.Animation();
+            _noAnswer.AddFrame(new Rectangle(0, _questionFrameHeight * 2, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
+
+            _questionCurrentAnimation = _noAnswer;
         }
 
         public override void Initialize()
         {
             _question = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
-                                      GraphicsDevice.Viewport.Height / 10);
+                                      GraphicsDevice.Viewport.Height / 6);
 
             Color[] data1 = new Color[_question.Width * _question.Height];
 
@@ -103,6 +125,7 @@ namespace CrawlIT.Shared.GameState
             _enemy = content.Load<Texture2D>("Sprites/tutorfight");
             _screen = content.Load<Texture2D>("Sprites/newscreentexture");
             _blackscreen = content.Load<Texture2D>("Sprites/blackscreentexture");
+            _questionTexture = content.Load<Texture2D>("Sprites/questiontexturesheet");
         }
 
         public override void SetState(Enum gameState)
@@ -121,12 +144,13 @@ namespace CrawlIT.Shared.GameState
 
         public override void Update(GameTime gameTime)
         {
+            _questionCurrentAnimation.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Initialization of the vectors responsible of the initial position of the question and answers
-            _questionPosition = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 5) - 6);
+            _questionPosition = new Vector2(0, (GraphicsDevice.Viewport.Height / 11 * 5) - 6);
             _answer1Position = new Vector2(0, GraphicsDevice.Viewport.Height / 10 * 6);
             _answer2Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 3, GraphicsDevice.Viewport.Height / 10 * 6);
             _answer3Position = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 8) + 3);
@@ -157,8 +181,10 @@ namespace CrawlIT.Shared.GameState
             // Render enemy screenshot
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
             spriteBatch.Draw(_enemy, _enemyRec, Color.White);
-            // Render question and answers
-            spriteBatch.Draw(_question, _questionPosition, Color.White);
+            // Render question
+            var sourceRectangle = _questionCurrentAnimation.CurrentRectangle;
+            spriteBatch.Draw(_questionTexture, _questionRec, sourceRectangle, Color.White);
+            // Render answers
             spriteBatch.Draw(_screen, _answer1Rec, Color.White);
             spriteBatch.Draw(_screen, _answer2Rec, Color.White);
             spriteBatch.Draw(_screen, _answer3Rec, Color.White);
