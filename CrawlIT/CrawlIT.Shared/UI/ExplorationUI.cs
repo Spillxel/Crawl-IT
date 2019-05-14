@@ -30,13 +30,15 @@ namespace CrawlIT.Shared.UI
         private Camera.Camera _staticCamera;
         private SpriteFont _font;
         private SpriteBatch _spriteBatch;
+        private Player _player;
 
-        public ExplorationUI(float zoom, GraphicsDeviceManager graphics, ContentManager content, Camera.Camera staticCamera)
+        public ExplorationUI(float zoom, GraphicsDeviceManager graphics, ContentManager content, Camera.Camera staticCamera, Player player)
         {
             _zoom = zoom;
             _graphics = graphics;
             _content = content;
             _staticCamera = staticCamera;
+            _player = player;
         }
 
         public void Initialize()
@@ -46,7 +48,7 @@ namespace CrawlIT.Shared.UI
 
         public void Load()
         {
-            _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar");
+            _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar3");
             _saveTexture = _content.Load<Texture2D>("Sprites/save");
             _inventoryTexture = _content.Load<Texture2D>("Sprites/iconplaceholder");
             _helpTexture = _content.Load<Texture2D>("Sprites/help");
@@ -76,10 +78,23 @@ namespace CrawlIT.Shared.UI
             _spriteBatch.DrawString(_font, levelString, new Vector2(levelStringPosX, levelStringPosY), Color.White);
             _spriteBatch.End();
 
+            switch (_player.lifeCount)
+            {
+                case 3:
+                    _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar3");
+                    break;
+                case 2:
+                    _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar2");
+                    break;
+                case 1:
+                    _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar1");
+                    break;
+            }
+
             _spriteBatch.Begin(SpriteSortMode.BackToFront,
-                              BlendState.AlphaBlend,
-                              SamplerState.PointClamp, null, null, null,
-                              _staticCamera.Transform);
+                  BlendState.AlphaBlend,
+                  SamplerState.PointClamp, null, null, null,
+                  _staticCamera.Transform);
             _lifeBar.Draw(_spriteBatch);
             _surgeCrystal.Draw(_spriteBatch);
             _save.Draw(_spriteBatch);
@@ -91,7 +106,7 @@ namespace CrawlIT.Shared.UI
 
         public void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            _lifeBar.Update(gameTime);
         }
     }
 }

@@ -238,8 +238,14 @@ namespace CrawlIT.Shared.GameState
         public override bool GetAnswer(Rectangle touch)
         {
             if (touch.Intersects(_answerRec[correct]))
+            {
                 return true;
+            }
+            else
+            {
+                //Player lifecount --;
                 return false;
+            }
         }
 
         public override void ChangeColour(SpriteBatch spriteBatch)

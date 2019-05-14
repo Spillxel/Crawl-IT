@@ -129,7 +129,7 @@ namespace CrawlIT
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _explorationUI = new ExplorationUI(_zoom, _graphics, Content, _staticCamera);
+            _explorationUI = new ExplorationUI(_zoom, _graphics, Content, _staticCamera, _player);
 
             _level = new Level(GraphicsDevice);
             _level.SetState(State.Playing);
