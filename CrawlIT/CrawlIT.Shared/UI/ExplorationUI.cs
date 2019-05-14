@@ -49,7 +49,7 @@ namespace CrawlIT.Shared.UI
             _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar");
             _saveTexture = _content.Load<Texture2D>("Sprites/save");
             _inventoryTexture = _content.Load<Texture2D>("Sprites/iconplaceholder");
-            _helpTexture = _content.Load<Texture2D>("Sprites/iconplaceholder");
+            _helpTexture = _content.Load<Texture2D>("Sprites/help");
             _badgeTexture = _content.Load<Texture2D>("Sprites/iconplaceholder");
             _surgeCrystalTexture = _content.Load<Texture2D>("Sprites/surgecrystal");
             _font = _content.Load<SpriteFont>("Fonts/File");
