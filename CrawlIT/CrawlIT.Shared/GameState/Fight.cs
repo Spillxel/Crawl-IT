@@ -197,8 +197,19 @@ namespace CrawlIT.Shared.GameState
             DrawString(spriteBatch, _font, _firstAnswer, _answerRec[correct], Color.Cyan);
             DrawString(spriteBatch, _font, _secondAnswer, _answerRec[wrong1], Color.Cyan);
             DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[wrong2], Color.Cyan);
-            DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[wrong3], Color.Cyan);
-            spriteBatch.End();
+            if (_fourthAnswer == "")
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
+                spriteBatch.Draw(_blackscreen, _answerRec[wrong3], Color.White);
+                spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
+                spriteBatch.End();
+            }
+            else
+            {
+                DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[wrong3], Color.Cyan);
+                spriteBatch.End();
+            }
 
             // Render crystal sprite
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
@@ -210,8 +221,8 @@ namespace CrawlIT.Shared.GameState
         {
             if (button.Equals(_screen))
             {
-                return new Point((int)_answer3Position.X,
-                                 (int)_answer3Position.Y);
+                return new Point((int)_answer1Position.X,
+                                 (int)_answer1Position.Y);
             }
             else if (button.Equals(_crystal))
             {
@@ -220,15 +231,15 @@ namespace CrawlIT.Shared.GameState
             }
             else
             {
-                //return new Point(0, 0);
-                return new Point((int)_answer3Position.X,
-                                 (int)_answer3Position.Y);
+                return new Point(0, 0);
             }
         }
 
-        public override Point GetRectangle(Rectangle touch)
+        public override bool GetAnswer(Rectangle touch)
         {
-            return new Point(0, 0);
+            if (touch.Intersects(_answerRec[correct]))
+                return true;
+                return false;
         }
 
         public override void ChangeColour(SpriteBatch spriteBatch)

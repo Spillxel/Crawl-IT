@@ -184,7 +184,7 @@ namespace CrawlIT
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
-            _answerButton = Content.Load<Texture2D>("Sprites/screentexture");
+            _answerButton = Content.Load<Texture2D>("Sprites/newscreentexture");
 
             _explorationUI.Load();
 
@@ -196,8 +196,8 @@ namespace CrawlIT
                                   _exitButton.Height * (int)_zoom);
             _pauseSize = new Point(_pauseButton.Width, _pauseButton.Height);
 
-            _answerSize = new Point(GraphicsDevice.Viewport.Width / 2 - 3,
-                                    GraphicsDevice.Viewport.Height / 10 * 2 - 3);
+            _answerSize = new Point(GraphicsDevice.Viewport.Width,
+                                    GraphicsDevice.Viewport.Height / 10 * 4);
             _surgeCrystalSize = new Point(_surgeCrystalTexture.Width * GraphicsDevice.Viewport.Width / 200,
                                           _surgeCrystalTexture.Height * GraphicsDevice.Viewport.Width / 200);
 
@@ -377,7 +377,7 @@ namespace CrawlIT
                 else if (_touch.Intersects(answer) && !_touch.Intersects(crystal))
                 {
                     _fight.ChangeColour(_spriteBatch);
-                    win = true;
+                    win |= _fight.GetAnswer(_touch);
                 }
             }
 

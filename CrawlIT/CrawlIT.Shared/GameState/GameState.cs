@@ -30,7 +30,7 @@ namespace CrawlIT.Shared.GameState
 
         public abstract Point GetPosition(Texture2D button);
 
-        public abstract Point GetRectangle(Rectangle touch);
+        public abstract bool GetAnswer(Rectangle touch);
 
         public abstract void ChangeColour(SpriteBatch spriteBatch);
 

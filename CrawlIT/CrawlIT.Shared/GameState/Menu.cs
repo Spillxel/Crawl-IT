@@ -96,7 +96,7 @@ namespace CrawlIT.Shared.GameState
             }
         }
 
-        public override Point GetRectangle(Rectangle touch)
+        public override bool GetAnswer(Rectangle touch)
         {
             throw new NotImplementedException();
         }
