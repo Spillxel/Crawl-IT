@@ -119,25 +119,6 @@ namespace CrawlIT
         /// </summary>
         protected override void Initialize()
         {
-            #region Load questions from JSON file
-
-            var questionDict = new Dictionary<string, Question>();
-            var filePath = Path.Combine(Content.RootDirectory, "questions.json");
-            
-            string jsonString;
-            using (var stream = TitleContainer.OpenStream(filePath))
-                using (var reader = new StreamReader(stream))
-                    jsonString = reader.ReadToEnd();
-
-            var questionList = JsonConvert.DeserializeObject<QuestionList>(jsonString);
-            
-            foreach (var q in questionList.Questions)
-                questionDict.Add(q.QuestionSubject, q);
-
-            var questionSample = questionDict["Algorithms"];
-
-            #endregion
-
             // TODO: think up a better way to zoom for different resolutions
             _zoom = _graphics.PreferredBackBufferHeight > 1280 ? 6.0f : 3.0f;
 
@@ -155,19 +136,6 @@ namespace CrawlIT
 
             _fight = new Fight(GraphicsDevice);
             _fight.SetState(State.Fighting);
-
-            _answerButton = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width / 2,
-                                    GraphicsDevice.Viewport.Height / 10 * 2);
-
-            _answerSize = new Point(_answerButton.Width, _answerButton.Height);
-
-            Color[] data1 = new Color[_answerButton.Width * _answerButton.Height];
-
-            for (int i = 0; i < data1.Length; ++i)
-            {
-                data1[i] = Color.LightGray;
-            }
-            _answerButton.SetData(data1);
 
             win = false;
 
@@ -216,6 +184,7 @@ namespace CrawlIT
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
+            _answerButton = Content.Load<Texture2D>("Sprites/screentexture");
 
             _explorationUI.Load();
 
@@ -227,6 +196,8 @@ namespace CrawlIT
                                   _exitButton.Height * (int)_zoom);
             _pauseSize = new Point(_pauseButton.Width, _pauseButton.Height);
 
+            _answerSize = new Point(GraphicsDevice.Viewport.Width / 2 - 3,
+                                    GraphicsDevice.Viewport.Height / 10 * 2 - 3);
             _surgeCrystalSize = new Point(_surgeCrystalTexture.Width * GraphicsDevice.Viewport.Width / 200,
                                           _surgeCrystalTexture.Height * GraphicsDevice.Viewport.Width / 200);
 
@@ -405,7 +376,7 @@ namespace CrawlIT
                     _fight.Help(_spriteBatch);
                 else if (_touch.Intersects(answer) && !_touch.Intersects(crystal))
                 {
-                    _fight.ChangeTexture(_spriteBatch);
+                    _fight.ChangeColour(_spriteBatch);
                     win = true;
                 }
             }

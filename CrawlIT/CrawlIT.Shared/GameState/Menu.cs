@@ -96,7 +96,12 @@ namespace CrawlIT.Shared.GameState
             }
         }
 
-        public override void ChangeTexture(SpriteBatch spriteBatch)
+        public override Point GetRectangle(Rectangle touch)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ChangeColour(SpriteBatch spriteBatch)
         {
             throw new NotImplementedException();
         }

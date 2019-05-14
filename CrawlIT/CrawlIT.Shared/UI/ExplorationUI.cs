@@ -22,7 +22,7 @@ namespace CrawlIT.Shared.UI
         private Texture2D _saveTexture;
         private Texture2D _inventoryTexture;
         private Texture2D _helpTexture;
-        private Texture2D _badgeTexture;
+        private Texture2D _badgesTexture;
 
         private readonly float _zoom;
         private GraphicsDeviceManager _graphics;
@@ -41,7 +41,7 @@ namespace CrawlIT.Shared.UI
 
         public void Initialize()
         {
-            
+            throw new NotImplementedException();
         }
 
         public void Load()
@@ -50,8 +50,9 @@ namespace CrawlIT.Shared.UI
             _saveTexture = _content.Load<Texture2D>("Sprites/save");
             _inventoryTexture = _content.Load<Texture2D>("Sprites/iconplaceholder");
             _helpTexture = _content.Load<Texture2D>("Sprites/help");
-            _badgeTexture = _content.Load<Texture2D>("Sprites/iconplaceholder");
+            _badgesTexture = _content.Load<Texture2D>("Sprites/iconplaceholder");
             _surgeCrystalTexture = _content.Load<Texture2D>("Sprites/surgecrystal");
+
             _font = _content.Load<SpriteFont>("Fonts/File");
 
             _lifeBar = new UIIcon(_lifeBarTexture, _zoom, 50, 50);
@@ -59,7 +60,7 @@ namespace CrawlIT.Shared.UI
             _save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth / 4) + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             _inventory = new UIIcon(_inventoryTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             _help = new UIIcon(_helpTexture, _zoom, 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            _badges = new UIIcon(_badgeTexture, _zoom, (_graphics.PreferredBackBufferWidth / 2) + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            _badges = new UIIcon(_badgesTexture, _zoom, (_graphics.PreferredBackBufferWidth / 2) + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
         }
 
         public void Draw(SpriteBatch spriteBatch)
