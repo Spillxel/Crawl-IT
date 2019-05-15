@@ -242,6 +242,7 @@ namespace CrawlIT.Shared.GameState
         {
             if (touch.Intersects(_answerRec[correct]))
             {
+                _questionCurrentAnimation = _correctAnswer; // Works but you can't see it because of the Thread.Sleep()
                 Player.lifeCount--;
                 return true;
             }

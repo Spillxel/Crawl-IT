@@ -303,6 +303,7 @@ namespace CrawlIT
                 }
 
                 _explorationUI.Update(gameTime);
+                _fight.Update(gameTime);
             }
 
             if (GameStateManager.Instance.IsState(State.Fighting))
