@@ -17,6 +17,6 @@ namespace CrawlIT.Shared.Entity
             _iconFrameHeight = 32;
         }
 
-        public abstract void SetAnimaton(Player player);
+        public abstract void SetAnimaton();
     }
 }

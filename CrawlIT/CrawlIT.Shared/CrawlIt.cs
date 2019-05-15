@@ -129,13 +129,8 @@ namespace CrawlIT
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _explorationUI = new ExplorationUI(_zoom, _graphics, Content, _staticCamera, _player);
-
             _level = new Level(GraphicsDevice);
             _level.SetState(State.Playing);
-
-            _fight = new Fight(GraphicsDevice);
-            _fight.SetState(State.Fighting);
 
             win = false;
 
@@ -175,8 +170,13 @@ namespace CrawlIT
             _playerTexture = Content.Load<Texture2D>("Sprites/playerspritesheet");
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());
             _playerCamera = new Camera(_graphics.PreferredBackBufferWidth,
-                                       _graphics.PreferredBackBufferHeight,
-                                       _zoom);
+                           _graphics.PreferredBackBufferHeight,
+                           _zoom);
+
+            _explorationUI = new ExplorationUI(_zoom, _graphics, Content, _staticCamera, _player);
+
+            _fight = new Fight(GraphicsDevice, _player);
+            _fight.SetState(State.Fighting);
 
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
             _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10);
@@ -301,6 +301,8 @@ namespace CrawlIT
                         // Display textbox "I have no more questions for you!"
                     }
                 }
+
+                _explorationUI.Update(gameTime);
             }
 
             if (GameStateManager.Instance.IsState(State.Fighting))

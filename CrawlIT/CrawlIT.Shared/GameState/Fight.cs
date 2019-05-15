@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using CrawlIT.Shared.Combat;
+using CrawlIT.Shared.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -61,9 +62,11 @@ namespace CrawlIT.Shared.GameState
         private float _scale;
         private float _crystalRatio;
 
-        public Fight(GraphicsDevice graphicsDevice)
+        public Fight(GraphicsDevice graphicsDevice, Player player)
         : base(graphicsDevice)
         {
+            Player = player;
+
             _questionFrameWidth = 600;
             _questionFrameHeight = 150;
 
@@ -239,11 +242,11 @@ namespace CrawlIT.Shared.GameState
         {
             if (touch.Intersects(_answerRec[correct]))
             {
+                Player.lifeCount--;
                 return true;
             }
             else
             {
-                //Player lifecount --;
                 return false;
             }
         }

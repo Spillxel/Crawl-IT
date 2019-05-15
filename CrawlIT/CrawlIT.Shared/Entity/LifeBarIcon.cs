@@ -45,13 +45,13 @@ namespace CrawlIT.Shared.Entity
 
         public override void Update(GameTime gameTime)
         {
-            SetAnimaton(_player);
+            SetAnimaton();
             CurrentAnimation.Update(gameTime);
         }
 
-        public override void SetAnimaton(Player player)
+        public override void SetAnimaton()
         {
-            switch (player.lifeCount)
+            switch (_player.lifeCount)
             {
                 case 0:
                     CurrentAnimation = _lifeBar0;
