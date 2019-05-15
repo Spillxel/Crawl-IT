@@ -48,7 +48,7 @@ namespace CrawlIT.Shared.UI
 
         public void Load()
         {
-            _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar3");
+            _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebarspritesheet");
             _saveTexture = _content.Load<Texture2D>("Sprites/save");
             _inventoryTexture = _content.Load<Texture2D>("Sprites/iconplaceholder");
             _helpTexture = _content.Load<Texture2D>("Sprites/help");
@@ -57,7 +57,7 @@ namespace CrawlIT.Shared.UI
 
             _font = _content.Load<SpriteFont>("Fonts/File");
 
-            _lifeBar = new UIIcon(_lifeBarTexture, _zoom, 50, 50);
+            _lifeBar = new LifeBarIcon(_lifeBarTexture, _zoom, 50, 50, _player);
             _surgeCrystal = new UIIcon(_surgeCrystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), 50);
             _save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth / 4) + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             _inventory = new UIIcon(_inventoryTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
@@ -77,19 +77,6 @@ namespace CrawlIT.Shared.UI
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_font, levelString, new Vector2(levelStringPosX, levelStringPosY), Color.White);
             _spriteBatch.End();
-
-            switch (_player.lifeCount)
-            {
-                case 3:
-                    _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar3");
-                    break;
-                case 2:
-                    _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar2");
-                    break;
-                case 1:
-                    _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebar1");
-                    break;
-            }
 
             _spriteBatch.Begin(SpriteSortMode.BackToFront,
                   BlendState.AlphaBlend,
