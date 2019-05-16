@@ -137,6 +137,18 @@
 #begin questions.json
 /copy:questions.json
 
+#begin Sprites/badges.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/badges.png
+
 #begin Sprites/blackscreentexture.png
 /importer:TextureImporter
 /processor:TextureProcessor

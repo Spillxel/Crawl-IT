@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using Android.Views.Animations;
-using Java.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

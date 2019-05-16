@@ -384,23 +384,23 @@ namespace CrawlIT
                 }
             }
 
-            #region FPS Counter
+            //#region FPS Counter
 
-            var fps = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
-            var fpsString = "FPS: " + Math.Ceiling(fps);
-            var (stringDimensionX, stringDimensionY) = _font.MeasureString(fpsString);
+            //var fps = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //var fpsString = "FPS: " + Math.Ceiling(fps);
+            //var (stringDimensionX, stringDimensionY) = _font.MeasureString(fpsString);
 
-            var stringPosX = (_graphics.PreferredBackBufferWidth - stringDimensionX) / 2;
-            var stringPosY = _graphics.PreferredBackBufferHeight - stringDimensionY;
+            //var stringPosX = (_graphics.PreferredBackBufferWidth - stringDimensionX) / 2;
+            //var stringPosY = _graphics.PreferredBackBufferHeight - stringDimensionY;
 
-            if (!GameStateManager.Instance.IsState(State.Fighting))
-            {
-                _spriteBatch.Begin();
-                _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Red);
-                _spriteBatch.End();
-            }
+            //if (!GameStateManager.Instance.IsState(State.Fighting))
+            //{
+            //    _spriteBatch.Begin();
+            //    _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Red);
+            //    _spriteBatch.End();
+            //}
 
-            #endregion
+            //#endregion
 
             base.Draw(gameTime);
         }
