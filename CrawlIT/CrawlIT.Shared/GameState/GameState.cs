@@ -1,4 +1,5 @@
 ﻿using System;
+using CrawlIT.Shared.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,6 +9,8 @@ namespace CrawlIT.Shared.GameState
     public abstract class GameState
     {
         protected GraphicsDevice GraphicsDevice;
+
+        protected Player Player;
 
         protected GameState(GraphicsDevice graphicsDevice)
         {

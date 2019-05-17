@@ -19,11 +19,15 @@ namespace CrawlIT.Shared.Entity
         private Animation.Animation _currentAnimation;
 
         private readonly Matrix _scale;
-
+        
         private const float Speed = 170;
 
         public List<Rectangle> CollisionObjects { get; set; }
         public List<Enemy> Enemies { get; set; }
+
+        public int lifeCount;
+        public int crystalCount;
+
 
         private Vector2 _currentVelocity;
 
@@ -38,6 +42,8 @@ namespace CrawlIT.Shared.Entity
             _scale = scale;
             FrameWidth = 23;
             FrameHeight = 45;
+            lifeCount = 3;
+            crystalCount = 0;
 
             // TODO: rethink this animation frame setup, probably better ways to set this up
             _walkDown = new Animation.Animation();

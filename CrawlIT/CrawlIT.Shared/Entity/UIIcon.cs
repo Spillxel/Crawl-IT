@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using Android.Views.Animations;
-using Java.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,8 +6,8 @@ namespace CrawlIT.Shared.Entity
 {
     public class UIIcon : Entity
     {
-        private readonly Vector2 _position;
-        private readonly Vector2 _scale;
+        protected readonly Vector2 _position;
+        protected readonly Vector2 _scale;
 
         public UIIcon(Texture2D texture, float zoom, float posx, float posy)
         {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using CrawlIT.Shared.Combat;
+using CrawlIT.Shared.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -61,9 +62,11 @@ namespace CrawlIT.Shared.GameState
         private float _scale;
         private float _crystalRatio;
 
-        public Fight(GraphicsDevice graphicsDevice)
+        public Fight(GraphicsDevice graphicsDevice, Player player)
         : base(graphicsDevice)
         {
+            Player = player;
+
             _questionFrameWidth = 600;
             _questionFrameHeight = 150;
 
@@ -71,10 +74,10 @@ namespace CrawlIT.Shared.GameState
             _noAnswer.AddFrame(new Rectangle(0, 0, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
 
             _correctAnswer = new Animation.Animation();
-            _noAnswer.AddFrame(new Rectangle(0, _questionFrameHeight, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
+            _correctAnswer.AddFrame(new Rectangle(0, _questionFrameHeight, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
 
             _wrongAnswer = new Animation.Animation();
-            _noAnswer.AddFrame(new Rectangle(0, _questionFrameHeight * 2, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
+            _wrongAnswer.AddFrame(new Rectangle(0, _questionFrameHeight * 2, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
 
             _questionCurrentAnimation = _noAnswer;
         }
@@ -238,8 +241,15 @@ namespace CrawlIT.Shared.GameState
         public override bool GetAnswer(Rectangle touch)
         {
             if (touch.Intersects(_answerRec[correct]))
+            {
+                _questionCurrentAnimation = _correctAnswer; // Works but you can't see it because of the Thread.Sleep()
+                Player.lifeCount--;
                 return true;
+            }
+            else
+            {
                 return false;
+            }
         }
 
         public override void ChangeColour(SpriteBatch spriteBatch)

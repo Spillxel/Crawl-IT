@@ -137,6 +137,18 @@
 #begin questions.json
 /copy:questions.json
 
+#begin Sprites/badges.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/badges.png
+
 #begin Sprites/blackscreentexture.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -173,7 +185,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/iconplaceholder.png
 
-#begin Sprites/lifebar.png
+#begin Sprites/lifebarspritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -183,7 +195,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/lifebar.png
+/build:Sprites/lifebarspritesheet.png
 
 #begin Sprites/newscreentexture.png
 /importer:TextureImporter
@@ -244,6 +256,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/screentexture.png
+
+#begin Sprites/settings.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/settings.png
 
 #begin Sprites/surgecrystal.png
 /importer:TextureImporter

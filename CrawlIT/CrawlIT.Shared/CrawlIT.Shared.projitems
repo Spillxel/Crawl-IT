@@ -11,9 +11,11 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Camera\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Question.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\AnimatedUIIcon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Character.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Entity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\LifeBarIcon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\UIIcon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationFrame.cs" />

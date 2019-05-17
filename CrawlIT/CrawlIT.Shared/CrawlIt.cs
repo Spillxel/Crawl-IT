@@ -129,13 +129,8 @@ namespace CrawlIT
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _explorationUI = new ExplorationUI(_zoom, _graphics, Content, _staticCamera);
-
             _level = new Level(GraphicsDevice);
             _level.SetState(State.Playing);
-
-            _fight = new Fight(GraphicsDevice);
-            _fight.SetState(State.Fighting);
 
             win = false;
 
@@ -175,8 +170,13 @@ namespace CrawlIT
             _playerTexture = Content.Load<Texture2D>("Sprites/playerspritesheet");
             _player = new Player(_playerTexture, _resolution.TransformationMatrix());
             _playerCamera = new Camera(_graphics.PreferredBackBufferWidth,
-                                       _graphics.PreferredBackBufferHeight,
-                                       _zoom);
+                           _graphics.PreferredBackBufferHeight,
+                           _zoom);
+
+            _explorationUI = new ExplorationUI(_zoom, _graphics, Content, _staticCamera, _player);
+
+            _fight = new Fight(GraphicsDevice, _player);
+            _fight.SetState(State.Fighting);
 
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
             _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10);
@@ -301,6 +301,9 @@ namespace CrawlIT
                         // Display textbox "I have no more questions for you!"
                     }
                 }
+
+                _explorationUI.Update(gameTime);
+                _fight.Update(gameTime);
             }
 
             if (GameStateManager.Instance.IsState(State.Fighting))
@@ -381,23 +384,23 @@ namespace CrawlIT
                 }
             }
 
-            #region FPS Counter
+            //#region FPS Counter
 
-            var fps = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
-            var fpsString = "FPS: " + Math.Ceiling(fps);
-            var (stringDimensionX, stringDimensionY) = _font.MeasureString(fpsString);
+            //var fps = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //var fpsString = "FPS: " + Math.Ceiling(fps);
+            //var (stringDimensionX, stringDimensionY) = _font.MeasureString(fpsString);
 
-            var stringPosX = (_graphics.PreferredBackBufferWidth - stringDimensionX) / 2;
-            var stringPosY = _graphics.PreferredBackBufferHeight - stringDimensionY;
+            //var stringPosX = (_graphics.PreferredBackBufferWidth - stringDimensionX) / 2;
+            //var stringPosY = _graphics.PreferredBackBufferHeight - stringDimensionY;
 
-            if (!GameStateManager.Instance.IsState(State.Fighting))
-            {
-                _spriteBatch.Begin();
-                _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Red);
-                _spriteBatch.End();
-            }
+            //if (!GameStateManager.Instance.IsState(State.Fighting))
+            //{
+            //    _spriteBatch.Begin();
+            //    _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Red);
+            //    _spriteBatch.End();
+            //}
 
-            #endregion
+            //#endregion
 
             base.Draw(gameTime);
         }
