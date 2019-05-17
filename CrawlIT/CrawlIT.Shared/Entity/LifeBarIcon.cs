@@ -1,11 +1,10 @@
-﻿using CrawlIT.Shared.Animation;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace CrawlIT.Shared.Entity
 {
-    public class LifeBarIcon : AnimatedUIIcon
+    public class LifeBarIcon : AnimatedUiIcon
     {
         private Animation.Animation _lifeBar0;
         private Animation.Animation _lifeBar1;
@@ -14,22 +13,22 @@ namespace CrawlIT.Shared.Entity
 
         private Player _player;
 
-        public LifeBarIcon(Texture2D texture, float zoom, float posx, float posy, Player player)
-            : base (texture, zoom, posx, posy)
+        public LifeBarIcon(Texture2D texture, Matrix scale, float posX, float posY, Player player)
+            : base (texture, scale, posX, posY)
         {
             _player = player;
 
             _lifeBar0 = new Animation.Animation();
-            _lifeBar0.AddFrame(new Rectangle(0, 0, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
+            _lifeBar0.AddFrame(new Rectangle(0, 0, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
             _lifeBar1 = new Animation.Animation();
-            _lifeBar1.AddFrame(new Rectangle(0, _iconFrameHeight, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
+            _lifeBar1.AddFrame(new Rectangle(0, IconFrameHeight, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
             _lifeBar2 = new Animation.Animation();
-            _lifeBar2.AddFrame(new Rectangle(0, _iconFrameHeight * 2, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
+            _lifeBar2.AddFrame(new Rectangle(0, IconFrameHeight * 2, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
             _lifeBar3 = new Animation.Animation();
-            _lifeBar3.AddFrame(new Rectangle(0, _iconFrameHeight * 3, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
+            _lifeBar3.AddFrame(new Rectangle(0, IconFrameHeight * 3, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
             CurrentAnimation = _lifeBar3;
         }
@@ -37,19 +36,17 @@ namespace CrawlIT.Shared.Entity
         public override void Draw(SpriteBatch spriteBatch)
         {
             var sourceRectangle = CurrentAnimation.CurrentRectangle;
-
-            spriteBatch.Draw(TextureSheet, _position, sourceRectangle,
-                             Color.White, 0, Vector2.Zero,
-                             _scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(TextureSheet, Position, sourceRectangle, Color.White);
         }
 
         public override void Update(GameTime gameTime)
         {
-            SetAnimaton();
+            SetAnimation();
             CurrentAnimation.Update(gameTime);
         }
 
-        public override void SetAnimaton()
+
+        public override void SetAnimation()
         {
             switch (_player.lifeCount)
             {
@@ -65,7 +62,8 @@ namespace CrawlIT.Shared.Entity
                 case 3:
                     CurrentAnimation = _lifeBar3;
                     break;
-                // Implement a default that throws an error
+                default:
+                    throw new NotImplementedException("Well this shouldn't happen...");
             }
         }
     }

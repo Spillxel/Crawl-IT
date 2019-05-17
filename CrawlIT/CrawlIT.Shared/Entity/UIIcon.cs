@@ -1,31 +1,26 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using Android.Views.Animations;
-using Java.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CrawlIT.Shared.Entity
 {
-    public class UIIcon : Entity
+    public class UiIcon : Entity
     {
-        protected readonly Vector2 _position;
-        protected readonly Vector2 _scale;
+        protected readonly Vector2 Position;
+        protected Matrix Scale;
 
-        public UIIcon(Texture2D texture, float zoom, float posx, float posy)
+        public UiIcon(Texture2D texture, Matrix scale, float posX, float posY)
         {
             TextureSheet = texture;
-            _scale = new Vector2(zoom);
-            PosX = posx;
-            PosY = posy;
-            _position = new Vector2(PosX, PosY);
+            Scale = scale;
+            PosX = posX;
+            PosY = posY;
+            Position = new Vector2(PosX, PosY);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(TextureSheet, _position, null,
-                             Color.White, 0, Vector2.Zero,
-                            _scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(TextureSheet, Position, Color.White);
         }
 
         public override void Update(GameTime gameTime)

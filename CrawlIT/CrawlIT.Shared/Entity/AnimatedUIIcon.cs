@@ -3,20 +3,20 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrawlIT.Shared.Entity
 {
-    public abstract class AnimatedUIIcon : UIIcon
+    public abstract class AnimatedUiIcon : UiIcon
     {
-        protected int _iconFrameWidth;
-        protected int _iconFrameHeight;
+        protected int IconFrameWidth;
+        protected int IconFrameHeight;
 
         public Animation.Animation CurrentAnimation;
 
-        public AnimatedUIIcon(Texture2D texture, float zoom, float posx, float posy)
-            : base(texture, zoom, posx, posy)
+        protected AnimatedUiIcon(Texture2D texture, Matrix scale, float posX, float posY)
+            : base(texture, scale, posX, posY)
         {
-            _iconFrameWidth = 32;
-            _iconFrameHeight = 32;
+            IconFrameWidth = 32;
+            IconFrameHeight = 32;
         }
 
-        public abstract void SetAnimaton();
+        public abstract void SetAnimation();
     }
 }

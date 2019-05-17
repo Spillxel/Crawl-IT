@@ -34,11 +34,11 @@ namespace CrawlIT.Shared.Entity
         // For collision
         public Rectangle CollisionRectangle => new Rectangle((int)PosX, (int)PosY, FrameWidth, FrameHeight);
 
-        public Player(Texture2D texture, Matrix scale, float posx = 50, float posy = 70)
+        public Player(Texture2D texture, Matrix scale, float posX = 50, float posY = 70)
         {
             TextureSheet = texture;
-            PosX = posx;
-            PosY = posy;
+            PosX = posX;
+            PosY = posY;
             _scale = scale;
             FrameWidth = 23;
             FrameHeight = 45;
@@ -156,8 +156,8 @@ namespace CrawlIT.Shared.Entity
                 return velocity;    // no input
 
             var (touchPointX, touchPointY) = ScaleInput(touchCollection[0].Position);
-            velocity.X = touchPointX - (720 * 0.5f);
-            velocity.Y = touchPointY - (1280 * 0.5f);
+            velocity.X = touchPointX - (1080 * 0.5f);
+            velocity.Y = touchPointY - (1920 * 0.5f);
 
             if (Math.Abs(velocity.X) < 1 && Math.Abs(velocity.Y) < 1)
                 return velocity;    // no movement

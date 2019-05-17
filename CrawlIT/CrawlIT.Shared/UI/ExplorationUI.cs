@@ -8,14 +8,14 @@ using Camera = CrawlIT.Shared.Camera.Camera;
 
 namespace CrawlIT.Shared.UI
 {
-    public class ExplorationUI
+    public class ExplorationUi
     {
-        private UIIcon _lifeBar;
-        private UIIcon _surgeCrystal;
-        private UIIcon _save;
-        private UIIcon _inventory;
-        private UIIcon _help;
-        private UIIcon _badges;
+        private UiIcon _lifeBar;
+        private UiIcon _surgeCrystal;
+        private UiIcon _save;
+        private UiIcon _inventory;
+        private UiIcon _help;
+        private UiIcon _badges;
 
         private Texture2D _lifeBarTexture;
         private Texture2D _surgeCrystalTexture;
@@ -24,18 +24,18 @@ namespace CrawlIT.Shared.UI
         private Texture2D _helpTexture;
         private Texture2D _badgesTexture;
 
-        private readonly float _zoom;
-        private GraphicsDeviceManager _graphics;
+        private Matrix _scale;
+        private Point _resolution;
         private ContentManager _content;
         private Camera.Camera _staticCamera;
         private SpriteFont _font;
         private SpriteBatch _spriteBatch;
         private Player _player;
 
-        public ExplorationUI(float zoom, GraphicsDeviceManager graphics, ContentManager content, Camera.Camera staticCamera, Player player)
+        public ExplorationUi(Matrix scale, Point resolution, ContentManager content, Camera.Camera staticCamera, Player player)
         {
-            _zoom = zoom;
-            _graphics = graphics;
+            _scale = scale;
+            _resolution = resolution;
             _content = content;
             _staticCamera = staticCamera;
             _player = player;
@@ -57,12 +57,13 @@ namespace CrawlIT.Shared.UI
 
             _font = _content.Load<SpriteFont>("Fonts/File");
 
-            _lifeBar = new LifeBarIcon(_lifeBarTexture, _zoom, 50, 50, _player);
-            _surgeCrystal = new UIIcon(_surgeCrystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), 50);
-            _save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth / 4) + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            _inventory = new UIIcon(_inventoryTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            _help = new UIIcon(_helpTexture, _zoom, 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            _badges = new UIIcon(_badgesTexture, _zoom, (_graphics.PreferredBackBufferWidth / 2) + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            var zoom = _scale.M11;
+            _lifeBar = new LifeBarIcon(_lifeBarTexture, _scale, 50, 50, _player);
+            _surgeCrystal = new UiIcon(_surgeCrystalTexture, _scale, _resolution.X - (32 * zoom + 50), 50);
+            _save = new UiIcon(_saveTexture, _scale, (_resolution.X / 4) + 50, _resolution.Y - 50 - (32 * zoom));
+            _inventory = new UiIcon(_inventoryTexture, _scale, _resolution.X - (32 * zoom + 50), _resolution.Y - 50 - (32 * zoom));
+            _help = new UiIcon(_helpTexture, _scale, 50, _resolution.Y - 50 - (32 * zoom));
+            _badges = new UiIcon(_badgesTexture, _scale, (_resolution.X / 2) + 50, _resolution.Y - 50 - (32 * zoom));
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -71,7 +72,7 @@ namespace CrawlIT.Shared.UI
 
             var levelString = "Semester 1";
             var (levelStringDimensionX, levelStringDimensionY) = _font.MeasureString(levelString);
-            var levelStringPosX = (_graphics.PreferredBackBufferWidth - levelStringDimensionX) / 2;
+            var levelStringPosX = (_resolution.X - levelStringDimensionX) / 2;
             var levelStringPosY = 50;
 
             _spriteBatch.Begin();
@@ -81,7 +82,7 @@ namespace CrawlIT.Shared.UI
             _spriteBatch.Begin(SpriteSortMode.BackToFront,
                   BlendState.AlphaBlend,
                   SamplerState.PointClamp, null, null, null,
-                  _staticCamera.Transform);
+                  _scale);
             _lifeBar.Draw(_spriteBatch);
             _surgeCrystal.Draw(_spriteBatch);
             _save.Draw(_spriteBatch);

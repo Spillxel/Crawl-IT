@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using CrawlIT.Shared.Entity;
 
 namespace CrawlIT.Shared.Camera
@@ -16,23 +17,20 @@ namespace CrawlIT.Shared.Camera
         {
             _width = width;
             _height = height;
-            Zoom = zoom;
+            Zoom = Math.Max(3, zoom);
         }
 
         public void Follow(Player target)
         {
-            _posX = target == null ? 0
-                                   : MathHelper.Lerp(_posX, target.PosX, 0.08f);
-            _posY = target == null ? 0
-                                   : MathHelper.Lerp(_posY, target.PosY, 0.08f);
+            _posX = target == null ? 0 : MathHelper.Lerp(_posX, target.PosX, 0.08f);
+            _posY = target == null ? 0 : MathHelper.Lerp(_posY, target.PosY, 0.08f);
 
-            Transform = 
-                Matrix.CreateTranslation(new Vector3(- _posX - target?.FrameWidth * 0.5f ?? 0,
-                                                     - _posY - target?.FrameHeight * 0.5f ?? 0,
-                                                     0))
-                                         * Matrix.CreateRotationZ(0)
-                                         * Matrix.CreateScale(new Vector3(Zoom, Zoom, 1))
-                                         * Matrix.CreateTranslation(new Vector3(_width * 0.5f, _height * 0.5f, 0));
+            Transform = Matrix.CreateTranslation(new Vector3(-_posX - target?.FrameWidth * 0.5f ?? 0,
+                                                             -_posY - target?.FrameHeight * 0.5f ?? 0,
+                                                             0))
+                        * Matrix.CreateRotationZ(0)
+                        * Matrix.CreateScale(Zoom, Zoom, 1)
+                        * Matrix.CreateTranslation(new Vector3(_width * 0.5f, _height * 0.5f, 0));
         }
     }
 }

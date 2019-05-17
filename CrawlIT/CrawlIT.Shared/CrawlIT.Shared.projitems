@@ -11,17 +11,17 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Camera\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Question.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entity\AnimatedUIIcon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\AnimatedUiIcon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Character.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\LifeBarIcon.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entity\UIIcon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\UiIcon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\Animation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CrawlIt.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\ExplorationUI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\ExplorationUi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameState\GameState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameState\GameStateManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameState\Menu.cs" />

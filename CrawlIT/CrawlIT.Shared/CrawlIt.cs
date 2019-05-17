@@ -23,10 +23,7 @@ using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using InputManager = CrawlIT.Shared.Input.InputManager;
 using Point = Microsoft.Xna.Framework.Point;
 using System.Threading;
-using Newtonsoft.Json;
-using System.IO;
-using CrawlIT.Shared.Combat;
-using System.Diagnostics;
+using Android.Transitions;
 using CrawlIT.Shared.UI;
 
 #endregion
@@ -43,10 +40,14 @@ namespace CrawlIT
         private TouchCollection _touchCollection;
 
         private readonly IResolution _resolution;
+        private Matrix _transform;
+        private readonly Point _virtualResolution;
+        private readonly Point _realResolution;
 
         private InputManager _inputManager;
 
-        private float _zoom;
+        private Matrix _scale;
+        private Vector2 _scaleVector;
         private Rectangle _touch;
 
         private enum State
@@ -70,9 +71,9 @@ namespace CrawlIT
         private Texture2D _playerTexture;
         private Texture2D _tutorTexture;
 
-        private GameState _menu;
-        private GameState _level;
-        private GameState _fight;
+        private Menu _menu;
+        private Level _level;
+        private Fight _fight;
 
         private Point _startSize;
         private Texture2D _startButton;
@@ -85,25 +86,30 @@ namespace CrawlIT
         private Point _surgeCrystalSize;
         private Texture2D _surgeCrystalTexture;
 
-        private Boolean win;
+        private bool _win;
 
         private SpriteFont _font;
 
         private List<Enemy> _enemies;
 
-        private ExplorationUI _explorationUI;
+        private ExplorationUi _explorationUi;
 
         public CrawlIt()
         {
             _graphics = new GraphicsDeviceManager(this)
-            {   // Force orientation to be fullscreen portrait
+            {
+                // Force orientation to be fullscreen portrait
                 SupportedOrientations = DisplayOrientation.Portrait,
                 IsFullScreen = true,
             };
 
+            _realResolution = new Point(_graphics.PreferredBackBufferWidth,
+                                        _graphics.PreferredBackBufferHeight);
             _resolution = new ResolutionComponent(this, _graphics,
-                                                  new Point(720, 1280), new Point(720, 1280),
+                                                  new Point(1080, 1920),
+                                                  new Point(1080, 1920),
                                                   true, false);
+            _virtualResolution = _resolution.VirtualResolution;
 
             TouchPanel.EnabledGestures = GestureType.Pinch
                                          | GestureType.PinchComplete;
@@ -112,27 +118,29 @@ namespace CrawlIT
         }
 
         /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
         /// </summary>
-        protected override void Initialize()
+        protected override void LoadContent()
         {
+            _transform = _resolution.TransformationMatrix();
             // TODO: think up a better way to zoom for different resolutions
-            _zoom = _graphics.PreferredBackBufferHeight > 1280 ? 6.0f : 3.0f;
+            var scaleX = _realResolution.X / _virtualResolution.X;
+            var scaleY = _realResolution.Y / _virtualResolution.Y;
+            _scale = Matrix.CreateScale(scaleX, scaleY, 1f);
+            _scaleVector = new Vector2(scaleX, scaleY);
 
-            _menu = new Menu(GraphicsDevice, _zoom);
+            _menu = new Menu(GraphicsDevice, _virtualResolution, _transform);
             _menu.SetState(State.Menu);
 
-            _staticCamera = new Camera(0, 0, 1.0f);
+            _staticCamera = new Camera(0, 0, 1);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _level = new Level(GraphicsDevice);
             _level.SetState(State.Playing);
 
-            win = false;
+            _win = false;
 
             // TODO: make this work
             // _gameStateManager.GameState = GameState.StartMenu;
@@ -142,25 +150,17 @@ namespace CrawlIT
             // Repeat _backgroundSong on end
             XnaMediaPlayer.IsRepeating = true;
 
-            base.Initialize();
 
             var pp = _graphics.GraphicsDevice.PresentationParameters;
             _mapRenderTarget = new RenderTarget2D(GraphicsDevice,
-                                                  _graphics.PreferredBackBufferWidth,
-                                                  _graphics.PreferredBackBufferHeight,
-                                                  false, SurfaceFormat.Color,
-                                                  DepthFormat.None,
-                                                  pp.MultiSampleCount,
-                                                  RenderTargetUsage.DiscardContents);
-        }
+                _virtualResolution.X,
+                _virtualResolution.Y,
+                false, SurfaceFormat.Color,
+                DepthFormat.None,
+                pp.MultiSampleCount,
+                RenderTargetUsage.DiscardContents);
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            //_spriteBatch = new SpriteBatch(GraphicsDevice);
+            //_spriteBatch = new _spriteBatch(_resolution);
 
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
             XnaMediaPlayer.Play(_backgroundSong);
@@ -168,12 +168,12 @@ namespace CrawlIT
             _map = Content.Load<TiledMap>("Maps/test");
 
             _playerTexture = Content.Load<Texture2D>("Sprites/playerspritesheet");
-            _player = new Player(_playerTexture, _resolution.TransformationMatrix());
-            _playerCamera = new Camera(_graphics.PreferredBackBufferWidth,
-                           _graphics.PreferredBackBufferHeight,
-                           _zoom);
-
-            _explorationUI = new ExplorationUI(_zoom, _graphics, Content, _staticCamera, _player);
+            _player = new Player(_playerTexture, _transform);
+            _playerCamera = new Camera(_virtualResolution.X,
+                                       _virtualResolution.Y,
+                                       _scale.M11);
+            
+            _explorationUi = new ExplorationUi(_transform, _virtualResolution, Content, _staticCamera, _player);
 
             _fight = new Fight(GraphicsDevice, _player);
             _fight.SetState(State.Fighting);
@@ -186,14 +186,12 @@ namespace CrawlIT
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
             _answerButton = Content.Load<Texture2D>("Sprites/newscreentexture");
 
-            _explorationUI.Load();
+            _explorationUi.Load();
 
             _surgeCrystalTexture = Content.Load<Texture2D>("Sprites/surgecrystal");
 
-            _startSize = new Point(_startButton.Width * (int)_zoom,
-                                   _startButton.Height * (int)_zoom);
-            _exitSize = new Point(_exitButton.Width * (int)_zoom,
-                                  _exitButton.Height * (int)_zoom);
+            _startSize = new Point(_startButton.Width, _startButton.Height);
+            _exitSize = new Point(_exitButton.Width, _exitButton.Height);
             _pauseSize = new Point(_pauseButton.Width, _pauseButton.Height);
 
             _answerSize = new Point(GraphicsDevice.Viewport.Width,
@@ -213,8 +211,7 @@ namespace CrawlIT
                                                        .ToList();
 
             // Making list of collision enemies to check for combat
-            _enemies = new List<Enemy>();
-            _enemies.Add(_tutor);
+            _enemies = new List<Enemy> {_tutor};
             _player.Enemies = _enemies;
             foreach (var enemy in _enemies)
             {
@@ -252,18 +249,20 @@ namespace CrawlIT
             _touchCollection = TouchPanel.GetState();
 
             if (_touchCollection.Count > 0)
-                _touch = new Rectangle((int)_touchCollection[0].Position.X,
-                                       (int)_touchCollection[0].Position.Y,
-                                       5, 5);         
+            {
+                var (touchX, touchY) = _resolution.ScreenToGameCoord(_touchCollection[0].Position);
+                Console.WriteLine($"startPos: {_menu.StartButtonPoint} screen: {_touchCollection[0].Position} game: {touchX}, {touchY}");
+                _touch = new Rectangle((int) touchX, (int) touchY, 5, 5);
+            }
 
             if (GameStateManager.Instance.IsState(State.Menu))
             {
-                var start = new Rectangle(_menu.GetPosition(_startButton), _startSize);
+                var start = new Rectangle(_menu.StartButtonPoint, _startSize);
                 if (_touch.Intersects(start))
                     GameStateManager.Instance.ChangeScreen(_level);
 
                 // TODO: remove exit button altogether (bad practice for mobile development)
-                var exit = new Rectangle(_menu.GetPosition(_exitButton), _exitSize);
+                var exit = new Rectangle(_menu.ExitButtonPoint, _exitSize);
 #if !__IOS__
                 if (_touch.Intersects(exit))
                     Activity.MoveTaskToBack(true);
@@ -302,14 +301,14 @@ namespace CrawlIT
                     }
                 }
 
-                _explorationUI.Update(gameTime);
+                _explorationUi.Update(gameTime);
             }
 
             if (GameStateManager.Instance.IsState(State.Fighting))
             {
-                if (win)
+                if (_win)
                 {
-                    win = false;
+                    _win = false;
                     Thread.Sleep(5000);
                     GameStateManager.Instance.RemoveScreen();
                     _player.MoveBack(_tutor);
@@ -338,13 +337,11 @@ namespace CrawlIT
                 GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
                 GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-                _mapRenderer.Draw(_map, viewMatrix: _playerCamera.Transform);
+                _mapRenderer.Draw(_map, _playerCamera.Transform);
 
                 GraphicsDevice.SetRenderTarget(null);
-                _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-                var destinationRectangle = new Rectangle(0, 0,
-                                                         _graphics.PreferredBackBufferWidth,
-                                                         _graphics.PreferredBackBufferHeight);
+                _spriteBatch.Begin(transformMatrix:_transform, samplerState: SamplerState.PointClamp);
+                var destinationRectangle = new Rectangle(0, 0, _virtualResolution.X, _virtualResolution.Y);
                 _spriteBatch.Draw(_mapRenderTarget, destinationRectangle, Color.White);
                 _spriteBatch.End();
 
@@ -352,11 +349,7 @@ namespace CrawlIT
 
                 #region Drawing Characters
 
-                _spriteBatch.Begin(SpriteSortMode.BackToFront,
-                                   BlendState.AlphaBlend,
-                                   SamplerState.PointClamp,
-                                   null, null, null,
-                                   _playerCamera.Transform);
+                _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform, samplerState: SamplerState.PointClamp);
                 _tutor.Draw(_spriteBatch);
                 _player.Draw(_spriteBatch);
                 _spriteBatch.End();
@@ -365,7 +358,7 @@ namespace CrawlIT
 
                 #region Drawing UI
 
-                _explorationUI.Draw(_spriteBatch);
+                _explorationUi.Draw(_spriteBatch);
 
                 #endregion 
             }
@@ -379,7 +372,7 @@ namespace CrawlIT
                 else if (_touch.Intersects(answer) && !_touch.Intersects(crystal))
                 {
                     _fight.ChangeColour(_spriteBatch);
-                    win |= _fight.GetAnswer(_touch);
+                    _win |= _fight.GetAnswer(_touch);
                 }
             }
 
