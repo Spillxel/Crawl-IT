@@ -57,16 +57,25 @@ namespace CrawlIT.Shared.UI
 
             _font = _content.Load<SpriteFont>("Fonts/File");
 
+            int _border = 100;
+            float _height = _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom);
+            float _screenWithoutBorder = _graphics.PreferredBackBufferWidth - 2 * _border;
+            float _iconWidth = 32 * _zoom;
+
             _lifeBar = new LifeBarIcon(_lifeBarTexture, _zoom, 32 * _zoom, 50, _player);
             _surgeCrystal = new UIIcon(_surgeCrystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (2 * 32 * _zoom), 50);
-            _save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth / 2) + 50 + (2 * 32), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            _settings = new UIIcon(_settingsTexture, _zoom, (_graphics.PreferredBackBufferWidth / 4) + 32 + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            _help = new UIIcon(_helpTexture, _zoom, 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            _badges = new UIIcon(_badgesTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            //_save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth / 2) + 50 + (2 * 32), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            //_settings = new UIIcon(_settingsTexture, _zoom, (_graphics.PreferredBackBufferWidth / 4) + 32 + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            //_help = new UIIcon(_helpTexture, _zoom, 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            //_badges = new UIIcon(_badgesTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             //_save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth - 32 * _zoom) * 0.6f, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             //_settings = new UIIcon(_settingsTexture, _zoom, (_graphics.PreferredBackBufferWidth - 32 * _zoom) * 0.3f , _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             //_help = new UIIcon(_helpTexture, _zoom, 32 * _zoom, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             //_badges = new UIIcon(_badgesTexture, _zoom, _graphics.PreferredBackBufferWidth - (2 * 32 * _zoom), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
+            _save = new UIIcon(_saveTexture, _zoom,(_screenWithoutBorder / 3) * 2 + _border - _iconWidth / 2, _height);
+            _settings = new UIIcon(_settingsTexture, _zoom, (_screenWithoutBorder / 3) + _border - _iconWidth / 2, _height);
+            _help = new UIIcon(_helpTexture, _zoom, _border - _iconWidth / 2, _height);
+            _badges = new UIIcon(_badgesTexture, _zoom, (_screenWithoutBorder / 3) * 3 + _border - _iconWidth / 2, _height);    
         }
 
         public void Draw(SpriteBatch spriteBatch)
