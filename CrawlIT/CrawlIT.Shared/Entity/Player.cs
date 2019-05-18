@@ -246,5 +246,10 @@ namespace CrawlIT.Shared.Entity
             else if (currentEnemy.CurrentAnimation == currentEnemy.StandLeft)
                 PosX -= 15;
         }
+
+        public void SetLifeCount(int count)
+        {
+            lifeCount = Math.Min(Math.Max(0, count), 3);
+        }
     }
 }

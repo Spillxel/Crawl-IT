@@ -244,13 +244,13 @@ namespace CrawlIT.Shared.GameState
         {
             if (touch.Intersects(_answerRec[correct]))
             {
-                Player.lifeCount++;
+                Player.SetLifeCount(Player.lifeCount + 1);
                 _win = true;
                 return true;
             }
             else
             {
-                Player.lifeCount--;
+                Player.SetLifeCount(Player.lifeCount - 1);
                 return false;
             }
         }
