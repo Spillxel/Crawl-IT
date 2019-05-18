@@ -85,7 +85,8 @@ namespace CrawlIT
         private Point _surgeCrystalSize;
         private Texture2D _surgeCrystalTexture;
 
-        private Boolean win;
+        private Boolean _win = false;
+        private Boolean _played = false;
 
         private SpriteFont _font;
 
@@ -131,8 +132,6 @@ namespace CrawlIT
 
             _level = new Level(GraphicsDevice);
             _level.SetState(State.Playing);
-
-            win = false;
 
             // TODO: make this work
             // _gameStateManager.GameState = GameState.StartMenu;
@@ -308,9 +307,10 @@ namespace CrawlIT
 
             if (GameStateManager.Instance.IsState(State.Fighting))
             {
-                if (win)
+                if (_played)
                 {
-                    win = false;
+                    //if(_win)
+                    _played = false;
                     Thread.Sleep(5000);
                     GameStateManager.Instance.RemoveScreen();
                     _player.MoveBack(_tutor);
@@ -379,8 +379,9 @@ namespace CrawlIT
                     _fight.Help(_spriteBatch);
                 else if (_touch.Intersects(answer) && !_touch.Intersects(crystal))
                 {
+                    _win |= _fight.GetAnswer(_touch);
                     _fight.ChangeColour(_spriteBatch);
-                    win |= _fight.GetAnswer(_touch);
+                    _played = true;
                 }
             }
 

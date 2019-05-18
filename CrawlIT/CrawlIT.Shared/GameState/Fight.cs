@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using CrawlIT.Shared.Combat;
 using CrawlIT.Shared.Entity;
 using Microsoft.Xna.Framework;
@@ -45,6 +46,7 @@ namespace CrawlIT.Shared.GameState
         private String _fourthAnswer;
 
         private SpriteFont _font;
+        private bool _win = false;
 
         private int _questionFrameWidth;
         private int _questionFrameHeight;
@@ -242,12 +244,13 @@ namespace CrawlIT.Shared.GameState
         {
             if (touch.Intersects(_answerRec[correct]))
             {
-                _questionCurrentAnimation = _correctAnswer; // Works but you can't see it because of the Thread.Sleep()
-                Player.lifeCount--;
+                Player.lifeCount++;
+                _win = true;
                 return true;
             }
             else
             {
+                Player.lifeCount--;
                 return false;
             }
         }
@@ -262,7 +265,15 @@ namespace CrawlIT.Shared.GameState
                 spriteBatch.End();
             }
 
+            if (_win)
+                _questionCurrentAnimation = _correctAnswer;
+            else
+                _questionCurrentAnimation = _wrongAnswer;
+
             spriteBatch.Begin();
+            var sourceRectangle = _questionCurrentAnimation.CurrentRectangle;
+            spriteBatch.Draw(_questionTexture, _questionRec, sourceRectangle, Color.White);
+            DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Cyan);
             DrawString(spriteBatch, _font, _firstAnswer, _answerRec[correct], Color.LimeGreen);
             DrawString(spriteBatch, _font, _secondAnswer, _answerRec[wrong1], Color.Red);
             DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[wrong2], Color.Red);
