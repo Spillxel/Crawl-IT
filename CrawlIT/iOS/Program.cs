@@ -1,8 +1,8 @@
-﻿using System;
+﻿using CrawlIT.Shared;
 using Foundation;
 using UIKit;
 
-namespace CrawlIT
+namespace iOS
 {
     [Register("AppDelegate")]
     class Program : UIApplicationDelegate

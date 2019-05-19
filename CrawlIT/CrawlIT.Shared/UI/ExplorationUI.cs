@@ -1,12 +1,9 @@
-﻿using CrawlIT.Shared.Entity;
-using CrawlIT.Shared.GameState;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using Camera = CrawlIT.Shared.Camera.Camera;
 
-namespace CrawlIT.Shared.UI
+namespace CrawlIT.Shared
 {
     public class ExplorationUi
     {
@@ -27,12 +24,12 @@ namespace CrawlIT.Shared.UI
         private Matrix _scale;
         private Point _resolution;
         private ContentManager _content;
-        private Camera.Camera _staticCamera;
+        private Camera _staticCamera;
         private SpriteFont _font;
         private SpriteBatch _spriteBatch;
         private Player _player;
 
-        public ExplorationUi(Matrix scale, Point resolution, ContentManager content, Camera.Camera staticCamera, Player player)
+        public ExplorationUi(Matrix scale, Point resolution, ContentManager content, Camera staticCamera, Player player)
         {
             _scale = scale;
             _resolution = resolution;
@@ -57,13 +54,13 @@ namespace CrawlIT.Shared.UI
 
             _font = _content.Load<SpriteFont>("Fonts/File");
 
-            var zoom = _scale.M11;
+            var zoom = 1;
             _lifeBar = new LifeBarIcon(_lifeBarTexture, _scale, 50, 50, _player);
             _surgeCrystal = new UiIcon(_surgeCrystalTexture, _scale, _resolution.X - (32 * zoom + 50), 50);
-            _save = new UiIcon(_saveTexture, _scale, (_resolution.X / 4) + 50, _resolution.Y - 50 - (32 * zoom));
-            _inventory = new UiIcon(_inventoryTexture, _scale, _resolution.X - (32 * zoom + 50), _resolution.Y - 50 - (32 * zoom));
-            _help = new UiIcon(_helpTexture, _scale, 50, _resolution.Y - 50 - (32 * zoom));
-            _badges = new UiIcon(_badgesTexture, _scale, (_resolution.X / 2) + 50, _resolution.Y - 50 - (32 * zoom));
+            _save = new UiIcon(_saveTexture, _scale, _resolution.X / 4 + 50, _resolution.Y - 50 - 32 * zoom);
+            _inventory = new UiIcon(_inventoryTexture, _scale, _resolution.X - (32 * zoom + 50), _resolution.Y - 50 - 32 * zoom);
+            _help = new UiIcon(_helpTexture, _scale, 50, _resolution.Y - 50 - 32 * zoom);
+            _badges = new UiIcon(_badgesTexture, _scale, _resolution.X * 0.5f, _resolution.Y - 50);
         }
 
         public void Draw(SpriteBatch spriteBatch)

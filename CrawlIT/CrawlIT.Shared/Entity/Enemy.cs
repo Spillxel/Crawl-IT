@@ -2,12 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace CrawlIT.Shared.Entity
+namespace CrawlIT.Shared
 {
-
     public class Enemy : Character
     {
-        public Animation.Animation CurrentAnimation;
+        public Animation CurrentAnimation;
 
         private readonly Matrix _scale;
 
@@ -32,16 +31,16 @@ namespace CrawlIT.Shared.Entity
             CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
             FightRectangle = new Rectangle((int)PosX -1, (int)PosY -1, FrameWidth + 2, (int)(FrameHeight / 1.5) + 2);
 
-            StandUp = new Animation.Animation();
+            StandUp = new Animation();
             StandUp.AddFrame(new Rectangle(FrameWidth * 3, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
 
-            StandDown = new Animation.Animation();
+            StandDown = new Animation();
             StandDown.AddFrame(new Rectangle(0, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
 
-            StandLeft = new Animation.Animation();
+            StandLeft = new Animation();
             StandLeft.AddFrame(new Rectangle(FrameWidth, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
 
-            StandRight = new Animation.Animation();
+            StandRight = new Animation();
             StandRight.AddFrame(new Rectangle(FrameWidth * 2, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
 
             CurrentAnimation = StandDown;

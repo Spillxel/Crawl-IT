@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using CrawlIT.Shared.Entity;
 
-namespace CrawlIT.Shared.Camera
+namespace CrawlIT.Shared
 {
     public class Camera
     {

@@ -2,8 +2,9 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using CrawlIT.Shared;
 
-namespace CrawlIT
+namespace Android
 {
     [Activity(Label = "CrawlIT"
         , MainLauncher = true

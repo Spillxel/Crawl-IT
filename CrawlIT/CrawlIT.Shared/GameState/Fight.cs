@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using CrawlIT.Shared.Combat;
-using CrawlIT.Shared.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 
-namespace CrawlIT.Shared.GameState
+namespace CrawlIT.Shared
 {
     public class Fight : GameState
     {
@@ -53,11 +50,11 @@ namespace CrawlIT.Shared.GameState
         private int wrong2;
         private int wrong3;
 
-        private readonly Animation.Animation _noAnswer;
-        private readonly Animation.Animation _correctAnswer;
-        private readonly Animation.Animation _wrongAnswer;
+        private readonly Animation _noAnswer;
+        private readonly Animation _correctAnswer;
+        private readonly Animation _wrongAnswer;
 
-        private Animation.Animation _questionCurrentAnimation;
+        private Animation _questionCurrentAnimation;
 
         private float _scale;
         private float _crystalRatio;
@@ -70,13 +67,13 @@ namespace CrawlIT.Shared.GameState
             _questionFrameWidth = 600;
             _questionFrameHeight = 150;
 
-            _noAnswer = new Animation.Animation();
+            _noAnswer = new Animation();
             _noAnswer.AddFrame(new Rectangle(0, 0, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
 
-            _correctAnswer = new Animation.Animation();
+            _correctAnswer = new Animation();
             _correctAnswer.AddFrame(new Rectangle(0, _questionFrameHeight, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
 
-            _wrongAnswer = new Animation.Animation();
+            _wrongAnswer = new Animation();
             _wrongAnswer.AddFrame(new Rectangle(0, _questionFrameHeight * 2, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
 
             _questionCurrentAnimation = _noAnswer;
@@ -150,13 +147,13 @@ namespace CrawlIT.Shared.GameState
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Initialization of the vectors responsible of the initial position of the question and answers
-            _questionPosition = new Vector2(0, (GraphicsDevice.Viewport.Height / 11 * 5) - 6);
+            _questionPosition = new Vector2(0, GraphicsDevice.Viewport.Height / 11 * 5 - 6);
             _answer1Position = new Vector2(0, GraphicsDevice.Viewport.Height / 10 * 6);
-            _answer2Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 3, GraphicsDevice.Viewport.Height / 10 * 6);
-            _answer3Position = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 8) + 3);
-            _answer4Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 3, (GraphicsDevice.Viewport.Height / 10 * 8) + 3);
-            _crystalPosition = new Vector2(((GraphicsDevice.Viewport.Width / 2) - (_crystal.Width * _crystalRatio / 2)),
-                                           ((GraphicsDevice.Viewport.Height / 10 * 8) - (_crystal.Height * _crystalRatio / 2)));
+            _answer2Position = new Vector2(GraphicsDevice.Viewport.Width / 2 + 3, GraphicsDevice.Viewport.Height / 10 * 6);
+            _answer3Position = new Vector2(0, GraphicsDevice.Viewport.Height / 10 * 8 + 3);
+            _answer4Position = new Vector2(GraphicsDevice.Viewport.Width / 2 + 3, GraphicsDevice.Viewport.Height / 10 * 8 + 3);
+            _crystalPosition = new Vector2(GraphicsDevice.Viewport.Width / 2 - _crystal.Width * _crystalRatio / 2,
+                                           GraphicsDevice.Viewport.Height / 10 * 8 - _crystal.Height * _crystalRatio / 2);
             _enemyPosition = new Vector2(0, 0);
             _crystalScale = new Vector2(_crystalRatio, _crystalRatio);
 
@@ -317,8 +314,8 @@ namespace CrawlIT.Shared.GameState
             int strWidth = (int)Math.Round(size.X * _scale);
             int strHeight = (int)Math.Round(size.Y * _scale);
             Vector2 position = new Vector2();
-            position.X = ((boundaries.Width - (strWidth / lines.Length)) / 2) + boundaries.X;
-            position.Y = (((boundaries.Height - (strHeight * lines.Length)) / 2) + boundaries.Y);
+            position.X = (boundaries.Width - strWidth / lines.Length) / 2 + boundaries.X;
+            position.Y = (boundaries.Height - strHeight * lines.Length) / 2 + boundaries.Y;
 
             // A bunch of settings where we just want to use reasonable defaults.
             float rotation = 0.0f;
@@ -330,7 +327,7 @@ namespace CrawlIT.Shared.GameState
             {
                 Vector2 lineSize = font.MeasureString(lines[i]);
                 int lineWidth = (int)Math.Round(lineSize.X * _scale);
-                position.X = ((boundaries.Width - lineWidth) / 2) + boundaries.X + 5;
+                position.X = (boundaries.Width - lineWidth) / 2 + boundaries.X + 5;
                 spriteBatch.DrawString(font, lines[i], position, color, rotation, spriteOrigin, _scale, spriteEffects, spriteLayer);
                 position.Y += strHeight;
             }

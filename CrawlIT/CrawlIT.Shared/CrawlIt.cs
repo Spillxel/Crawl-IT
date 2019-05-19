@@ -1,8 +1,9 @@
 ﻿#region Using Statements
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,21 +15,13 @@ using ResolutionBuddy;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
 
-using CrawlIT.Shared.Entity;
-using CrawlIT.Shared.GameState;
-
-using Camera = CrawlIT.Shared.Camera.Camera;
 using Color = Microsoft.Xna.Framework.Color;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
-using InputManager = CrawlIT.Shared.Input.InputManager;
 using Point = Microsoft.Xna.Framework.Point;
-using System.Threading;
-using Android.Transitions;
-using CrawlIT.Shared.UI;
 
 #endregion
 
-namespace CrawlIT
+namespace CrawlIT.Shared
 {
     /// <summary>
     /// This is the main type for your game.
@@ -106,8 +99,8 @@ namespace CrawlIT
             _realResolution = new Point(_graphics.PreferredBackBufferWidth,
                                         _graphics.PreferredBackBufferHeight);
             _resolution = new ResolutionComponent(this, _graphics,
-                                                  new Point(1080, 1920),
-                                                  new Point(1080, 1920),
+                                                  new Point(720, 1280),
+                                                  new Point(720, 1280),
                                                   true, false);
             _virtualResolution = _resolution.VirtualResolution;
 

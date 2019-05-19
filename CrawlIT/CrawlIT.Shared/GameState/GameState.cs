@@ -1,10 +1,9 @@
 ﻿using System;
-using CrawlIT.Shared.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CrawlIT.Shared.GameState
+namespace CrawlIT.Shared
 {
     public abstract class GameState
     {

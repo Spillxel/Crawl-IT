@@ -2,14 +2,14 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace CrawlIT.Shared.Entity
+namespace CrawlIT.Shared
 {
     public class LifeBarIcon : AnimatedUiIcon
     {
-        private Animation.Animation _lifeBar0;
-        private Animation.Animation _lifeBar1;
-        private Animation.Animation _lifeBar2;
-        private Animation.Animation _lifeBar3;
+        private Animation _lifeBar0;
+        private Animation _lifeBar1;
+        private Animation _lifeBar2;
+        private Animation _lifeBar3;
 
         private Player _player;
 
@@ -18,16 +18,16 @@ namespace CrawlIT.Shared.Entity
         {
             _player = player;
 
-            _lifeBar0 = new Animation.Animation();
+            _lifeBar0 = new Animation();
             _lifeBar0.AddFrame(new Rectangle(0, 0, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
-            _lifeBar1 = new Animation.Animation();
+            _lifeBar1 = new Animation();
             _lifeBar1.AddFrame(new Rectangle(0, IconFrameHeight, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
-            _lifeBar2 = new Animation.Animation();
+            _lifeBar2 = new Animation();
             _lifeBar2.AddFrame(new Rectangle(0, IconFrameHeight * 2, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
-            _lifeBar3 = new Animation.Animation();
+            _lifeBar3 = new Animation();
             _lifeBar3.AddFrame(new Rectangle(0, IconFrameHeight * 3, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
             CurrentAnimation = _lifeBar3;

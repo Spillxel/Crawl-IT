@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 
-namespace CrawlIT.Shared.Input
+namespace CrawlIT.Shared
 {
     public class InputManager
     {
@@ -14,9 +14,9 @@ namespace CrawlIT.Shared.Input
 
         public InputState CurrentInputState { get; private set; }
 
-        private readonly Camera.Camera _camera;
+        private readonly Camera _camera;
 
-        public InputManager(Camera.Camera camera)
+        public InputManager(Camera camera)
         {
             _camera = camera;
             CurrentInputState = InputState.Idle;
