@@ -6,15 +6,15 @@ namespace CrawlIT.Shared
 {
     public class LifeBarIcon : AnimatedUiIcon
     {
-        private Animation _lifeBar0;
-        private Animation _lifeBar1;
-        private Animation _lifeBar2;
-        private Animation _lifeBar3;
+        private readonly Animation _lifeBar0;
+        private readonly Animation _lifeBar1;
+        private readonly Animation _lifeBar2;
+        private readonly Animation _lifeBar3;
 
-        private Player _player;
+        private readonly Player _player;
 
         public LifeBarIcon(Texture2D texture, Matrix scale, float posX, float posY, Player player)
-            : base (texture, scale, posX, posY)
+            : base(texture, scale, posX, posY)
         {
             _player = player;
 
@@ -48,7 +48,7 @@ namespace CrawlIT.Shared
 
         public override void SetAnimation()
         {
-            switch (_player.lifeCount)
+            switch (_player.LifeCount)
             {
                 case 0:
                     CurrentAnimation = _lifeBar0;

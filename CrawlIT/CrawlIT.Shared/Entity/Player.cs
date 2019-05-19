@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -22,8 +23,8 @@ namespace CrawlIT.Shared
         public List<Rectangle> CollisionObjects { get; set; }
         public List<Enemy> Enemies { get; set; }
 
-        public int lifeCount;
-        public int crystalCount;
+        public int LifeCount;
+        public int CrystalCount;
 
         private Vector2 _currentVelocity;
 
@@ -38,8 +39,8 @@ namespace CrawlIT.Shared
             _scale = scale;
             FrameWidth = 23;
             FrameHeight = 45;
-            lifeCount = 3;
-            crystalCount = 0;
+            LifeCount = 3;
+            CrystalCount = 0;
 
             // TODO: rethink this animation frame setup, probably better ways to set this up
             _walkDown = new Animation();

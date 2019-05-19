@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 namespace CrawlIT.Shared
 {
     public abstract class AnimatedUiIcon : UiIcon

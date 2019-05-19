@@ -21,13 +21,13 @@ namespace CrawlIT.Shared
         private Texture2D _helpTexture;
         private Texture2D _badgesTexture;
 
-        private Matrix _scale;
-        private Point _resolution;
-        private ContentManager _content;
+        private readonly Matrix _scale;
+        private readonly Point _resolution;
+        private readonly ContentManager _content;
         private Camera _staticCamera;
         private SpriteFont _font;
         private SpriteBatch _spriteBatch;
-        private Player _player;
+        private readonly Player _player;
 
         public ExplorationUi(Matrix scale, Point resolution, ContentManager content, Camera staticCamera, Player player)
         {

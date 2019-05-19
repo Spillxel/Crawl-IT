@@ -33,7 +33,7 @@ namespace CrawlIT.Shared
         private Rectangle _answer3Rec;
         private Rectangle _answer4Rec;
         private Rectangle _enemyRec;
-        private Rectangle[] _answerRec = new Rectangle[4];
+        private readonly Rectangle[] _answerRec = new Rectangle[4];
 
         private String _questionString;
         private String _firstAnswer;
@@ -43,8 +43,8 @@ namespace CrawlIT.Shared
 
         private SpriteFont _font;
 
-        private int _questionFrameWidth;
-        private int _questionFrameHeight;
+        private readonly int _questionFrameWidth;
+        private readonly int _questionFrameHeight;
         private int correct;
         private int wrong1;
         private int wrong2;
@@ -54,7 +54,7 @@ namespace CrawlIT.Shared
         private readonly Animation _correctAnswer;
         private readonly Animation _wrongAnswer;
 
-        private Animation _questionCurrentAnimation;
+        private readonly Animation _questionCurrentAnimation;
 
         private float _scale;
         private float _crystalRatio;
@@ -239,7 +239,7 @@ namespace CrawlIT.Shared
         {
             if (touch.Intersects(_answerRec[correct]))
             {
-                Player.lifeCount--;
+                Player.LifeCount--;
                 return true;
             }
             else
