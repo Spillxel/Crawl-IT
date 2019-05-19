@@ -6,7 +6,10 @@ namespace CrawlIT.Shared
     {
         public List<Question> Questions { get; set; }
     }
-
+    
+    // TODO: there's probably better ways of defining some of the variables below
+    // i.e. QuestionSubject => Subject
+    // would also be nice if we don't have to use numbers in variables
     public class Question
     {
         //public enum Subject { Maths, Programming, Algorithms, Security, Networks, Database };
