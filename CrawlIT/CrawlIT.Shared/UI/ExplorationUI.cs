@@ -64,7 +64,7 @@ namespace CrawlIT.Shared
 
             _font = _content.Load<SpriteFont>("Fonts/File");
 
-            // calculating icon positions
+            // icon positions
             var border = _resolution.X * 0.05f;
 
             var textureWidth = _saveTexture.Width * _scale;
@@ -76,7 +76,7 @@ namespace CrawlIT.Shared
             _lifeBar = new LifeBarIcon(_lifeBarTexture, _scale, border, border, _player);
             _surgeCrystal = new UiIcon(_surgeCrystalTexture, _scale, _resolution.X - border - textureWidth, border);
             
-            // the space between help and badges icons
+            // free space between leftmost and rightmost icons, minus textureWidth of the other two
             var remainingSpace = _resolution.X - 2 * border - 4 * textureWidth;
             // we want to put two icons in this space, hence we divide the space by three
             var spacing = remainingSpace / 3 + textureWidth;
