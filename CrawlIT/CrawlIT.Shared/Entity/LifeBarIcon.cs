@@ -13,7 +13,7 @@ namespace CrawlIT.Shared
 
         private readonly Player _player;
 
-        public LifeBarIcon(Texture2D texture, Matrix scale, float posX, float posY, Player player)
+        public LifeBarIcon(Texture2D texture, float scale, float posX, float posY, Player player)
             : base(texture, scale, posX, posY)
         {
             _player = player;
@@ -36,7 +36,8 @@ namespace CrawlIT.Shared
         public override void Draw(SpriteBatch spriteBatch)
         {
             var sourceRectangle = CurrentAnimation.CurrentRectangle;
-            spriteBatch.Draw(TextureSheet, Position, sourceRectangle, Color.White);
+            spriteBatch.Draw(TextureSheet, Position, sourceRectangle, Color.White, 0,
+                             Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
 
         public override void Update(GameTime gameTime)

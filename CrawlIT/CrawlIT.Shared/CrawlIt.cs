@@ -39,8 +39,7 @@ namespace CrawlIT.Shared
 
         private InputManager _inputManager;
 
-        private Matrix _scale;
-        private Vector2 _scaleVector;
+        private float _scale;
         private Rectangle _touch;
 
         private enum State
@@ -102,7 +101,7 @@ namespace CrawlIT.Shared
             _resolution = new ResolutionComponent(this, _graphics,
                                                   new Point(720, 1280),
                                                   new Point(720, 1280),
-                                                  true, false);
+                                                  true, true);
             _virtualResolution = _resolution.VirtualResolution;
 
             TouchPanel.EnabledGestures = GestureType.Pinch
@@ -118,11 +117,11 @@ namespace CrawlIT.Shared
         protected override void LoadContent()
         {
             _transform = _resolution.TransformationMatrix();
-            // TODO: think up a better way to zoom for different resolutions
-            var scaleX = _realResolution.X / _virtualResolution.X;
-            var scaleY = _realResolution.Y / _virtualResolution.Y;
-            _scale = Matrix.CreateScale(scaleX, scaleY, 1f);
-            _scaleVector = new Vector2(scaleX, scaleY);
+
+            // TODO: comment this scaling stuff
+            var scaleX = Math.Max(_realResolution.X / (float) _virtualResolution.X, 3);
+            var scaleY = Math.Max(_realResolution.Y / (float) _virtualResolution.Y, 3);
+            _scale = Math.Min(scaleX, scaleY);
 
             _menu = new Menu(GraphicsDevice, _virtualResolution, _transform);
             _menu.SetState(State.Menu);
@@ -166,15 +165,15 @@ namespace CrawlIT.Shared
             _player = new Player(_playerTexture, _transform);
             _playerCamera = new Camera(_virtualResolution.X,
                                        _virtualResolution.Y,
-                                       _scale.M11);
+                                       _scale);
             
-            _explorationUi = new ExplorationUi(_transform, _virtualResolution, Content, _staticCamera, _player);
+            _explorationUi = new ExplorationUi(_transform, _scale, _virtualResolution, Content, _player);
 
             _fight = new Fight(GraphicsDevice, _player);
             _fight.SetState(State.Fighting);
 
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
-            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10);
+            _tutor = new Enemy(_tutorTexture, _transform, 600, 80, 10);
 
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
@@ -296,7 +295,7 @@ namespace CrawlIT.Shared
                     }
                 }
 
-                _explorationUI.Update(gameTime);
+                _explorationUi.Update(gameTime);
                 _fight.Update(gameTime);
             }
 

@@ -55,7 +55,7 @@ namespace CrawlIT.Shared
         private readonly Animation _correctAnswer;
         private readonly Animation _wrongAnswer;
 
-        private readonly Animation _questionCurrentAnimation;
+        private Animation _questionCurrentAnimation;
 
         private float _scale;
         private float _crystalRatio;
@@ -240,13 +240,13 @@ namespace CrawlIT.Shared
         {
             if (touch.Intersects(_answerRec[correct]))
             {
-                Player.SetLifeCount(Player.lifeCount + 1);
+                Player.SetLifeCount(Player.LifeCount + 1);
                 _win = true;
                 return true;
             }
             else
             {
-                Player.SetLifeCount(Player.lifeCount - 1);
+                Player.SetLifeCount(Player.LifeCount - 1);
                 return false;
             }
         }

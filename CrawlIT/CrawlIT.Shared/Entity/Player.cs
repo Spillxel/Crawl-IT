@@ -238,7 +238,7 @@ namespace CrawlIT.Shared
 
         public void SetLifeCount(int count)
         {
-            lifeCount = Math.Min(Math.Max(0, count), 3);
+            LifeCount = Math.Min(Math.Max(0, count), 3);
         }
     }
 }
