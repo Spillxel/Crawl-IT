@@ -137,6 +137,18 @@
 #begin questions.json
 /copy:questions.json
 
+#begin Sprites/badges.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/badges.png
+
 #begin Sprites/blackscreentexture.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -161,18 +173,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/help.png
 
-#begin Sprites/iconplaceholder.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/iconplaceholder.png
-
 #begin Sprites/lifebarspritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -184,6 +184,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/lifebarspritesheet.png
+
+#begin Sprites/newhelp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/newhelp.png
 
 #begin Sprites/newscreentexture.png
 /importer:TextureImporter
@@ -233,7 +245,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/save.png
 
-#begin Sprites/screentexture.png
+#begin Sprites/settings.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -243,7 +255,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/screentexture.png
+/build:Sprites/settings.png
 
 #begin Sprites/surgecrystal.png
 /importer:TextureImporter

@@ -42,6 +42,7 @@ namespace CrawlIT.Shared
         private String _fourthAnswer;
 
         private SpriteFont _font;
+        private bool _win = false;
 
         private readonly int _questionFrameWidth;
         private readonly int _questionFrameHeight;
@@ -239,11 +240,13 @@ namespace CrawlIT.Shared
         {
             if (touch.Intersects(_answerRec[correct]))
             {
-                Player.LifeCount--;
+                Player.SetLifeCount(Player.lifeCount + 1);
+                _win = true;
                 return true;
             }
             else
             {
+                Player.SetLifeCount(Player.lifeCount - 1);
                 return false;
             }
         }
@@ -258,7 +261,15 @@ namespace CrawlIT.Shared
                 spriteBatch.End();
             }
 
+            if (_win)
+                _questionCurrentAnimation = _correctAnswer;
+            else
+                _questionCurrentAnimation = _wrongAnswer;
+
             spriteBatch.Begin();
+            var sourceRectangle = _questionCurrentAnimation.CurrentRectangle;
+            spriteBatch.Draw(_questionTexture, _questionRec, sourceRectangle, Color.White);
+            DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Cyan);
             DrawString(spriteBatch, _font, _firstAnswer, _answerRec[correct], Color.LimeGreen);
             DrawString(spriteBatch, _font, _secondAnswer, _answerRec[wrong1], Color.Red);
             DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[wrong2], Color.Red);
