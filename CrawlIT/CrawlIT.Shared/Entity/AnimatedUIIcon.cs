@@ -13,8 +13,8 @@ namespace CrawlIT.Shared
         protected AnimatedUiIcon(Texture2D texture, Matrix scale, float posX, float posY)
             : base(texture, scale, posX, posY)
         {
-            IconFrameWidth = 32;
-            IconFrameHeight = 32;
+            IconFrameWidth = texture.Width;
+            IconFrameHeight = texture.Height;
         }
 
         public abstract void SetAnimation();
