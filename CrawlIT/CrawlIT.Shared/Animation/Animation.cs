@@ -6,6 +6,10 @@ using Microsoft.Xna.Framework;
 
 namespace CrawlIT.Shared
 {
+    /// <summary>
+    /// Serves to define an <c>Animation</c> containing a list of <c>AnimationFrame</c>s, which one can loop through
+    /// using the provided <value>duration</value> for each <c>AnimationFrame</c>.
+    /// </summary>
     public class Animation
     {
         private readonly List<AnimationFrame> _animationFrames = new List<AnimationFrame>();

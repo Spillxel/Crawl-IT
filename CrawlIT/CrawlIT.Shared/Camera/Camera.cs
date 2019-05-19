@@ -3,6 +3,13 @@ using Microsoft.Xna.Framework;
 
 namespace CrawlIT.Shared
 {
+    /// <summary>
+    /// <para>Serves to define an <c>Camera</c> with a width, height and zoom level.</para>
+    /// <para>The class then provides the <see cref="Follow"/> to either follow a
+    /// <see cref="Player"/> or null (static camera).</para>
+    /// <para>This method updates the camera's transform and position.
+    /// The transform can be used to draw using the camera's perspective.</para>
+    /// </summary>
     public class Camera
     {
         public Matrix Transform { get; private set; }
