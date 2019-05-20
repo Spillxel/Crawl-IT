@@ -169,11 +169,11 @@ namespace CrawlIT.Shared
             
             _explorationUi = new ExplorationUi(_transform, _scale, _virtualResolution, Content, _player);
 
-            _fight = new Fight(GraphicsDevice, _player);
+            _fight = new Fight(GraphicsDevice, _virtualResolution, _transform,  _player);
             _fight.SetState(State.Fighting);
 
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
-            _tutor = new Enemy(_tutorTexture, _transform, 600, 80, 10);
+            _tutor = new Enemy(_tutorTexture, 600, 80, 10);
 
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
@@ -188,10 +188,10 @@ namespace CrawlIT.Shared
             _exitSize = new Point(_exitButton.Width, _exitButton.Height);
             _pauseSize = new Point(_pauseButton.Width, _pauseButton.Height);
 
-            _answerSize = new Point(GraphicsDevice.Viewport.Width,
-                                    GraphicsDevice.Viewport.Height / 10 * 4);
-            _surgeCrystalSize = new Point(_surgeCrystalTexture.Width * GraphicsDevice.Viewport.Width / 200,
-                                          _surgeCrystalTexture.Height * GraphicsDevice.Viewport.Width / 200);
+            _answerSize = new Point(_virtualResolution.X,
+                                    (int)(_virtualResolution.Y * 0.4f));
+            _surgeCrystalSize = new Point(_surgeCrystalTexture.Width * _virtualResolution.X / 200,
+                                          _surgeCrystalTexture.Height * _virtualResolution.Y / 200);
 
             _font = Content.Load<SpriteFont>("Fonts/File");
 
@@ -235,7 +235,6 @@ namespace CrawlIT.Shared
 #if !__IOS__
                 Activity.MoveTaskToBack(true);
 #endif
-
             }
 
             GameStateManager.Instance.Update(gameTime);

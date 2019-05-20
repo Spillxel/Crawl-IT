@@ -57,12 +57,17 @@ namespace CrawlIT.Shared
 
         private Animation _questionCurrentAnimation;
 
+        private Matrix _transform;
+        private Point _resolution;
+
         private float _scale;
         private float _crystalRatio;
 
-        public Fight(GraphicsDevice graphicsDevice, Player player)
-        : base(graphicsDevice)
+        public Fight(GraphicsDevice graphicsDevice, Point resolution, Matrix transform, Player player)
+            : base(graphicsDevice)
         {
+            _resolution = resolution;
+            _transform = transform;
             Player = player;
 
             _questionFrameWidth = 600;
@@ -82,9 +87,8 @@ namespace CrawlIT.Shared
 
         public override void Initialize()
         {
-            _scale = GraphicsDevice.Viewport.Width / 1200f;
-
-            _crystalRatio = GraphicsDevice.Viewport.Width / 200;
+            _scale = _resolution.X / 1200f;
+            _crystalRatio = _resolution.X / 200f;
         }
 
         public override void LoadContent(ContentManager content)
@@ -148,21 +152,21 @@ namespace CrawlIT.Shared
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Initialization of the vectors responsible of the initial position of the question and answers
-            _questionPosition = new Vector2(0, GraphicsDevice.Viewport.Height / 11 * 5 - 6);
-            _answer1Position = new Vector2(0, GraphicsDevice.Viewport.Height / 10 * 6);
-            _answer2Position = new Vector2(GraphicsDevice.Viewport.Width / 2 + 3, GraphicsDevice.Viewport.Height / 10 * 6);
-            _answer3Position = new Vector2(0, GraphicsDevice.Viewport.Height / 10 * 8 + 3);
-            _answer4Position = new Vector2(GraphicsDevice.Viewport.Width / 2 + 3, GraphicsDevice.Viewport.Height / 10 * 8 + 3);
-            _crystalPosition = new Vector2(GraphicsDevice.Viewport.Width / 2 - _crystal.Width * _crystalRatio / 2,
-                                           GraphicsDevice.Viewport.Height / 10 * 8 - _crystal.Height * _crystalRatio / 2);
+            _questionPosition = new Vector2(0, _resolution.Y / 11 * 5 - 6);
+            _answer1Position = new Vector2(0, _resolution.Y / 10 * 6);
+            _answer2Position = new Vector2(_resolution.X / 2 + 3, _resolution.Y / 10 * 6);
+            _answer3Position = new Vector2(0, _resolution.Y / 10 * 8 + 3);
+            _answer4Position = new Vector2(_resolution.X / 2 + 3, _resolution.Y / 10 * 8 + 3);
+            _crystalPosition = new Vector2(_resolution.X / 2 - _crystal.Width * _crystalRatio / 2,
+                                           _resolution.Y / 10 * 8 - _crystal.Height * _crystalRatio / 2);
             _enemyPosition = new Vector2(0, 0);
             _crystalScale = new Vector2(_crystalRatio, _crystalRatio);
 
             //Initialization of the size of the question and answers
-            Point _questionPoint = new Point(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 20 * 3);
-            Point _answerPoint = new Point(GraphicsDevice.Viewport.Width / 2 - 3,
-                                           GraphicsDevice.Viewport.Height / 10 * 2 - 3);
-            Point _enemyPoint = new Point(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 2);
+            Point _questionPoint = new Point(_resolution.X, _resolution.Y / 20 * 3);
+            Point _answerPoint = new Point(_resolution.X / 2 - 3,
+                                           _resolution.Y / 10 * 2 - 3);
+            Point _enemyPoint = new Point(_resolution.X, _resolution.Y / 2);
 
             //Initialization of the rectangles using the initial position and the size of the question and answers
             _questionRec = new Rectangle(_questionPosition.ToPoint(), _questionPoint);
@@ -180,7 +184,7 @@ namespace CrawlIT.Shared
             GraphicsDevice.Clear(Color.Black);
 
             // Render enemy screenshot
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
             spriteBatch.Draw(_enemy, _enemyRec, Color.White);
             // Render question
             var sourceRectangle = _questionCurrentAnimation.CurrentRectangle;
@@ -190,31 +194,27 @@ namespace CrawlIT.Shared
             spriteBatch.Draw(_screen, _answer2Rec, Color.White);
             spriteBatch.Draw(_screen, _answer3Rec, Color.White);
             spriteBatch.Draw(_screen, _answer4Rec, Color.White);
-            spriteBatch.End();
 
             // Draw the text on the rectangles of the answers
-            spriteBatch.Begin();
             DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Cyan);
             DrawString(spriteBatch, _font, _firstAnswer, _answerRec[correct], Color.Cyan);
             DrawString(spriteBatch, _font, _secondAnswer, _answerRec[wrong1], Color.Cyan);
             DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[wrong2], Color.Cyan);
+
             if (_fourthAnswer == "")
             {
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
                 spriteBatch.Draw(_blackscreen, _answerRec[wrong3], Color.White);
-                spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
-                spriteBatch.End();
+                spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
+                                 Vector2.Zero,_crystalScale, SpriteEffects.None, 0);
             }
             else
             {
                 DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[wrong3], Color.Cyan);
-                spriteBatch.End();
             }
 
             // Render crystal sprite
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
-            spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
+            spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
+                             Vector2.Zero,_crystalScale, SpriteEffects.None, 0);
             spriteBatch.End();
         }
 
@@ -253,12 +253,12 @@ namespace CrawlIT.Shared
 
         public override void ChangeColour(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
             if (_fourthAnswer == "")
             {
-                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
                 spriteBatch.Draw(_blackscreen, _answerRec[wrong3], Color.White);
-                spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
-                spriteBatch.End();
+                spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
+                                 Vector2.Zero, _crystalScale, SpriteEffects.None, 0);
             }
 
             if (_win)
@@ -266,7 +266,6 @@ namespace CrawlIT.Shared
             else
                 _questionCurrentAnimation = _wrongAnswer;
 
-            spriteBatch.Begin();
             var sourceRectangle = _questionCurrentAnimation.CurrentRectangle;
             spriteBatch.Draw(_questionTexture, _questionRec, sourceRectangle, Color.White);
             DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Cyan);
@@ -280,13 +279,12 @@ namespace CrawlIT.Shared
         public override void Help(SpriteBatch spriteBatch)
         {
             _fourthAnswer = "";
-
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
+            
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
             spriteBatch.Draw(_blackscreen, _answerRec[wrong3], Color.White);
-            spriteBatch.Draw(texture: _crystal, position: _crystalPosition, color: Color.White, scale: _crystalScale);
-            spriteBatch.End();
+            spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
+                             Vector2.Zero, _crystalScale, SpriteEffects.None, 0);
 
-            spriteBatch.Begin();
             DrawString(spriteBatch, _font, _firstAnswer, _answerRec[correct], Color.Cyan);
             DrawString(spriteBatch, _font, _secondAnswer, _answerRec[wrong1], Color.Cyan);
             DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[wrong2], Color.Cyan);

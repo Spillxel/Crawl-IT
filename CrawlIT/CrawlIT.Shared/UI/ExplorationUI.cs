@@ -25,6 +25,9 @@ namespace CrawlIT.Shared
         private Texture2D _badgesTexture;
 
         private SpriteFont _font;
+        private float _fontScale;
+        private Vector2 _levelStringPos;
+        private const string _levelString = "SEMESTER 1";
 
         private readonly Matrix _transform;
         private readonly float _scale;
@@ -42,6 +45,7 @@ namespace CrawlIT.Shared
         {
             _transform = transform;
             _scale = scale;
+            _fontScale = _scale * 0.3f;
             _resolution = resolution;
             _content = content;
             _player = player;
@@ -89,7 +93,11 @@ namespace CrawlIT.Shared
             _help = new UiIcon(_helpTexture, _scale, helpPos, bottomHeight);
             _save = new UiIcon(_saveTexture, _scale, savePos, bottomHeight);
             _settings = new UiIcon(_settingsTexture, _scale, settingsPos, bottomHeight);
-            _badges = new UiIcon(_badgesTexture, _scale, badgesPos, bottomHeight);    
+            _badges = new UiIcon(_badgesTexture, _scale, badgesPos, bottomHeight);
+
+            
+            var (x, y) = _font.MeasureString(_levelString) * _fontScale;
+            _levelStringPos = new Vector2((_resolution.X - x) * 0.5f, border + (textureHeight - y) * 0.5f);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -97,13 +105,11 @@ namespace CrawlIT.Shared
             _spriteBatch = spriteBatch;
 
             // TODO: we probably need to extract level string drawing from here for future purposes
-            var levelString = _bottomHeight;
-            var (levelStringDimensionX, levelStringDimensionY) = _font.MeasureString(levelString);
-            var levelStringPosX = (_resolution.X - levelStringDimensionX) / 2;
-            const int levelStringPosY = 50;
+            
 
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, levelString, new Vector2(levelStringPosX, levelStringPosY), Color.White);
+            _spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
+            _spriteBatch.DrawString(_font, _levelString, _levelStringPos, Color.White,
+                                    0, Vector2.Zero, _fontScale, SpriteEffects.None, 0);
             _spriteBatch.End();
 
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend,

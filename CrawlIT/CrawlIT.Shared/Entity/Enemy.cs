@@ -9,8 +9,6 @@ namespace CrawlIT.Shared
     {
         public Animation CurrentAnimation;
 
-        private readonly Matrix _scale;
-
         private readonly Vector2 _position;
 
         public int Rounds;
@@ -18,7 +16,7 @@ namespace CrawlIT.Shared
         public Rectangle CollisionRectangle;
         public Rectangle FightRectangle;
 
-        public Enemy(Texture2D texture, Matrix scale, float posx, float posy, int rounds)
+        public Enemy(Texture2D texture, float posx, float posy, int rounds)
         {
             TextureSheet = texture;
             PosX = posx;
@@ -26,7 +24,6 @@ namespace CrawlIT.Shared
             _position = new Vector2(PosX, PosY);
             FrameWidth = 23;
             FrameHeight = 45;
-            _scale = scale;
             Rounds = rounds;
 
             CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));

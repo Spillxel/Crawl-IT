@@ -23,7 +23,7 @@ namespace CrawlIT.Shared
         private readonly Point _resolution;
 
         public Menu(GraphicsDevice graphicsDevice, Point resolution, Matrix transform)
-        : base(graphicsDevice)
+            : base(graphicsDevice)
         {
             _transform = transform;
             _resolution = resolution;
