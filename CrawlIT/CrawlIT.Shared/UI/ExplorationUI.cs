@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,21 +25,17 @@ namespace CrawlIT.Shared
         private Texture2D _badgesTexture;
 
         private SpriteFont _font;
-        private float _fontScale;
+        private readonly float _fontScale;
         private Vector2 _levelStringPos;
-        private const string _levelString = "SEMESTER 1";
+        private const string LevelString = "SEMESTER 1";
 
         private readonly Matrix _transform;
         private readonly float _scale;
         private readonly Point _resolution;
 
         private readonly ContentManager _content;
-        private SpriteBatch _spriteBatch;
 
         private readonly Player _player;
-
-        // TODO: remove
-        private string _bottomHeight;
 
         public ExplorationUi(Matrix transform, float scale, Point resolution, ContentManager content, Player player)
         {
@@ -75,7 +71,6 @@ namespace CrawlIT.Shared
             var textureHeight = _saveTexture.Height * _scale;
 
             var bottomHeight = _resolution.Y - border - textureHeight;
-            _bottomHeight = bottomHeight.ToString(CultureInfo.InvariantCulture);
 
             _lifeBar = new LifeBarIcon(_lifeBarTexture, _scale, border, border, _player);
             _surgeCrystal = new UiIcon(_surgeCrystalTexture, _scale, _resolution.X - border - textureWidth, border);
@@ -96,35 +91,25 @@ namespace CrawlIT.Shared
             _badges = new UiIcon(_badgesTexture, _scale, badgesPos, bottomHeight);
 
             
-            var (x, y) = _font.MeasureString(_levelString) * _fontScale;
+            var (x, y) = _font.MeasureString(LevelString) * _fontScale;
             _levelStringPos = new Vector2((_resolution.X - x) * 0.5f, border + (textureHeight - y) * 0.5f);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _spriteBatch = spriteBatch;
-
-            // TODO: we probably need to extract level string drawing from here for future purposes
-            
-
-            _spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
-            _spriteBatch.DrawString(_font, _levelString, _levelStringPos, Color.White,
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
+            spriteBatch.DrawString(_font, LevelString, _levelStringPos, Color.White,
                                     0, Vector2.Zero, _fontScale, SpriteEffects.None, 0);
-            _spriteBatch.End();
 
-            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend,
-                               SamplerState.PointClamp, null, null, null,
-                               _transform);
+            _lifeBar.Draw(spriteBatch);
+            _surgeCrystal.Draw(spriteBatch);
 
-            _lifeBar.Draw(_spriteBatch);
-            _surgeCrystal.Draw(_spriteBatch);
+            _save.Draw(spriteBatch);
+            _settings.Draw(spriteBatch);
+            _help.Draw(spriteBatch);
+            _badges.Draw(spriteBatch);
 
-            _save.Draw(_spriteBatch);
-            _settings.Draw(_spriteBatch);
-            _help.Draw(_spriteBatch);
-            _badges.Draw(_spriteBatch);
-
-            _spriteBatch.End();
+            spriteBatch.End();
         }
 
         public void Update(GameTime gameTime)
