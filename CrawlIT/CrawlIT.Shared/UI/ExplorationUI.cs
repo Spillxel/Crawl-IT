@@ -47,11 +47,6 @@ namespace CrawlIT.Shared
             _player = player;
         }
 
-        public void Initialize()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Load()
         {
             _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebarspritesheet");

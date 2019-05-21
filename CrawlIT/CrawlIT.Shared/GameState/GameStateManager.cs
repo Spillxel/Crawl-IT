@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,16 +19,12 @@ namespace CrawlIT.Shared
 
         public static GameStateManager Instance => _instance ?? (_instance = new GameStateManager());
 
+        public GameState.StateType State => _screens.Peek().State;
+
         // Sets the content manager
         public void SetContent(ContentManager content)
         {
             _content = content;
-        }
-
-        // Get the state of the current screen
-        public bool IsState(Enum state)
-        {
-            return _screens.Peek().GetState().Equals(state);
         }
 
         // Adds a new screen to the stack 
