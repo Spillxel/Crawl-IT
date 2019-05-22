@@ -203,7 +203,7 @@ namespace CrawlIT
             _font = Content.Load<SpriteFont>("Fonts/File");
 
             //_staticCamera = new Camera(0, 0, 1.0f);
-            
+
             // Fetching list of collision objects in the map to check for collision
             _player.CollisionObjects = _map.ObjectLayers[0].Objects
                                                        .Select(o => new Rectangle(
@@ -219,7 +219,7 @@ namespace CrawlIT
             {
                 _player.CollisionObjects.Add(enemy.CollisionRectangle);
             }
-                
+
             _inputManager = new InputManager(_playerCamera);
 
             // Set the content to the GameStateManager to be able to use it
@@ -253,7 +253,7 @@ namespace CrawlIT
             if (_touchCollection.Count > 0)
                 _touch = new Rectangle((int)_touchCollection[0].Position.X,
                                        (int)_touchCollection[0].Position.Y,
-                                       5, 5);         
+                                       5, 5);
 
             if (GameStateManager.Instance.IsState(State.Menu))
             {
@@ -309,8 +309,9 @@ namespace CrawlIT
             {
                 if (_played)
                 {
-                    //if(_win)
+                    //if (_win)
                     _played = false;
+                    _win = false;
                     Thread.Sleep(5000);
                     GameStateManager.Instance.RemoveScreen();
                     _player.MoveBack(_tutor);
@@ -382,6 +383,8 @@ namespace CrawlIT
                     _win |= _fight.GetAnswer(_touch);
                     _fight.ChangeColour(_spriteBatch);
                     _played = true;
+                    if (_win)
+                        GameStateManager.Instance.FadeBackBufferToBlack(GraphicsDevice, _spriteBatch);
                 }
             }
 

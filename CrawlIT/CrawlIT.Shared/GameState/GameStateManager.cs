@@ -18,6 +18,10 @@ namespace CrawlIT.Shared.GameState
 
         public static GameStateManager Instance => _instance ?? (_instance = new GameStateManager());
 
+        public SpriteBatch SpriteBatch { get; private set; }
+
+        public Texture2D BlankTexture;
+
         // Sets the content manager
         public void SetContent(ContentManager content)
         {
@@ -118,6 +122,29 @@ namespace CrawlIT.Shared.GameState
             {
                 Console.WriteLine(ex.StackTrace);
             }
+        }
+
+
+        public void FadeBackBufferToBlack(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
+        {
+            Viewport viewport = graphicsDevice.Viewport;
+
+            BlankTexture = new Texture2D(graphicsDevice, graphicsDevice.Viewport.Width,
+                                      graphicsDevice.Viewport.Height);
+
+
+            Color[] data = new Color[BlankTexture.Width * BlankTexture.Height];
+
+            for (int i = 0; i < data.Length; ++i)
+            {
+                data[i] = Color.Black*0.7f;
+            }
+
+            BlankTexture.SetData(data);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.Black);
+            spriteBatch.End();
         }
 
         // Unloads the content from the screen

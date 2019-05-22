@@ -110,6 +110,5 @@ namespace CrawlIT.Shared.GameState
         {
             throw new NotImplementedException();
         }
-
     }
 }
