@@ -383,8 +383,8 @@ namespace CrawlIT
                     _win |= _fight.GetAnswer(_touch);
                     _fight.ChangeColour(_spriteBatch);
                     _played = true;
-                    if (_win)
-                        GameStateManager.Instance.FadeBackBufferToBlack(GraphicsDevice, _spriteBatch);
+                    GameStateManager.Instance.FadeBackBufferToBlack(GraphicsDevice, _spriteBatch);
+                    _fight.PopUp(_spriteBatch);
                 }
             }
 

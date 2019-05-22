@@ -110,5 +110,10 @@ namespace CrawlIT.Shared.GameState
         {
             throw new NotImplementedException();
         }
+
+        public override void PopUp(SpriteBatch spriteBatch)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

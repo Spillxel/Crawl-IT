@@ -37,6 +37,8 @@ namespace CrawlIT.Shared.GameState
 
         public abstract void ChangeColour(SpriteBatch spriteBatch);
 
-        public abstract void Help(SpriteBatch spriteBatch); 
+        public abstract void Help(SpriteBatch spriteBatch);
+
+        public abstract void PopUp(SpriteBatch spriteBatch);
     }
 }
