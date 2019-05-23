@@ -107,11 +107,11 @@
     <Reference Include="MonoGame.Extended.Tiled, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Extended.Tiled.1.1.0\lib\portable-net45+win8+wpa81\MonoGame.Extended.Tiled.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.Portable.3.7.1.189\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
+    <Reference Include="MonoGame.Framework, Version=3.8.0.398, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.Portable.3.8.0.398-develop\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework.Content.Pipeline, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.Content.Pipeline.Portable.3.7.1.189\lib\portable-net45+win8+wpa81\MonoGame.Framework.Content.Pipeline.dll</HintPath>
+    <Reference Include="MonoGame.Framework.Content.Pipeline, Version=3.8.0.398, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.Content.Pipeline.Portable.3.8.0.398-develop\lib\portable-net45+win8+wpa81\MonoGame.Framework.Content.Pipeline.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
@@ -142,9 +142,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Sprites\charactersheet.png" />
     <None Include="app.config" />
     <None Include="Content\Fonts\File.spritefont" />
+    <None Include="Content\Maps\test.tmx">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\questions.json" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <MonoGameContentReference Include="Content\Content.mgcb" />
@@ -158,17 +161,76 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Audio\Investigations.mp3" />
-    <Content Include="Content\Audio\sneaky_snitch.mp3" />
+    <None Include="Content\Audio\Investigations.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Audio\sneaky_snitch.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Buttons\exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Buttons\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Buttons\resume.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Buttons\start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Images\fight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Images\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Maps\maptiles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\badges.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\blackscreentexture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\lifebarspritesheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\newhelp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\newscreentexture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\playerspritesheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\questiontexturesheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\surgecrystal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\tutorfight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Sprites\tutorspritesheet.png" />
   </ItemGroup>
   <Import Project="..\CrawlIT.Shared\CrawlIT.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
-  <Import Project="..\packages\MonoGame.Framework.iOS.3.7.1.189\build\MonoGame.Framework.iOS.targets" Condition="Exists('..\packages\MonoGame.Framework.iOS.3.7.1.189\build\MonoGame.Framework.iOS.targets')" />
+  <Import Project="..\packages\MonoGame.Framework.iOS.3.8.0.398-develop\build\MonoGame.Framework.iOS.targets" Condition="Exists('..\packages\MonoGame.Framework.iOS.3.8.0.398-develop\build\MonoGame.Framework.iOS.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MonoGame.Framework.iOS.3.7.1.189\build\MonoGame.Framework.iOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.iOS.3.7.1.189\build\MonoGame.Framework.iOS.targets'))" />
+    <Error Condition="!Exists('..\packages\MonoGame.Framework.iOS.3.8.0.398-develop\build\MonoGame.Framework.iOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.iOS.3.8.0.398-develop\build\MonoGame.Framework.iOS.targets'))" />
   </Target>
 </Project>

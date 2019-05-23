@@ -94,7 +94,7 @@ namespace CrawlIT.Shared
         {
             spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
             spriteBatch.DrawString(_font, LevelString, _levelStringPos, Color.White,
-                                    0, Vector2.Zero, _fontScale, SpriteEffects.None, 0);
+                                   0, Vector2.Zero, _fontScale, SpriteEffects.None, 0);
 
             _lifeBar.Draw(spriteBatch);
             _surgeCrystal.Draw(spriteBatch);

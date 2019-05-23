@@ -29,8 +29,8 @@ namespace CrawlIT.Shared
         private TouchCollection _touchCollection;
 
         private readonly IResolution _resolutionComponent;
-        private readonly Point _virtualResolution;
-        private readonly Point _realResolution;
+        private Point _virtualResolution;
+        private Point _realResolution;
         private Matrix _transform;
 
         private InputManager _inputManager;
@@ -39,7 +39,6 @@ namespace CrawlIT.Shared
         private Rectangle _touch;
 
         private Song _backgroundSong;
-        private SpriteFont _font;
 
         private Menu _menu;
         private Level _level;
@@ -77,11 +76,7 @@ namespace CrawlIT.Shared
             _resolutionComponent = new ResolutionComponent(this, _graphics,
                                                            new Point(720, 1280),
                                                            new Point(720, 1280),
-                                                           true, true);
-
-            _realResolution = new Point(_graphics.PreferredBackBufferWidth,
-                                        _graphics.PreferredBackBufferHeight);
-            _virtualResolution = _resolutionComponent.VirtualResolution;
+                                                           true, false);
 
             TouchPanel.EnabledGestures = GestureType.Pinch
                                          | GestureType.PinchComplete;
@@ -116,6 +111,11 @@ namespace CrawlIT.Shared
         /// </summary>  
         private void InitializeComponents()
         {
+            _realResolution = new Point(_graphics.PreferredBackBufferWidth,
+                                        _graphics.PreferredBackBufferHeight);
+            // Set _virtualResolution to actual drawn screen size
+            _virtualResolution = _resolutionComponent.ScreenArea.Size;
+
             _transform = _resolutionComponent.TransformationMatrix();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -220,6 +220,7 @@ namespace CrawlIT.Shared
             // Initialize by adding the Menu screen into the game
             GameStateManager.Instance.AddScreen(_menu);
 
+            // TODO: move this to Menu.cs
             // Buttons
             _startButtonTexture = Content.Load<Texture2D>("Buttons/start");
             _startButtonSize = new Point(_startButtonTexture.Width, _startButtonTexture.Height);
@@ -351,21 +352,6 @@ namespace CrawlIT.Shared
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            
-            // FPS
-            //var fps = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
-            //var fpsString = "FPS: " + Math.Ceiling(fps);
-            //var (stringDimensionX, stringDimensionY) = _font.MeasureString(fpsString);
-
-            //var stringPosX = (_graphics.PreferredBackBufferWidth - stringDimensionX) / 2;
-            //var stringPosY = _graphics.PreferredBackBufferHeight - stringDimensionY;
-
-            //if (!GameStateManager.Instance.IsState(GameState.StateType.Fighting))
-            //{
-            //    _spriteBatch.Begin();
-            //    _spriteBatch.DrawString(_font, fpsString, new Vector2(stringPosX, stringPosY), Color.Red);
-            //    _spriteBatch.End();
-            //}
 
             base.Draw(gameTime);
         }
