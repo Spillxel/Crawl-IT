@@ -66,9 +66,15 @@ namespace CrawlIT
 
         private Player _player;
         private Enemy _tutor;
+        private Enemy _assistant1;
+        private Enemy _assistant2;
+        private Enemy _assistant3;
 
         private Texture2D _playerTexture;
         private Texture2D _tutorTexture;
+        private Texture2D _assistant1Texture;
+        private Texture2D _assistant2Texture;
+        private Texture2D _assistant3Texture;
 
         private GameState _menu;
         private GameState _level;
