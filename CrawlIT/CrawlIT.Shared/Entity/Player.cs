@@ -251,5 +251,10 @@ namespace CrawlIT.Shared.Entity
         {
             lifeCount = Math.Min(Math.Max(0, count), 3);
         }
+
+        public void SetCrystalCount(int count)
+        {
+            crystalCount = Math.Max(0, count);
+        }
     }
 }

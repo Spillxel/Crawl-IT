@@ -51,7 +51,7 @@ namespace CrawlIT.Shared.Entity
 
         public override void SetAnimaton()
         {
-            switch (_player.lifeCount)
+            switch (_player.crystalCount)
             {
                 case 0:
                     CurrentAnimation = _lifeBar0;
@@ -65,7 +65,7 @@ namespace CrawlIT.Shared.Entity
                 case 3:
                     CurrentAnimation = _lifeBar3;
                     break;
-                // Implement a default that throws an error
+                // TODO: Implement a default that throws an error
             }
         }
     }

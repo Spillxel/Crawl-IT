@@ -399,7 +399,10 @@ namespace CrawlIT
                 var crystal = new Rectangle(_fight.GetPosition(_surgeCrystalTexture), _surgeCrystalSize);
                 var answer = new Rectangle(_fight.GetPosition(_answerButton), _answerSize);
                 if (_touch.Intersects(crystal))
+                {
+                    _player.SetCrystalCount(_player.crystalCount - 1);
                     _fight.Help(_spriteBatch);
+                }
                 else if (_touch.Intersects(answer) && !_touch.Intersects(crystal))
                 {
                     _win |= _fight.GetAnswer(_touch);
