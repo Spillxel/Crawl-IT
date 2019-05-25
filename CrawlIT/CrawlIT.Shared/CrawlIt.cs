@@ -185,6 +185,12 @@ namespace CrawlIT
 
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
             _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10);
+            _assistant1Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet1");
+            _assistant1 = new Enemy(_assistant1Texture, _resolution.TransformationMatrix(), 300, 300, 10);
+            _assistant2Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet2");
+            _assistant2 = new Enemy(_assistant2Texture, _resolution.TransformationMatrix(), 650, 300, 10);
+            _assistant3Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet3");
+            _assistant3 = new Enemy(_assistant3Texture, _resolution.TransformationMatrix(), 400, 500, 10);
 
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
@@ -218,8 +224,13 @@ namespace CrawlIT
                                                        .ToList();
 
             // Making list of collision enemies to check for combat
-            _enemies = new List<Enemy>();
-            _enemies.Add(_tutor);
+            _enemies = new List<Enemy>
+            {
+                _tutor,
+                _assistant1,
+                _assistant2,
+                _assistant3
+            };
             _player.Enemies = _enemies;
             foreach (var enemy in _enemies)
             {
@@ -285,6 +296,9 @@ namespace CrawlIT
                 _player.Update(gameTime);
 
                 _tutor.Update(gameTime);
+                _assistant1.Update(gameTime);
+                _assistant2.Update(gameTime);
+                _assistant3.Update(gameTime);
 
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
@@ -365,6 +379,9 @@ namespace CrawlIT
                                    null, null, null,
                                    _playerCamera.Transform);
                 _tutor.Draw(_spriteBatch);
+                _assistant1.Draw(_spriteBatch);
+                _assistant2.Draw(_spriteBatch);
+                _assistant3.Draw(_spriteBatch);
                 _player.Draw(_spriteBatch);
                 _spriteBatch.End();
 

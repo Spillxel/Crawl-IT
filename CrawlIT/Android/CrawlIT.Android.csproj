@@ -139,6 +139,9 @@
     </MonoGameContentReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Sprites\assistantspritesheet1.png" />
+    <Content Include="Content\Sprites\assistantspritesheet2.png" />
+    <Content Include="Content\Sprites\assistantspritesheet3.png" />
     <Content Include="Content\Sprites\badges.png" />
     <Content Include="Content\Sprites\blackscreentexture.png" />
     <Content Include="Content\Sprites\lifebarspritesheet.png" />
