@@ -12,7 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Camera\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Question.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\AnimatedUIIcon.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entity\BonusIcon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\CrystalIcon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Character.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Entity.cs" />

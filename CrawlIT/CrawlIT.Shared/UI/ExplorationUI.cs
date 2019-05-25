@@ -63,7 +63,7 @@ namespace CrawlIT.Shared.UI
             float _iconWidth = 32 * _zoom;
 
             _lifeBar = new LifeBarIcon(_lifeBarTexture, _zoom, 32 * _zoom, 50, _player);
-            _surgeCrystal = new BonusIcon(_crystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (2 * 32 * _zoom), 50, _player);
+            _surgeCrystal = new CrystalIcon(_crystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (2 * 32 * _zoom), 50, _player);
             //_save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth / 2) + 50 + (2 * 32), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             //_settings = new UIIcon(_settingsTexture, _zoom, (_graphics.PreferredBackBufferWidth / 4) + 32 + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             //_help = new UIIcon(_helpTexture, _zoom, 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));

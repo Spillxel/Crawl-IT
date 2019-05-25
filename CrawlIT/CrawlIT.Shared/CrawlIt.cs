@@ -184,13 +184,13 @@ namespace CrawlIT
             _fight.SetState(State.Fighting);
 
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
-            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10);
+            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10, 1);
             _assistant1Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet1");
-            _assistant1 = new Enemy(_assistant1Texture, _resolution.TransformationMatrix(), 300, 300, 10);
+            _assistant1 = new Enemy(_assistant1Texture, _resolution.TransformationMatrix(), 300, 300, 10, 2);
             _assistant2Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet2");
-            _assistant2 = new Enemy(_assistant2Texture, _resolution.TransformationMatrix(), 650, 300, 10);
+            _assistant2 = new Enemy(_assistant2Texture, _resolution.TransformationMatrix(), 650, 300, 10, 2);
             _assistant3Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet3");
-            _assistant3 = new Enemy(_assistant3Texture, _resolution.TransformationMatrix(), 400, 500, 10);
+            _assistant3 = new Enemy(_assistant3Texture, _resolution.TransformationMatrix(), 400, 500, 10, 2);
 
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
@@ -309,11 +309,11 @@ namespace CrawlIT
 
                 foreach (var enemy in _enemies)
                 {
-                    if (_player.Collides(enemy.FightRectangle) && enemy.Rounds > 0)
+                    if (_player.Collides(enemy.FightRectangle) && enemy.FightsLeft > 0)
                     {
                         Thread.Sleep(2000);
                         GameStateManager.Instance.AddScreen(_fight);
-                        enemy.Rounds--;
+                        enemy.FightsLeft--;
                     }
                     else
                     {

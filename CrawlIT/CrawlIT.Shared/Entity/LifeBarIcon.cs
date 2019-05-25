@@ -51,7 +51,7 @@ namespace CrawlIT.Shared.Entity
 
         public override void SetAnimaton()
         {
-            switch (_player.crystalCount)
+            switch (_player.lifeCount)
             {
                 case 0:
                     CurrentAnimation = _lifeBar0;
