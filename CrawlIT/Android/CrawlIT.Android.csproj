@@ -139,6 +139,9 @@
     </MonoGameContentReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Sprites\assistant1closeup.png" />
+    <Content Include="Content\Sprites\assistant2closeup.png" />
+    <Content Include="Content\Sprites\assistant3closeup.png" />
     <Content Include="Content\Sprites\assistantspritesheet1.png" />
     <Content Include="Content\Sprites\assistantspritesheet2.png" />
     <Content Include="Content\Sprites\assistantspritesheet3.png" />
@@ -154,7 +157,7 @@
     <Content Include="Content\Sprites\surgecrystal.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Sprites\tutorfight.PNG" />
+    <Content Include="Content\Sprites\tutorcloseup.png" />
     <Content Include="Content\Sprites\tutorspritesheet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

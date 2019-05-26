@@ -28,7 +28,7 @@ namespace CrawlIT.Shared.Entity
             _crystal2 = new Animation.Animation();
             _crystal2.AddFrame(new Rectangle(0, _iconFrameHeight * 2, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
 
-            _crystal2 = new Animation.Animation();
+            _crystal3 = new Animation.Animation();
             _crystal2.AddFrame(new Rectangle(0, _iconFrameHeight * 3, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
 
             CurrentAnimation = _crystal0;
