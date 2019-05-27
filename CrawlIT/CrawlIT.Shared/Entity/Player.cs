@@ -235,16 +235,17 @@ namespace CrawlIT.Shared.Entity
                    CollisionRectangle.Top < rect.Bottom;
         }
 
-        public void MoveBack(Enemy currentEnemy)
+        // Doesn't work at the moment because we don't have time to update the enemy animation before the sleep
+        public void MoveBack(Enemy currentEnemy) 
         {
             if (currentEnemy.CurrentAnimation == currentEnemy.StandDown)
-                PosY += 15;
+                PosY += 20;
             else if (currentEnemy.CurrentAnimation == currentEnemy.StandUp)
-                PosY -= 15;
+                PosY -= 20;
             else if (currentEnemy.CurrentAnimation == currentEnemy.StandRight)
-                PosX += 15;
+                PosX += 20;
             else if (currentEnemy.CurrentAnimation == currentEnemy.StandLeft)
-                PosX -= 15;
+                PosX -= 20;
         }
 
         public void SetLifeCount(int count)

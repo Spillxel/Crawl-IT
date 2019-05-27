@@ -19,9 +19,12 @@ namespace CrawlIT.Shared.Entity
         public Rectangle CollisionRectangle;
         public Rectangle FightRectangle;
 
-        public Enemy(Texture2D texture, Matrix scale, float posx, float posy, int fightsLeft, int questionPerFight)
+        public Texture2D CloseUpTexture;
+
+        public Enemy(Texture2D texture, Texture2D closeUpTexture, Matrix scale, float posx, float posy, int fightsLeft, int questionPerFight)
         {
             TextureSheet = texture;
+            CloseUpTexture = closeUpTexture;
             PosX = posx;
             PosY = posy;
             _position = new Vector2(PosX, PosY);

@@ -72,13 +72,17 @@ namespace CrawlIT
 
         private Texture2D _playerTexture;
         private Texture2D _tutorTexture;
+        private Texture2D _tutorCloseUpTexture;
         private Texture2D _assistant1Texture;
+        private Texture2D _assistant1CloseUpTexture;
         private Texture2D _assistant2Texture;
+        private Texture2D _assistant2CloseUpTexture;
         private Texture2D _assistant3Texture;
+        private Texture2D _assistant3CloseUpTexture;
 
         private GameState _menu;
         private GameState _level;
-        private GameState _fight;
+        private Fight _fight;
 
         private Point _startSize;
         private Texture2D _startButton;
@@ -180,18 +184,27 @@ namespace CrawlIT
 
             _explorationUI = new ExplorationUI(_zoom, _graphics, Content, _staticCamera, _player);
 
-            _fight = new Fight(GraphicsDevice, _player);
-            _fight.SetState(State.Fighting);
+            //_fight = new Fight(GraphicsDevice, _player, _enemies[0]);
+            //_fight.SetState(State.Fighting);
 
+            // Load enemy textures
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
-            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10, 1);
-            _assistant1Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet1");
-            _assistant1 = new Enemy(_assistant1Texture, _resolution.TransformationMatrix(), 300, 300, 10, 2);
-            _assistant2Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet2");
-            _assistant2 = new Enemy(_assistant2Texture, _resolution.TransformationMatrix(), 650, 300, 10, 2);
-            _assistant3Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet3");
-            _assistant3 = new Enemy(_assistant3Texture, _resolution.TransformationMatrix(), 400, 500, 10, 2);
+            _tutorCloseUpTexture = Content.Load<Texture2D>("Sprites/tutorcloseup");
+            _tutor = new Enemy(_tutorTexture, _tutorCloseUpTexture, _resolution.TransformationMatrix(), 600, 80, 10, 1);
 
+            _assistant1Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet1");
+            _assistant1CloseUpTexture = Content.Load<Texture2D>("Sprites/assistant1closeup");
+            _assistant1 = new Enemy(_assistant1Texture, _assistant1CloseUpTexture, _resolution.TransformationMatrix(), 300, 300, 10, 2);
+
+            _assistant2Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet2");
+            _assistant2CloseUpTexture = Content.Load<Texture2D>("Sprites/assistant2closeup");
+            _assistant2 = new Enemy(_assistant2Texture, _assistant2CloseUpTexture, _resolution.TransformationMatrix(), 650, 300, 10, 2);
+
+            _assistant3Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet3");
+            _assistant3CloseUpTexture = Content.Load<Texture2D>("Sprites/assistant3closeup");
+            _assistant3 = new Enemy(_assistant3Texture, _assistant3CloseUpTexture, _resolution.TransformationMatrix(), 400, 500, 10, 2);
+
+            // Load button textures
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
             _pauseButton = Content.Load<Texture2D>("Buttons/pause");
@@ -236,7 +249,10 @@ namespace CrawlIT
             {
                 _player.CollisionObjects.Add(enemy.CollisionRectangle);
             }
-                
+
+            _fight = new Fight(GraphicsDevice, _player, _enemies[0]);
+            _fight.SetState(State.Fighting);
+
             _inputManager = new InputManager(_playerCamera);
 
             // Set the content to the GameStateManager to be able to use it
@@ -303,6 +319,7 @@ namespace CrawlIT
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
 
+                // Fight test button
                 var pause = new Rectangle(_level.GetPosition(_pauseButton), _pauseSize);
                 if (_touch.Intersects(pause))
                     GameStateManager.Instance.AddScreen(_fight);
@@ -311,16 +328,19 @@ namespace CrawlIT
                 {
                     if (_player.Collides(enemy.FightRectangle) && enemy.FightsLeft > 0)
                     {
+                        _fight.Enemy = enemy;
+                        // TODO: For loop with enemy.QuestionPerFight
+                        _fight.QuestionCurrentAnimation = _fight.NoAnswer;
                         Thread.Sleep(2000);
                         GameStateManager.Instance.AddScreen(_fight);
                         enemy.FightsLeft--;
+                        _player.MoveBack(enemy);
                     }
                     else
                     {
-                        // Display textbox "I have no more questions for you!"
+                        // TODO: Display textbox "I have no more questions for you!"
                     }
                 }
-
                 _explorationUI.Update(gameTime);
                 _fight.Update(gameTime);
             }
@@ -332,8 +352,7 @@ namespace CrawlIT
                     //if(_win)
                     _played = false;
                     Thread.Sleep(5000);
-                    GameStateManager.Instance.RemoveScreen();
-                    _player.MoveBack(_tutor);
+                    GameStateManager.Instance.RemoveScreen();               
                 }
             }
             base.Update(gameTime);
