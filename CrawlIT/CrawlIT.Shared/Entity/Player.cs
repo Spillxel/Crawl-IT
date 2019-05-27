@@ -94,6 +94,8 @@ namespace CrawlIT.Shared
 
             StandRight = new Animation();
             StandRight.AddFrame(new Rectangle(0, FrameHeight * 2, FrameWidth, FrameHeight), TimeSpan.FromSeconds(.125));
+
+            _currentAnimation = StandDown;
         }
 
         public override void Update(GameTime gameTime) => _currentAnimation.Update(gameTime);

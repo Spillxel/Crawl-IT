@@ -149,11 +149,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/blackscreentexture.png
 
-#begin Sprites/help.aseprite
-/importer:
-/processor:
-/build:Sprites/help.aseprite
-
 #begin Sprites/help.png
 /importer:TextureImporter
 /processor:TextureProcessor
