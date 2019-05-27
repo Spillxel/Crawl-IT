@@ -21,6 +21,7 @@ namespace CrawlIT.Shared.GameState
         private Texture2D _crystalTexture;
         private Texture2D _enemyTexture;
         private Texture2D _blackscreenTexture;
+        private Texture2D _rectangle;
 
         private Vector2 _questionPosition;
         private Vector2 _answer1Position;
@@ -37,6 +38,7 @@ namespace CrawlIT.Shared.GameState
         private Rectangle _answer3Rec;
         private Rectangle _answer4Rec;
         private Rectangle _enemyRec;
+        private Rectangle _rectanglePos;
         private Rectangle[] _answerRec = new Rectangle[4];
 
         private String _questionString;
@@ -299,6 +301,37 @@ namespace CrawlIT.Shared.GameState
             DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[wrong2], Color.Cyan);
             DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[wrong3], Color.Cyan);
             spriteBatch.End();
+        }
+
+        public override void PopUp(SpriteBatch spriteBatch)
+        {
+            String test;
+
+            if (_win)
+                test = "YOU WON!!!";
+            else
+                test = "YOU LOST";
+
+            _rectangle = new Texture2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
+                                      GraphicsDevice.Viewport.Height/4);
+
+            _rectanglePos = new Rectangle(0, (GraphicsDevice.Viewport.Height / 2) - (_rectangle.Height / 2),
+                                          _rectangle.Width,  _rectangle.Height);
+
+            Color[] data = new Color[_rectangle.Width * _rectangle.Height];
+
+            for (int i = 0; i < data.Length; ++i)
+            {
+                data[i] = Color.White;
+            }
+
+            _rectangle.SetData(data);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(_rectangle, _rectanglePos, Color.White);
+            DrawString(spriteBatch, _font, test, _rectanglePos, Color.Black);
+            spriteBatch.End();
+
         }
 
         /// <summary>
