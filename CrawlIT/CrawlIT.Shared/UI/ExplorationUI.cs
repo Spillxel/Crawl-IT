@@ -18,7 +18,7 @@ namespace CrawlIT.Shared.UI
         private UIIcon _badges;
 
         private Texture2D _lifeBarTexture;
-        private Texture2D _surgeCrystalTexture;
+        private Texture2D _crystalTexture;
         private Texture2D _saveTexture;
         private Texture2D _settingsTexture;
         private Texture2D _helpTexture;
@@ -53,7 +53,7 @@ namespace CrawlIT.Shared.UI
             _settingsTexture = _content.Load<Texture2D>("Sprites/settings");
             _helpTexture = _content.Load<Texture2D>("Sprites/newhelp");
             _badgesTexture = _content.Load<Texture2D>("Sprites/badges");
-            _surgeCrystalTexture = _content.Load<Texture2D>("Sprites/surgecrystal");
+            _crystalTexture = _content.Load<Texture2D>("Sprites/crystalspritesheet");
 
             _font = _content.Load<SpriteFont>("Fonts/File");
 
@@ -63,7 +63,7 @@ namespace CrawlIT.Shared.UI
             float _iconWidth = 32 * _zoom;
 
             _lifeBar = new LifeBarIcon(_lifeBarTexture, _zoom, 32 * _zoom, 50, _player);
-            _surgeCrystal = new UIIcon(_surgeCrystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (2 * 32 * _zoom), 50);
+            _surgeCrystal = new CrystalIcon(_crystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (2 * 32 * _zoom), 50, _player);
             //_save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth / 2) + 50 + (2 * 32), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             //_settings = new UIIcon(_settingsTexture, _zoom, (_graphics.PreferredBackBufferWidth / 4) + 32 + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
             //_help = new UIIcon(_helpTexture, _zoom, 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));

@@ -13,12 +13,13 @@ namespace CrawlIT.Shared.Entity
 
         private readonly Vector2 _position;
 
-        public int Rounds;
+        public int FightsLeft;
+        public int QuestionPerFight;
 
         public Rectangle CollisionRectangle;
         public Rectangle FightRectangle;
 
-        public Enemy(Texture2D texture, Matrix scale, float posx, float posy, int rounds)
+        public Enemy(Texture2D texture, Matrix scale, float posx, float posy, int fightsLeft, int questionPerFight)
         {
             TextureSheet = texture;
             PosX = posx;
@@ -27,7 +28,8 @@ namespace CrawlIT.Shared.Entity
             FrameWidth = 23;
             FrameHeight = 45;
             _scale = scale;
-            Rounds = rounds;
+            FightsLeft = fightsLeft;
+            QuestionPerFight = questionPerFight;
 
             CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
             FightRectangle = new Rectangle((int)PosX -1, (int)PosY -1, FrameWidth + 2, (int)(FrameHeight / 1.5) + 2);

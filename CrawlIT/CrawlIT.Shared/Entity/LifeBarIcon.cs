@@ -65,7 +65,7 @@ namespace CrawlIT.Shared.Entity
                 case 3:
                     CurrentAnimation = _lifeBar3;
                     break;
-                // Implement a default that throws an error
+                // TODO: Implement a default that throws an error
             }
         }
     }

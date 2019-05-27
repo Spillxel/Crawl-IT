@@ -66,9 +66,15 @@ namespace CrawlIT
 
         private Player _player;
         private Enemy _tutor;
+        private Enemy _assistant1;
+        private Enemy _assistant2;
+        private Enemy _assistant3;
 
         private Texture2D _playerTexture;
         private Texture2D _tutorTexture;
+        private Texture2D _assistant1Texture;
+        private Texture2D _assistant2Texture;
+        private Texture2D _assistant3Texture;
 
         private GameState _menu;
         private GameState _level;
@@ -178,7 +184,13 @@ namespace CrawlIT
             _fight.SetState(State.Fighting);
 
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
-            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10);
+            _tutor = new Enemy(_tutorTexture, _resolution.TransformationMatrix(), 600, 80, 10, 1);
+            _assistant1Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet1");
+            _assistant1 = new Enemy(_assistant1Texture, _resolution.TransformationMatrix(), 300, 300, 10, 2);
+            _assistant2Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet2");
+            _assistant2 = new Enemy(_assistant2Texture, _resolution.TransformationMatrix(), 650, 300, 10, 2);
+            _assistant3Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet3");
+            _assistant3 = new Enemy(_assistant3Texture, _resolution.TransformationMatrix(), 400, 500, 10, 2);
 
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
@@ -212,8 +224,13 @@ namespace CrawlIT
                                                        .ToList();
 
             // Making list of collision enemies to check for combat
-            _enemies = new List<Enemy>();
-            _enemies.Add(_tutor);
+            _enemies = new List<Enemy>
+            {
+                _tutor,
+                _assistant1,
+                _assistant2,
+                _assistant3
+            };
             _player.Enemies = _enemies;
             foreach (var enemy in _enemies)
             {
@@ -279,6 +296,9 @@ namespace CrawlIT
                 _player.Update(gameTime);
 
                 _tutor.Update(gameTime);
+                _assistant1.Update(gameTime);
+                _assistant2.Update(gameTime);
+                _assistant3.Update(gameTime);
 
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
@@ -289,11 +309,11 @@ namespace CrawlIT
 
                 foreach (var enemy in _enemies)
                 {
-                    if (_player.Collides(enemy.FightRectangle) && enemy.Rounds > 0)
+                    if (_player.Collides(enemy.FightRectangle) && enemy.FightsLeft > 0)
                     {
                         Thread.Sleep(2000);
                         GameStateManager.Instance.AddScreen(_fight);
-                        enemy.Rounds--;
+                        enemy.FightsLeft--;
                     }
                     else
                     {
@@ -360,6 +380,9 @@ namespace CrawlIT
                                    null, null, null,
                                    _playerCamera.Transform);
                 _tutor.Draw(_spriteBatch);
+                _assistant1.Draw(_spriteBatch);
+                _assistant2.Draw(_spriteBatch);
+                _assistant3.Draw(_spriteBatch);
                 _player.Draw(_spriteBatch);
                 _spriteBatch.End();
 
@@ -377,7 +400,10 @@ namespace CrawlIT
                 var crystal = new Rectangle(_fight.GetPosition(_surgeCrystalTexture), _surgeCrystalSize);
                 var answer = new Rectangle(_fight.GetPosition(_answerButton), _answerSize);
                 if (_touch.Intersects(crystal))
+                {
+                    _player.SetCrystalCount(_player.crystalCount - 1);
                     _fight.Help(_spriteBatch);
+                }
                 else if (_touch.Intersects(answer) && !_touch.Intersects(crystal))
                 {
                     _win |= _fight.GetAnswer(_touch);
