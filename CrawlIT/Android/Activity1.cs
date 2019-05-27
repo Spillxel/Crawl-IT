@@ -6,9 +6,10 @@ using CrawlIT.Shared;
 
 namespace Android
 {
-    [Activity(Label = "CrawlIT"
+    [Activity(Label = "Crawl IT"
         , MainLauncher = true
-        , Icon = "@drawable/icon"
+        , Icon = "@drawable/logo"
+        , RoundIcon = "@drawable/logo"
         , Theme = "@style/Theme.Splash"
         , AlwaysRetainTaskState = true
         , LaunchMode = Android.Content.PM.LaunchMode.SingleInstance
