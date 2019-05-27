@@ -58,13 +58,13 @@
     <None Include="$(MSBuildThisFileDirectory)Content\Sprites\playerspritesheet.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Content\questions.json">
+    <None Include="$(MSBuildThisFileDirectory)Content\questions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\blackscreentexture.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\screentexture.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\surgecrystal.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorfight.PNG" />
-    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorspritesheet.png" />
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Content\Sprites\blackscreentexture.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Sprites\screentexture.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Sprites\surgecrystal.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorfight.PNG" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorspritesheet.png" />
   </ItemGroup>
 </Project>
