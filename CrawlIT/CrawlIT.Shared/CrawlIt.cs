@@ -78,6 +78,9 @@ namespace CrawlIT.Shared
 
         private List<Enemy> _enemies;
 
+        private bool _fightTrigger;
+        private double _fightTransitionTimer = 0;
+
         public CrawlIt()
         {
             _graphics = new GraphicsDeviceManager(this)
@@ -287,6 +290,22 @@ namespace CrawlIT.Shared
                         GameStateManager.Instance.ChangeScreen(_level);
                     break;
                 case GameState.StateType.Playing:
+                    if (_fightTrigger)
+                    {
+                        _fightTransitionTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        if (_fightTransitionTimer > 2000)
+                        {
+                            _fightTrigger = false;
+                            _fightTransitionTimer = 0;
+                            // TODO: For loop with enemy.QuestionPerFight
+                            _fight.QuestionCurrentAnimation = _fight.NoAnswer;
+                            GameStateManager.Instance.AddScreen(_fight);
+                            _fight.Enemy.FightsLeft--;
+                            _player.MoveBack(_fight.Enemy);
+
+                        }
+                        break;
+                    }
                     _mapRenderer.Update(_map, gameTime);
 
                     _inputManager.Update(gameTime);
@@ -307,12 +326,7 @@ namespace CrawlIT.Shared
                         if (_player.Collides(enemy.FightRectangle) && enemy.FightsLeft > 0)
                         {
                             _fight.Enemy = enemy;
-                            // TODO: For loop with enemy.QuestionPerFight
-                            _fight.QuestionCurrentAnimation = _fight.NoAnswer;
-                            Thread.Sleep(2000);
-                            GameStateManager.Instance.AddScreen(_fight);
-                            enemy.FightsLeft--;
-                            _player.MoveBack(enemy);
+                            _fightTrigger = true;
                         }
                         else
                         {
