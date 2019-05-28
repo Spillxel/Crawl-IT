@@ -131,11 +131,10 @@ namespace CrawlIT.Shared
             }
         }
 
-
         public void FadeBackBufferToBlack(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
-            spriteBatch.Draw(BlankTexture, _resolution.ToVector2(), Color.White);
+            spriteBatch.Draw(BlankTexture, Vector2.Zero, Color.White);
             spriteBatch.End();
         }
 

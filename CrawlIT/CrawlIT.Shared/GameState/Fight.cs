@@ -141,7 +141,7 @@ namespace CrawlIT.Shared
             _blackScreen = content.Load<Texture2D>("Sprites/blackscreentexture");
             _enemy = Enemy.CloseUpTexture;
             _question = content.Load<Texture2D>("Sprites/questiontexturesheet");
-            _popUp = new Texture2D(GraphicsDevice, _resolution.X, _resolution.Y);
+            _popUp = new Texture2D(GraphicsDevice, _resolution.X, _resolution.Y / 4);
 
             //Initialization of the vectors responsible of the initial position of the question and answers
             _questionPosition = new Vector2(0, _resolution.Y / 11 * 5 - 6);
@@ -163,7 +163,7 @@ namespace CrawlIT.Shared
             var popUpPoint = new Point(_popUp.Width, _popUp.Height);
             
             var popUpData = new Color[_popUp.Width * _popUp.Height];
-            popUpData.Select(i => Color.White).ToArray();
+            popUpData = popUpData.Select(i => Color.White).ToArray();
             _popUp.SetData(popUpData);
 
 
