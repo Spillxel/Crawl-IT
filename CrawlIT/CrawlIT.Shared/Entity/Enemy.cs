@@ -11,20 +11,24 @@ namespace CrawlIT.Shared
 
         private readonly Vector2 _position;
 
-        public int Rounds;
+        public int FightsLeft;
+        public int QuestionPerFight;
 
         public Rectangle CollisionRectangle;
         public Rectangle FightRectangle;
 
-        public Enemy(Texture2D texture, float posx, float posy, int rounds)
+        public Texture2D CloseUpTexture;
+        public Enemy(Texture2D texture, Texture2D closeUpTexture, float posx, float posy, int fightsLeft, int questionPerFight)
         {
             TextureSheet = texture;
+            CloseUpTexture = closeUpTexture;
             PosX = posx;
             PosY = posy;
             _position = new Vector2(PosX, PosY);
             FrameWidth = 23;
             FrameHeight = 45;
-            Rounds = rounds;
+            FightsLeft = fightsLeft;
+            QuestionPerFight = questionPerFight;
 
             CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
             FightRectangle = new Rectangle((int)PosX -1, (int)PosY -1, FrameWidth + 2, (int)(FrameHeight / 1.5) + 2);

@@ -1,29 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
 using Newtonsoft.Json;
 
 namespace CrawlIT.Shared
 {
     public class Fight : GameState
     {
-        private Texture2D _questionTexture;
+        private Texture2D _question;
         private Texture2D _screen;
         private Texture2D _crystal;
         private Texture2D _enemy;
         private Texture2D _blackScreen;
+        private Texture2D _popUp;
 
         private Vector2 _questionPosition;
+        private Vector2 _crystalPosition;
+        private Vector2 _enemyPosition;
+        private Vector2 _crystalScale;
+        private Vector2 _popUpPosition;
         private Vector2 _answer1Position;
         private Vector2 _answer2Position;
         private Vector2 _answer3Position;
         private Vector2 _answer4Position;
-        private Vector2 _crystalPosition;
-        private Vector2 _enemyPosition;
-        private Vector2 _crystalScale;
 
         private Rectangle _questionRec;
         public Rectangle AnswerRectangle { get; private set; }
@@ -34,6 +38,7 @@ namespace CrawlIT.Shared
         public Rectangle CrystalRectangle { get; private set; }
         private Rectangle _enemyRec;
         private readonly List<Rectangle> _answerRec = new List<Rectangle>();
+        private Rectangle _popUpRec;
 
         private string _questionString;
         private string _firstAnswer;
@@ -49,10 +54,11 @@ namespace CrawlIT.Shared
         private int _wrong2;
         private int _wrong3;
 
+        public readonly Animation NoAnswer;
         private readonly Animation _correctAnswer;
         private readonly Animation _wrongAnswer;
 
-        private Animation _questionCurrentAnimation;
+        public Animation QuestionCurrentAnimation;
 
         private readonly Matrix _transform;
         private readonly Point _resolution;
@@ -60,28 +66,36 @@ namespace CrawlIT.Shared
         private float _scale;
         private float _crystalRatio;
         public override StateType State { get; }
+        
+        public Enemy Enemy;
 
-        public Fight(GraphicsDevice graphicsDevice, Point resolution, Matrix transform, Player player)
+        public Fight(GraphicsDevice graphicsDevice, Point resolution, Matrix transform,
+                     Player player, Enemy enemy)
             : base(graphicsDevice)
         {
             _resolution = resolution;
             _transform = transform;
             Player = player;
+            Enemy = enemy;
 
             const int questionFrameWidth = 600;
             const int questionFrameHeight = 150;
 
-            var noAnswer = new Animation();
-            noAnswer.AddFrame(new Rectangle(0, 0, questionFrameWidth, questionFrameHeight), TimeSpan.FromSeconds(1));
-
             _correctAnswer = new Animation();
-            _correctAnswer.AddFrame(new Rectangle(0, questionFrameHeight, questionFrameWidth, questionFrameHeight), TimeSpan.FromSeconds(1));
+            _correctAnswer.AddFrame(new Rectangle(0, questionFrameHeight,
+                                                  questionFrameWidth, questionFrameHeight),
+                                    TimeSpan.FromSeconds(1));
+            NoAnswer = new Animation();
+            NoAnswer.AddFrame(new Rectangle(0, 0,
+                                            questionFrameWidth, questionFrameHeight),
+                              TimeSpan.FromSeconds(1));
 
             _wrongAnswer = new Animation();
-            _wrongAnswer.AddFrame(new Rectangle(0, questionFrameHeight * 2, questionFrameWidth, questionFrameHeight), TimeSpan.FromSeconds(1));
+            _wrongAnswer.AddFrame(new Rectangle(0, questionFrameHeight * 2,
+                                                questionFrameWidth, questionFrameHeight),
+                                  TimeSpan.FromSeconds(1));
 
-            _questionCurrentAnimation = noAnswer;
-
+            QuestionCurrentAnimation = NoAnswer;
             State = StateType.Fighting;
         }
 
@@ -123,10 +137,11 @@ namespace CrawlIT.Shared
 
             _font = content.Load<SpriteFont>("Fonts/File");
             _crystal = content.Load<Texture2D>("Sprites/surgecrystal");
-            _enemy = content.Load<Texture2D>("Sprites/tutorfight");
             _screen = content.Load<Texture2D>("Sprites/newscreentexture");
             _blackScreen = content.Load<Texture2D>("Sprites/blackscreentexture");
-            _questionTexture = content.Load<Texture2D>("Sprites/questiontexturesheet");
+            _enemy = Enemy.CloseUpTexture;
+            _question = content.Load<Texture2D>("Sprites/questiontexturesheet");
+            _popUp = new Texture2D(GraphicsDevice, _resolution.X, _resolution.Y);
 
             //Initialization of the vectors responsible of the initial position of the question and answers
             _questionPosition = new Vector2(0, _resolution.Y / 11 * 5 - 6);
@@ -138,12 +153,19 @@ namespace CrawlIT.Shared
                                            _resolution.Y / 10 * 8 - _crystal.Height * _crystalRatio / 2);
             _enemyPosition = new Vector2(0, 0);
             _crystalScale = new Vector2(_crystalRatio, _crystalRatio);
+            _popUpPosition = new Vector2(0, _resolution.Y / 2 - _popUp.Height / 2);
 
             //Initialization of the size of the question and answers
             var questionPoint = new Point(_resolution.X, _resolution.Y / 20 * 3);
             var answerPoint = new Point(_resolution.X / 2 - 3,
                                         _resolution.Y / 10 * 2 - 3);
             var enemyPoint = new Point(_resolution.X, _resolution.Y / 2);
+            var popUpPoint = new Point(_popUp.Width, _popUp.Height);
+            
+            var popUpData = new Color[_popUp.Width * _popUp.Height];
+            popUpData.Select(i => Color.White).ToArray();
+            _popUp.SetData(popUpData);
+
 
             //Initialization of the rectangles using the initial position and the size of the question and answers
             _questionRec = new Rectangle(_questionPosition.ToPoint(), questionPoint);
@@ -154,6 +176,7 @@ namespace CrawlIT.Shared
             Answer3Rectangle = new Rectangle(_answer3Position.ToPoint(), answerPoint);
             Answer4Rectangle = new Rectangle(_answer4Position.ToPoint(), answerPoint);
             _enemyRec = new Rectangle(_enemyPosition.ToPoint(), enemyPoint);
+            _popUpRec = new Rectangle(_popUpPosition.ToPoint(), popUpPoint);
 
             _answerRec.Add(Answer1Rectangle);
             _answerRec.Add(Answer2Rectangle);
@@ -169,7 +192,7 @@ namespace CrawlIT.Shared
 
         public override void Update(GameTime gameTime)
         {
-            _questionCurrentAnimation.Update(gameTime);
+            QuestionCurrentAnimation.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -180,8 +203,8 @@ namespace CrawlIT.Shared
             spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
             spriteBatch.Draw(_enemy, _enemyRec, Color.White);
             // Render question
-            var sourceRectangle = _questionCurrentAnimation.CurrentRectangle;
-            spriteBatch.Draw(_questionTexture, _questionRec, sourceRectangle, Color.White);
+            var sourceRectangle = QuestionCurrentAnimation.CurrentRectangle;
+            spriteBatch.Draw(_question, _questionRec, sourceRectangle, Color.White);
             // Render answers
             spriteBatch.Draw(_screen, Answer1Rectangle, Color.White);
             spriteBatch.Draw(_screen, Answer2Rectangle, Color.White);
@@ -239,10 +262,10 @@ namespace CrawlIT.Shared
                                  Vector2.Zero, _crystalScale, SpriteEffects.None, 0);
             }
 
-            _questionCurrentAnimation = _win ? _correctAnswer : _wrongAnswer;
+            QuestionCurrentAnimation = _win ? _correctAnswer : _wrongAnswer;
 
-            var sourceRectangle = _questionCurrentAnimation.CurrentRectangle;
-            spriteBatch.Draw(_questionTexture, _questionRec, sourceRectangle, Color.White);
+            var sourceRectangle = QuestionCurrentAnimation.CurrentRectangle;
+            spriteBatch.Draw(_question, _questionRec, sourceRectangle, Color.White);
             DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Cyan);
             DrawString(spriteBatch, _font, _firstAnswer, _answerRec[_correct], Color.LimeGreen);
             DrawString(spriteBatch, _font, _secondAnswer, _answerRec[_wrong1], Color.Red);
@@ -264,6 +287,16 @@ namespace CrawlIT.Shared
             DrawString(spriteBatch, _font, _secondAnswer, _answerRec[_wrong1], Color.Cyan);
             DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[_wrong2], Color.Cyan);
             DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[_wrong3], Color.Cyan);
+            spriteBatch.End();
+        }
+
+        public void PopUp(SpriteBatch spriteBatch)
+        {
+            var test = _win ? "YOU WON!!!" : "YOU LOST";
+
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
+            spriteBatch.Draw(_popUp, _popUpRec, Color.White);
+            DrawString(spriteBatch, _font, test, _popUpRec, Color.Black);
             spriteBatch.End();
         }
 
@@ -321,7 +354,7 @@ namespace CrawlIT.Shared
         /// <summary>
         /// Returns all numbers, between min and max inclusive, once in a random sequence.
         /// </summary>
-        List<int> UniqueRandom()
+        private List<int> UniqueRandom()
         {
             var candidates = new List<int>();
             var result = new List<int>();

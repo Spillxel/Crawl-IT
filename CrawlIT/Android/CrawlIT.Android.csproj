@@ -142,24 +142,31 @@
     </MonoGameContentReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Sprites\badges.png" />
-    <None Include="Content\Sprites\blackscreentexture.png" />
-    <None Include="Content\Sprites\lifebarspritesheet.png" />
-    <None Include="Content\Sprites\newhelp.png" />
-    <None Include="Content\Sprites\newscreentexture.png" />
-    <None Include="Content\Sprites\questiontexturesheet.png" />
-    <None Include="Content\Sprites\save.png" />
-    <None Include="Content\Sprites\settings.png" />
-    <None Include="Content\Sprites\surgecrystal.png" />
+    <Content Include="Content\Sprites\assistant1closeup.png" />
+    <Content Include="Content\Sprites\assistant2closeup.png" />
+    <Content Include="Content\Sprites\assistant3closeup.png" />
+    <Content Include="Content\Sprites\assistantspritesheet1.png" />
+    <Content Include="Content\Sprites\assistantspritesheet2.png" />
+    <Content Include="Content\Sprites\assistantspritesheet3.png" />
+    <Content Include="Content\Sprites\badges.png" />
+    <Content Include="Content\Sprites\blackscreentexture.png" />
+    <Content Include="Content\Sprites\crystalspritesheet.png" />
+    <Content Include="Content\Sprites\lifebarspritesheet.png" />
+    <Content Include="Content\Sprites\newhelp.png" />
+    <Content Include="Content\Sprites\newscreentexture.png" />
+    <Content Include="Content\Sprites\questiontexturesheet.png" />
+    <Content Include="Content\Sprites\save.png" />
+    <Content Include="Content\Sprites\settings.png" />
+    <Content Include="Content\Sprites\surgecrystal.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Sprites\tutorfight.PNG" />
-    <None Include="Content\Sprites\tutorspritesheet.png" />
+    <Content Include="Content\Sprites\tutorcloseup.png" />
+    <Content Include="Content\Sprites\tutorspritesheet.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\logo.png">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
+  <AndroidResource Include="Resources\Drawable\logo.png">
+    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+  </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
