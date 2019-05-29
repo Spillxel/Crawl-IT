@@ -36,7 +36,7 @@ namespace CrawlIT.Shared
         private InputManager _inputManager;
 
         private float _scale;
-        private Rectangle _touch;
+        private Rectangle? _touch;
 
         private Song _backgroundSong;
 
@@ -278,13 +278,16 @@ namespace CrawlIT.Shared
             _touchCollection = TouchPanel.GetState();
             if (_touchCollection.Count > 0)
                 UpdateTouch(out _touch);
+            else
+                _touch = null;
 
             // TODO: simplify stuff inside of here
             switch (GameStateManager.Instance.State)
             {
                 case GameState.StateType.Menu:
-                    if (_touch.Intersects(_startButton))
-                        GameStateManager.Instance.ChangeScreen(_level);
+                    if (_touch is Rectangle touchRect)
+                        if (touchRect.Intersects(_startButton))
+                            GameStateManager.Instance.ChangeScreen(_level);
                     break;
                 case GameState.StateType.Playing:
                     _mapRenderer.Update(_map, gameTime);
@@ -310,15 +313,15 @@ namespace CrawlIT.Shared
                             // TODO: For loop with enemy.QuestionPerFight
                             _fight.QuestionCurrentAnimation = _fight.NoAnswer;
                             Thread.Sleep(2000);
+                            _touch = null;
                             GameStateManager.Instance.AddScreen(_fight);
                             enemy.FightsLeft--;
-                            _player.MoveBack(enemy);
                         }
                         else
                         {
                             // TODO: Display TextBox "I have no more questions for you!"
                         }
-                    }
+                    }   
 
                     _explorationUi.Update(gameTime);
                     break;
@@ -328,6 +331,8 @@ namespace CrawlIT.Shared
                         _played = false;
                         Thread.Sleep(5000);
                         GameStateManager.Instance.RemoveScreen();
+                        // TODO: temporary because of our current fight setup
+                        _player.ResetPos();
                     }
 
                     _fight.Update(gameTime);
@@ -344,7 +349,7 @@ namespace CrawlIT.Shared
         /// Otherwise null.
         /// </summary>
         /// <param name="touchRectangle"></param>
-        private void UpdateTouch(out Rectangle touchRectangle)
+        private void UpdateTouch(out Rectangle? touchRectangle)
         {
             var touchPoint = _resolutionComponent.ScreenToGameCoord(_touchCollection[0].Position)
                                                  .ToPoint();
@@ -374,18 +379,21 @@ namespace CrawlIT.Shared
                 case GameState.StateType.Fighting:
                     // TODO: make this better
                     // it's just straight up a weird way to do what it does
-                    if (_touch.Intersects(_fight.CrystalRectangle))
+                    if (_touch is Rectangle touchRect)
                     {
-                        _player.SetCrystalCount(_player.CrystalCount - 1);
-                        _fight.Help(_spriteBatch);
-                    }
-                    else if (_touch.Intersects(_fight.AnswerRectangle))
-                    {
-                        _fight.CheckAnswer(_touch);
-                        _fight.ChangeColour(_spriteBatch);
-                        _played = true;
-                        GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
-                        _fight.PopUp(_spriteBatch);
+                        if (touchRect.Intersects(_fight.CrystalRectangle))
+                        {
+                            _player.SetCrystalCount(_player.CrystalCount - 1);
+                            _fight.Help(_spriteBatch);
+                        }
+                        else if (touchRect.Intersects(_fight.AnswerRectangle))
+                        {
+                            _fight.CheckAnswer(touchRect);
+                            _fight.ChangeColour(_spriteBatch);
+                            _played = true;
+                            GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
+                            _fight.PopUp(_spriteBatch);
+                        }
                     }
 
                     break;
