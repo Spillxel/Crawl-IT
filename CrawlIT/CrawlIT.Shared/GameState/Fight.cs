@@ -125,6 +125,24 @@ namespace CrawlIT.Shared
                 questionDict.Add(q.QuestionSubject, q);
 
             var questionSample = questionDict["Maths"];
+            var number = UniqueRandom();
+
+            switch (number[0])
+            {
+                case 0:
+                    questionSample = questionDict["Maths"];
+                    break;
+                case 1:
+                    questionSample = questionDict["Algorithms"];
+                    break;
+                case 2:
+                    questionSample = questionDict["Database"];
+                    break;
+                case 3:
+                    questionSample = questionDict["Programming"];
+                    break;
+            }
+
 
             _questionString = questionSample.QuestionText;
             _firstAnswer = questionSample.Answer1;
@@ -315,6 +333,12 @@ namespace CrawlIT.Shared
         /// the string will be absolutely-centered inside of the boundaries.
         public void DrawString(SpriteBatch spriteBatch, SpriteFont font, string strToDraw, Rectangle boundaries, Color color)
         {
+            if(boundaries.Width==_resolution.X)
+            {
+                boundaries.Width = (int)((int)_resolution.X * 0.8);
+                boundaries.X += (int)((int)_resolution.X * 0.1);
+            }
+
             // Code for parsing the text depending on the width of the screen
             var line = string.Empty;
             var returnString = string.Empty;
