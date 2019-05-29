@@ -1,35 +1,36 @@
-﻿using CrawlIT.Shared.Animation;
+﻿using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
-namespace CrawlIT.Shared.Entity
+namespace CrawlIT.Shared
 {
-    public class CrystalIcon : AnimatedUIIcon
+    public class CrystalIcon : AnimatedUiIcon
     {
-        private Animation.Animation _crystal0;
-        private Animation.Animation _crystal1;
-        private Animation.Animation _crystal2;
-        private Animation.Animation _crystal3;
+        private readonly Animation _crystal0;
+        private readonly Animation _crystal1;
+        private readonly Animation _crystal2;
+        private readonly Animation _crystal3;
 
-        private Player _player;
+        private readonly Player _player;
 
-        public CrystalIcon(Texture2D texture, float zoom, float posx, float posy, Player player)
-            : base(texture, zoom, posx, posy)
+        public CrystalIcon(Texture2D texture, float scale, float posx, float posy, Player player)
+            : base(texture, scale, posx, posy)
         {
             _player = player;
 
-            _crystal0 = new Animation.Animation();
-            _crystal0.AddFrame(new Rectangle(0, 0, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
+            _crystal0 = new Animation();
+            _crystal0.AddFrame(new Rectangle(0, 0, IconFrameWidth, IconFrameHeight),
+                               TimeSpan.FromSeconds(1));
 
-            _crystal1 = new Animation.Animation();
-            _crystal1.AddFrame(new Rectangle(0, _iconFrameHeight, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
+            _crystal1 = new Animation();
+            _crystal1.AddFrame(new Rectangle(0, IconFrameHeight, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
-            _crystal2 = new Animation.Animation();
-            _crystal2.AddFrame(new Rectangle(0, _iconFrameHeight * 2, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
+            _crystal2 = new Animation();
+            _crystal2.AddFrame(new Rectangle(0, IconFrameHeight * 2, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
-            _crystal3 = new Animation.Animation();
-            _crystal2.AddFrame(new Rectangle(0, _iconFrameHeight * 3, _iconFrameWidth, _iconFrameHeight), TimeSpan.FromSeconds(1));
+            _crystal3 = new Animation();
+            _crystal2.AddFrame(new Rectangle(0, IconFrameHeight * 3, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
 
             CurrentAnimation = _crystal0;
         }
@@ -37,21 +38,19 @@ namespace CrawlIT.Shared.Entity
         public override void Draw(SpriteBatch spriteBatch)
         {
             var sourceRectangle = CurrentAnimation.CurrentRectangle;
-
-            spriteBatch.Draw(TextureSheet, _position, sourceRectangle,
-                             Color.White, 0, Vector2.Zero,
-                             _scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(TextureSheet, Position, sourceRectangle, Color.White, 0,
+                             Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
 
         public override void Update(GameTime gameTime)
         {
-            SetAnimaton();
+            SetAnimation();
             CurrentAnimation.Update(gameTime);
         }
 
-        public override void SetAnimaton()
+        public override void SetAnimation()
         {
-            switch (_player.crystalCount)
+            switch (_player.CrystalCount)
             {
                 case 0:
                     CurrentAnimation = _crystal0;

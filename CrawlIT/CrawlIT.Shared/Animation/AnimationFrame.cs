@@ -1,8 +1,7 @@
 ﻿using System;
-
 using Microsoft.Xna.Framework;
 
-namespace CrawlIT.Shared.Animation
+namespace CrawlIT.Shared
 {
     public class AnimationFrame
     {

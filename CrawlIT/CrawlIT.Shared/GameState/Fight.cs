@@ -1,102 +1,116 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using CrawlIT.Shared.Combat;
-using CrawlIT.Shared.Entity;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
 using Newtonsoft.Json;
 
-namespace CrawlIT.Shared.GameState
+namespace CrawlIT.Shared
 {
     public class Fight : GameState
     {
-        private Enum _state;
-
-        private Texture2D _questionTexture;
-        private Texture2D _screenTexture;
-        private Texture2D _crystalTexture;
-        private Texture2D _enemyTexture;
-        private Texture2D _blackscreenTexture;
+        private Texture2D _question;
+        private Texture2D _screen;
+        private Texture2D _crystal;
+        private Texture2D _enemy;
+        private Texture2D _blackScreen;
+        private Texture2D _popUp;
 
         private Vector2 _questionPosition;
+        private Vector2 _crystalPosition;
+        private Vector2 _enemyPosition;
+        private Vector2 _crystalScale;
+        private Vector2 _popUpPosition;
         private Vector2 _answer1Position;
         private Vector2 _answer2Position;
         private Vector2 _answer3Position;
         private Vector2 _answer4Position;
-        private Vector2 _crystalPosition;
-        private Vector2 _enemyPosition;
-        private Vector2 _crystalScale;
 
         private Rectangle _questionRec;
-        private Rectangle _answer1Rec;
-        private Rectangle _answer2Rec;
-        private Rectangle _answer3Rec;
-        private Rectangle _answer4Rec;
+        public Rectangle AnswerRectangle { get; private set; }
+        public Rectangle Answer1Rectangle { get; private set; }
+        public Rectangle Answer2Rectangle { get; private set; }
+        public Rectangle Answer3Rectangle { get; private set; }
+        public Rectangle Answer4Rectangle { get; private set; }
+        public Rectangle CrystalRectangle { get; private set; }
         private Rectangle _enemyRec;
-        private Rectangle[] _answerRec = new Rectangle[4];
+        private readonly List<Rectangle> _answerRec = new List<Rectangle>();
+        private Rectangle _popUpRec;
 
-        private String _questionString;
-        private String _firstAnswer;
-        private String _secondAnswer;
-        private String _thirdAnswer;
-        private String _fourthAnswer;
+        private string _questionString;
+        private string _firstAnswer;
+        private string _secondAnswer;
+        private string _thirdAnswer;
+        private string _fourthAnswer;
 
         private SpriteFont _font;
-        private bool _win = false;
+        private bool _win;
 
-        private int _questionFrameWidth;
-        private int _questionFrameHeight;
-        private int correct;
-        private int wrong1;
-        private int wrong2;
-        private int wrong3;
+        private int _correct;
+        private int _wrong1;
+        private int _wrong2;
+        private int _wrong3;
 
-        public Animation.Animation NoAnswer;
-        private readonly Animation.Animation _correctAnswer;
-        private readonly Animation.Animation _wrongAnswer;
+        public readonly Animation NoAnswer;
+        private readonly Animation _correctAnswer;
+        private readonly Animation _wrongAnswer;
 
-        public Animation.Animation QuestionCurrentAnimation;
+        public Animation QuestionCurrentAnimation;
+
+        private readonly Matrix _transform;
+        private readonly Point _resolution;
 
         private float _scale;
         private float _crystalRatio;
+        public override StateType State { get; }
+
+        private bool _life;
 
         public Enemy Enemy;
 
-        public Fight(GraphicsDevice graphicsDevice, Player player, Enemy enemy)
-        : base(graphicsDevice)
+        public Fight(GraphicsDevice graphicsDevice, Point resolution, Matrix transform,
+                     Player player, Enemy enemy)
+            : base(graphicsDevice)
         {
+            _resolution = resolution;
+            _transform = transform;
             Player = player;
             Enemy = enemy;
 
-            _questionFrameWidth = 600;
-            _questionFrameHeight = 150;
+            const int questionFrameWidth = 600;
+            const int questionFrameHeight = 150;
 
-            NoAnswer = new Animation.Animation();
-            NoAnswer.AddFrame(new Rectangle(0, 0, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
+            _correctAnswer = new Animation();
+            _correctAnswer.AddFrame(new Rectangle(0, questionFrameHeight,
+                                                  questionFrameWidth, questionFrameHeight),
+                                    TimeSpan.FromSeconds(1));
+            NoAnswer = new Animation();
+            NoAnswer.AddFrame(new Rectangle(0, 0,
+                                            questionFrameWidth, questionFrameHeight),
+                              TimeSpan.FromSeconds(1));
 
-            _correctAnswer = new Animation.Animation();
-            _correctAnswer.AddFrame(new Rectangle(0, _questionFrameHeight, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
-
-            _wrongAnswer = new Animation.Animation();
-            _wrongAnswer.AddFrame(new Rectangle(0, _questionFrameHeight * 2, _questionFrameWidth, _questionFrameHeight), TimeSpan.FromSeconds(1));
+            _wrongAnswer = new Animation();
+            _wrongAnswer.AddFrame(new Rectangle(0, questionFrameHeight * 2,
+                                                questionFrameWidth, questionFrameHeight),
+                                  TimeSpan.FromSeconds(1));
 
             QuestionCurrentAnimation = NoAnswer;
+            State = StateType.Fighting;
         }
+
 
         public override void Initialize()
         {
-            _scale = GraphicsDevice.Viewport.Width / 1200f;
-
-            _crystalRatio = GraphicsDevice.Viewport.Width / 200;
+            _scale = _resolution.X / 1200f;
+            _crystalRatio = _resolution.X / 200f;
+            _life = true;
         }
 
         public override void LoadContent(ContentManager content)
         {
-            #region
             var questionDict = new Dictionary<string, Question>();
             var filePath = Path.Combine(content.RootDirectory, "questions.json");
 
@@ -109,9 +123,26 @@ namespace CrawlIT.Shared.GameState
 
             foreach (var q in questionList.Questions)
                 questionDict.Add(q.QuestionSubject, q);
-            #endregion
 
-            Question questionSample = questionDict["Maths"];
+            var questionSample = questionDict["Maths"];
+            var number = UniqueRandom();
+
+            switch (number[0])
+            {
+                case 0:
+                    questionSample = questionDict["Maths"];
+                    break;
+                case 1:
+                    questionSample = questionDict["Algorithms"];
+                    break;
+                case 2:
+                    questionSample = questionDict["Database"];
+                    break;
+                case 3:
+                    questionSample = questionDict["Programming"];
+                    break;
+            }
+
 
             _questionString = questionSample.QuestionText;
             _firstAnswer = questionSample.Answer1;
@@ -119,28 +150,61 @@ namespace CrawlIT.Shared.GameState
             _thirdAnswer = questionSample.Answer3;
             _fourthAnswer = questionSample.Answer4;
 
-            List<int> numbers = UniqueRandom();
-            correct = numbers[0];
-            wrong1 = numbers[1];
-            wrong2 = numbers[2];
-            wrong3 = numbers[3];
+            var numbers = UniqueRandom();
+            _correct = numbers[0];
+            _wrong1 = numbers[1];
+            _wrong2 = numbers[2];
+            _wrong3 = numbers[3];
 
             _font = content.Load<SpriteFont>("Fonts/File");
-            _crystalTexture = content.Load<Texture2D>("Sprites/surgecrystal");
-            _enemyTexture = Enemy.CloseUpTexture;
-            _screenTexture = content.Load<Texture2D>("Sprites/newscreentexture");
-            _blackscreenTexture = content.Load<Texture2D>("Sprites/blackscreentexture");
-            _questionTexture = content.Load<Texture2D>("Sprites/questiontexturesheet");
-        }
+            _crystal = content.Load<Texture2D>("Sprites/surgecrystal");
+            _screen = content.Load<Texture2D>("Sprites/newscreentexture");
+            _blackScreen = content.Load<Texture2D>("Sprites/blackscreentexture");
+            _enemy = Enemy.CloseUpTexture;
+            _question = content.Load<Texture2D>("Sprites/questiontexturesheet");
+            _popUp = new Texture2D(GraphicsDevice, _resolution.X, _resolution.Y / 4);
 
-        public override void SetState(Enum gameState)
-        {
-            _state = gameState;
-        }
+            //Initialization of the vectors responsible of the initial position of the question and answers
+            _questionPosition = new Vector2(0, _resolution.Y / 11 * 5 - 6);
+            _answer1Position = new Vector2(0, _resolution.Y / 10 * 6);
+            _answer2Position = new Vector2(_resolution.X / 2 + 3, _resolution.Y / 10 * 6);
+            _answer3Position = new Vector2(0, _resolution.Y / 10 * 8 + 3);
+            _answer4Position = new Vector2(_resolution.X / 2 + 3, _resolution.Y / 10 * 8 + 3);
+            _crystalPosition = new Vector2(_resolution.X / 2f - _crystal.Width * _crystalRatio / 2,
+                                           _resolution.Y / 10 * 8 - _crystal.Height * _crystalRatio / 2);
+            _enemyPosition = new Vector2(0, 0);
+            _crystalScale = new Vector2(_crystalRatio, _crystalRatio);
+            _popUpPosition = new Vector2(0, _resolution.Y / 2 - _popUp.Height / 2);
 
-        public override Enum GetState()
-        {
-            return _state;
+            //Initialization of the size of the question and answers
+            var questionPoint = new Point(_resolution.X, _resolution.Y / 20 * 3);
+            var answerPoint = new Point(_resolution.X / 2 - 3,
+                                        _resolution.Y / 10 * 2 - 3);
+            var enemyPoint = new Point(_resolution.X, _resolution.Y / 2);
+            var popUpPoint = new Point(_popUp.Width, _popUp.Height);
+
+            var popUpData = new Color[_popUp.Width * _popUp.Height];
+            popUpData = popUpData.Select(i => Color.White).ToArray();
+            _popUp.SetData(popUpData);
+
+
+            //Initialization of the rectangles using the initial position and the size of the question and answers
+            _questionRec = new Rectangle(_questionPosition.ToPoint(), questionPoint);
+            AnswerRectangle = new Rectangle(_answer1Position.ToPoint(),
+                                            new Point(_resolution.X - 3, _resolution.Y / 2 - questionPoint.Y - 3));
+            Answer1Rectangle = new Rectangle(_answer1Position.ToPoint(), answerPoint);
+            Answer2Rectangle = new Rectangle(_answer2Position.ToPoint(), answerPoint);
+            Answer3Rectangle = new Rectangle(_answer3Position.ToPoint(), answerPoint);
+            Answer4Rectangle = new Rectangle(_answer4Position.ToPoint(), answerPoint);
+            _enemyRec = new Rectangle(_enemyPosition.ToPoint(), enemyPoint);
+            _popUpRec = new Rectangle(_popUpPosition.ToPoint(), popUpPoint);
+
+            _answerRec.Add(Answer1Rectangle);
+            _answerRec.Add(Answer2Rectangle);
+            _answerRec.Add(Answer3Rectangle);
+            _answerRec.Add(Answer4Rectangle);
+
+            CrystalRectangle = new Rectangle(_crystalPosition.ToPoint(), _crystal.Bounds.Size * _crystalScale.ToPoint());
         }
 
         public override void UnloadContent()
@@ -154,150 +218,111 @@ namespace CrawlIT.Shared.GameState
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //Initialization of the vectors responsible of the initial position of the question and answers
-            _questionPosition = new Vector2(0, (GraphicsDevice.Viewport.Height / 11 * 5) - 6);
-            _answer1Position = new Vector2(0, GraphicsDevice.Viewport.Height / 10 * 6);
-            _answer2Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 3, GraphicsDevice.Viewport.Height / 10 * 6);
-            _answer3Position = new Vector2(0, (GraphicsDevice.Viewport.Height / 10 * 8) + 3);
-            _answer4Position = new Vector2((GraphicsDevice.Viewport.Width / 2) + 3, (GraphicsDevice.Viewport.Height / 10 * 8) + 3);
-            _crystalPosition = new Vector2(((GraphicsDevice.Viewport.Width / 2) - (_crystalTexture.Width * _crystalRatio / 2)),
-                                           ((GraphicsDevice.Viewport.Height / 10 * 8) - (_crystalTexture.Height * _crystalRatio / 2)));
-            _enemyPosition = new Vector2(0, 0);
-            _crystalScale = new Vector2(_crystalRatio, _crystalRatio);
-
-            //Initialization of the size of the question and answers
-            Point _questionPoint = new Point(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 20 * 3);
-            Point _answerPoint = new Point(GraphicsDevice.Viewport.Width / 2 - 3,
-                                           GraphicsDevice.Viewport.Height / 10 * 2 - 3);
-            Point _enemyPoint = new Point(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 2);
-
-            //Initialization of the rectangles using the initial position and the size of the question and answers
-            _questionRec = new Rectangle(_questionPosition.ToPoint(), _questionPoint);
-            _answer1Rec = new Rectangle(_answer1Position.ToPoint(), _answerPoint);
-            _answer2Rec = new Rectangle(_answer2Position.ToPoint(), _answerPoint);
-            _answer3Rec = new Rectangle(_answer3Position.ToPoint(), _answerPoint);
-            _answer4Rec = new Rectangle(_answer4Position.ToPoint(), _answerPoint);
-            _enemyRec = new Rectangle(_enemyPosition.ToPoint(), _enemyPoint);
-
-            _answerRec[0] = _answer1Rec;
-            _answerRec[1] = _answer2Rec;
-            _answerRec[2] = _answer3Rec;
-            _answerRec[3] = _answer4Rec;
-
             GraphicsDevice.Clear(Color.Black);
 
-            // Render enemy screenshot
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
-            spriteBatch.Draw(_enemyTexture, _enemyRec, Color.White);
+            // Render enemy ScreenShot
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
+            spriteBatch.Draw(_enemy, _enemyRec, Color.White);
             // Render question
             var sourceRectangle = QuestionCurrentAnimation.CurrentRectangle;
-            spriteBatch.Draw(_questionTexture, _questionRec, sourceRectangle, Color.White);
+            spriteBatch.Draw(_question, _questionRec, sourceRectangle, Color.White);
             // Render answers
-            spriteBatch.Draw(_screenTexture, _answer1Rec, Color.White);
-            spriteBatch.Draw(_screenTexture, _answer2Rec, Color.White);
-            spriteBatch.Draw(_screenTexture, _answer3Rec, Color.White);
-            spriteBatch.Draw(_screenTexture, _answer4Rec, Color.White);
-            spriteBatch.End();
+            spriteBatch.Draw(_screen, Answer1Rectangle, Color.White);
+            spriteBatch.Draw(_screen, Answer2Rectangle, Color.White);
+            spriteBatch.Draw(_screen, Answer3Rectangle, Color.White);
+            spriteBatch.Draw(_screen, Answer4Rectangle, Color.White);
 
             // Draw the text on the rectangles of the answers
-            spriteBatch.Begin();
             DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Cyan);
-            DrawString(spriteBatch, _font, _firstAnswer, _answerRec[correct], Color.Cyan);
-            DrawString(spriteBatch, _font, _secondAnswer, _answerRec[wrong1], Color.Cyan);
-            DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[wrong2], Color.Cyan);
+            DrawString(spriteBatch, _font, _firstAnswer, _answerRec[_correct], Color.Cyan);
+            DrawString(spriteBatch, _font, _secondAnswer, _answerRec[_wrong1], Color.Cyan);
+            DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[_wrong2], Color.Cyan);
+
             if (_fourthAnswer == "")
             {
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
-                spriteBatch.Draw(_blackscreenTexture, _answerRec[wrong3], Color.White);
-                spriteBatch.Draw(texture: _crystalTexture, position: _crystalPosition, color: Color.White, scale: _crystalScale);
-                spriteBatch.End();
+                spriteBatch.Draw(_blackScreen, _answerRec[_wrong3], Color.White);
+                spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
+                                 Vector2.Zero, _crystalScale, SpriteEffects.None, 0);
             }
             else
             {
-                DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[wrong3], Color.Cyan);
-                spriteBatch.End();
+                DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[_wrong3], Color.Cyan);
             }
 
             // Render crystal sprite
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
-            spriteBatch.Draw(texture: _crystalTexture, position: _crystalPosition, color: Color.White, scale: _crystalScale);
+            spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
+                             Vector2.Zero, _crystalScale, SpriteEffects.None, 0);
             spriteBatch.End();
         }
 
-        public override Point GetPosition(Texture2D button)
+        public void CheckAnswer(Rectangle touch)
         {
-            if (button.Equals(_screenTexture))
+            foreach (var rect in _answerRec)
             {
-                return new Point((int)_answer1Position.X,
-                                 (int)_answer1Position.Y);
-            }
-            else if (button.Equals(_crystalTexture))
-            {
-                return new Point((int)_crystalPosition.X,
-                                 (int)_crystalPosition.Y);
-            }
-            else
-            {
-                return new Point(0, 0);
+                if (!touch.Intersects(rect)) continue;
+                if (_answerRec.IndexOf(rect) == _correct && _life)
+                {
+                    Player.SetLifeCount(Player.LifeCount + 1);
+                    _win = true;
+                    _life = false;
+                    break;
+                }
+                else if (_life)
+                {
+                    Player.SetLifeCount(Player.LifeCount - 1);
+                    _life = false;
+                    _win = false;
+                    break;
+                }
             }
         }
 
-        public override bool GetAnswer(Rectangle touch)
+        public void ChangeColour(SpriteBatch spriteBatch)
         {
-            if (touch.Intersects(_answerRec[correct]))
-            {
-                Player.SetLifeCount(Player.lifeCount + 1);
-                _win = true;
-                return true;
-            }
-            else
-            {
-                Player.SetLifeCount(Player.lifeCount - 1);
-                return false;
-            }
-        }
-
-        public override void ChangeColour(SpriteBatch spriteBatch)
-        {
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
             if (_fourthAnswer == "")
             {
-                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
-                spriteBatch.Draw(_blackscreenTexture, _answerRec[wrong3], Color.White);
-                spriteBatch.Draw(texture: _crystalTexture, position: _crystalPosition, color: Color.White, scale: _crystalScale);
-                spriteBatch.End();
+                spriteBatch.Draw(_blackScreen, _answerRec[_wrong3], Color.White);
+                spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
+                                 Vector2.Zero, _crystalScale, SpriteEffects.None, 0);
             }
 
-            if (_win)
-                QuestionCurrentAnimation = _correctAnswer;
-            else
-                QuestionCurrentAnimation = _wrongAnswer;
+            QuestionCurrentAnimation = _win ? _correctAnswer : _wrongAnswer;
 
-            spriteBatch.Begin();
             var sourceRectangle = QuestionCurrentAnimation.CurrentRectangle;
-            spriteBatch.Draw(_questionTexture, _questionRec, sourceRectangle, Color.White);
+            spriteBatch.Draw(_question, _questionRec, sourceRectangle, Color.White);
             DrawString(spriteBatch, _font, _questionString, _questionRec, Color.Cyan);
-            DrawString(spriteBatch, _font, _firstAnswer, _answerRec[correct], Color.LimeGreen);
-            DrawString(spriteBatch, _font, _secondAnswer, _answerRec[wrong1], Color.Red);
-            DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[wrong2], Color.Red);
-            DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[wrong3], Color.Red);
+            DrawString(spriteBatch, _font, _firstAnswer, _answerRec[_correct], Color.LimeGreen);
+            DrawString(spriteBatch, _font, _secondAnswer, _answerRec[_wrong1], Color.Red);
+            DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[_wrong2], Color.Red);
+            DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[_wrong3], Color.Red);
             spriteBatch.End();
         }
 
-        public override void Help(SpriteBatch spriteBatch)
+        public void Help(SpriteBatch spriteBatch)
         {
             _fourthAnswer = "";
 
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
-            spriteBatch.Draw(_blackscreenTexture, _answerRec[wrong3], Color.White);
-            spriteBatch.Draw(texture: _crystalTexture, position: _crystalPosition, color: Color.White, scale: _crystalScale);
-            spriteBatch.End();
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
+            spriteBatch.Draw(_blackScreen, _answerRec[_wrong3], Color.White);
+            spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
+                             Vector2.Zero, _crystalScale, SpriteEffects.None, 0);
 
-            spriteBatch.Begin();
-            DrawString(spriteBatch, _font, _firstAnswer, _answerRec[correct], Color.Cyan);
-            DrawString(spriteBatch, _font, _secondAnswer, _answerRec[wrong1], Color.Cyan);
-            DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[wrong2], Color.Cyan);
-            DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[wrong3], Color.Cyan);
+            DrawString(spriteBatch, _font, _firstAnswer, _answerRec[_correct], Color.Cyan);
+            DrawString(spriteBatch, _font, _secondAnswer, _answerRec[_wrong1], Color.Cyan);
+            DrawString(spriteBatch, _font, _thirdAnswer, _answerRec[_wrong2], Color.Cyan);
+            DrawString(spriteBatch, _font, _fourthAnswer, _answerRec[_wrong3], Color.Cyan);
+            spriteBatch.End();
+        }
+
+        public void PopUp(SpriteBatch spriteBatch)
+        {
+            var test = _win ? "YOU WON!!!" : "YOU LOST";
+
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
+            //spriteBatch.Draw(_popUp, _popUpRec, Color.White);
+            spriteBatch.Draw(_screen, _popUpRec, Color.White);
+            DrawString(spriteBatch, _font, test, _popUpRec, Color.Cyan);
             spriteBatch.End();
         }
 
@@ -308,65 +333,71 @@ namespace CrawlIT.Shared.GameState
         /// the string will be absolutely-centered inside of the boundaries.
         public void DrawString(SpriteBatch spriteBatch, SpriteFont font, string strToDraw, Rectangle boundaries, Color color)
         {
+            if(boundaries.Width==_resolution.X)
+            {
+                boundaries.Width = (int)((int)_resolution.X * 0.8);
+                boundaries.X += (int)((int)_resolution.X * 0.1);
+            }
+
             // Code for parsing the text depending on the width of the screen
-            String line = String.Empty;
-            String returnString = String.Empty;
-            String[] wordArray = strToDraw.Split(' ');
-            foreach (String word in wordArray)
+            var line = string.Empty;
+            var returnString = string.Empty;
+            var wordArray = strToDraw.Split(' ');
+            foreach (var word in wordArray)
             {
                 if (_font.MeasureString(line + word).Length() > boundaries.Width / _scale)
                 {
                     returnString = returnString + line + '\n';
-                    line = String.Empty;
+                    line = string.Empty;
                 }
 
                 line = line + word + ' ';
             }
             returnString += line;
 
-            Vector2 size = font.MeasureString(strToDraw);
+            var (x, y) = font.MeasureString(strToDraw);
 
-            String[] lines = returnString.Split('\n');
+            var lines = returnString.Split('\n');
 
             // Figure out the location to absolutely-center it in the boundaries rectangle.
-            int strWidth = (int)Math.Round(size.X * _scale);
-            int strHeight = (int)Math.Round(size.Y * _scale);
-            Vector2 position = new Vector2();
-            position.X = ((boundaries.Width - (strWidth / lines.Length)) / 2) + boundaries.X;
-            position.Y = (((boundaries.Height - (strHeight * lines.Length)) / 2) + boundaries.Y);
+            var strWidth = (int)Math.Round(x * _scale);
+            var strHeight = (int)Math.Round(y * _scale);
+            var position = Vector2.Zero;
+            position.X = (boundaries.Width - strWidth / lines.Length) / 2 + boundaries.X;
+            position.Y = (boundaries.Height - strHeight * lines.Length) / 2 + boundaries.Y;
 
             // A bunch of settings where we just want to use reasonable defaults.
-            float rotation = 0.0f;
-            Vector2 spriteOrigin = new Vector2(0, 0);
-            float spriteLayer = 0.0f; // all the way in the front
-            SpriteEffects spriteEffects = new SpriteEffects();
+            const float rotation = 0.0f;
+            var spriteOrigin = new Vector2(0, 0);
+            const float spriteLayer = 0.0f; // all the way in the front
+            const SpriteEffects spriteEffects = new SpriteEffects();
 
-            for (int i = 0; i < lines.Length; i++)
+            foreach (var l in lines)
             {
-                Vector2 lineSize = font.MeasureString(lines[i]);
-                int lineWidth = (int)Math.Round(lineSize.X * _scale);
-                position.X = ((boundaries.Width - lineWidth) / 2) + boundaries.X + 5;
-                spriteBatch.DrawString(font, lines[i], position, color, rotation, spriteOrigin, _scale, spriteEffects, spriteLayer);
+                var lineSize = font.MeasureString(l);
+                var lineWidth = (int)Math.Round(lineSize.X * _scale);
+                position.X = (boundaries.Width - lineWidth) / 2 + boundaries.X + 5;
+                spriteBatch.DrawString(font, l, position, color, rotation, spriteOrigin, _scale,
+                                       spriteEffects, spriteLayer);
                 position.Y += strHeight;
             }
-
         }
 
         /// <summary>
         /// Returns all numbers, between min and max inclusive, once in a random sequence.
         /// </summary>
-        List<int> UniqueRandom()
+        private List<int> UniqueRandom()
         {
-            List<int> candidates = new List<int>();
-            List<int> result = new List<int>();
-            for (int i = 0; i <= 3; i++)
+            var candidates = new List<int>();
+            var result = new List<int>();
+            for (var i = 0; i <= 3; i++)
             {
                 candidates.Add(i);
             }
-            Random rnd = new Random();
+            var rnd = new Random();
             while (candidates.Count > 0)
             {
-                int index = rnd.Next(candidates.Count);
+                var index = rnd.Next(candidates.Count);
                 result.Add(candidates[index]);
                 candidates.RemoveAt(index);
             }

@@ -4,12 +4,16 @@ using System.Linq;
 
 using Microsoft.Xna.Framework;
 
-namespace CrawlIT.Shared.Animation
+namespace CrawlIT.Shared
 {
+    /// <summary>
+    /// Serves to define an <c>Animation</c> containing a list of <c>AnimationFrame</c>s, which one can loop through
+    /// using the provided <value>duration</value> for each <c>AnimationFrame</c>.
+    /// </summary>
     public class Animation
     {
         private readonly List<AnimationFrame> _animationFrames = new List<AnimationFrame>();
-        private TimeSpan _timeIntoAnimation;
+        private TimeSpan _animationTime;
 
         // Define duration of our animation depending on frame durations
         private TimeSpan Duration
@@ -27,7 +31,7 @@ namespace CrawlIT.Shared.Animation
         // Add animation frames to our animation
         public void AddFrame(Rectangle rectangle, TimeSpan duration)
         {
-            var newFrame = new AnimationFrame()
+            var newFrame = new AnimationFrame
             {
                 SourceRectangle = rectangle,
                 Duration = duration
@@ -39,13 +43,9 @@ namespace CrawlIT.Shared.Animation
         // Update time into animation to switch frames
         public void Update(GameTime gameTime)
         {
-            var secondsIntoAnimation =
-                _timeIntoAnimation.TotalSeconds
-                + gameTime.ElapsedGameTime.TotalSeconds;
-
+            var secondsIntoAnimation = _animationTime.TotalSeconds + gameTime.ElapsedGameTime.TotalSeconds;
             var remainder = secondsIntoAnimation % Duration.TotalSeconds;
-
-            _timeIntoAnimation = TimeSpan.FromSeconds(remainder);
+            _animationTime = TimeSpan.FromSeconds(remainder);
         }
 
         public Rectangle CurrentRectangle
@@ -55,10 +55,10 @@ namespace CrawlIT.Shared.Animation
                 AnimationFrame currentFrame = null;
 
                 // Find correct frame depending on how long into the animation we are
-                TimeSpan elapsedTime = new TimeSpan();
+                var elapsedTime = new TimeSpan();
                 foreach (var frame in _animationFrames)
                 {
-                    if (elapsedTime + frame.Duration >= _timeIntoAnimation)
+                    if (elapsedTime + frame.Duration >= _animationTime)
                     {
                         currentFrame = frame;
                         break;
@@ -72,11 +72,8 @@ namespace CrawlIT.Shared.Animation
                     currentFrame = _animationFrames.LastOrDefault();
 
                 // Now we return the corresponding frame rectangle
-                if (currentFrame != null)
-                    return currentFrame.SourceRectangle;
-
                 // If for whatever reason we still don't have a frame, we return an empty rectangle (w: 0, h:0)
-                return Rectangle.Empty;
+                return currentFrame?.SourceRectangle ?? Rectangle.Empty;
             }
         }
     }

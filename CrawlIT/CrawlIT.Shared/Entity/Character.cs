@@ -1,16 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CrawlIT.Shared.Entity
+﻿namespace CrawlIT.Shared
 {
     public abstract class Character : Entity
     {
-        public Animation.Animation StandUp;
-        public Animation.Animation StandDown;
-        public Animation.Animation StandLeft;
-        public Animation.Animation StandRight;
+        public Animation StandUp;
+        public Animation StandDown;
+        public Animation StandLeft;
+        public Animation StandRight;
 
         public int FrameWidth;
         public int FrameHeight; 

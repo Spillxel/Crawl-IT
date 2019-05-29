@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 
-namespace CrawlIT.Shared.Input
+namespace CrawlIT.Shared
 {
     public class InputManager
     {
@@ -14,9 +14,9 @@ namespace CrawlIT.Shared.Input
 
         public InputState CurrentInputState { get; private set; }
 
-        private readonly Camera.Camera _camera;
+        private readonly Camera _camera;
 
-        public InputManager(Camera.Camera camera)
+        public InputManager(Camera camera)
         {
             _camera = camera;
             CurrentInputState = InputState.Idle;
@@ -41,8 +41,8 @@ namespace CrawlIT.Shared.Input
                     var oldDistance = Vector2.Distance(oldPosOne, oldPosTwo);
 
                     // set new zoom level and clamp it to normal values
-                    _camera.Zoom -= (oldDistance - currentDistance) * 0.01f;
-                    _camera.Zoom = Math.Min(12f, Math.Max(_camera.Zoom, 3f));
+                    var newScaleFactor = _camera.Zoom - (oldDistance - currentDistance) * 0.01f;
+                    _camera.Zoom = Math.Min(8f, Math.Max(newScaleFactor, 3f));
                 }
                 else if (gesture.GestureType == GestureType.PinchComplete)
                 {

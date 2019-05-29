@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CrawlIT.Shared.GameState
+namespace CrawlIT.Shared
 {
     public class GameStateManager
     {
@@ -14,20 +15,30 @@ namespace CrawlIT.Shared.GameState
         // Stack for the screens     
         private readonly Stack<GameState> _screens = new Stack<GameState>();
 
+        private GraphicsDevice _graphicsDevice;
         private ContentManager _content;
+        private Point _resolution;
+        private Matrix _transform;
 
         public static GameStateManager Instance => _instance ?? (_instance = new GameStateManager());
 
-        // Sets the content manager
-        public void SetContent(ContentManager content)
-        {
-            _content = content;
-        }
+        public GameState.StateType State => _screens.Peek().State;
 
-        // Get the state of the current screen
-        public bool IsState(Enum state)
+        public Texture2D BlankTexture;
+
+        // Init stuff
+        public void Init(GraphicsDevice graphicsDevice, ContentManager content,
+                         Point resolution, Matrix transform)
         {
-            return _screens.Peek().GetState().Equals(state);
+            _graphicsDevice = graphicsDevice;
+            _content = content;
+            _resolution = resolution;
+            _transform = transform;
+
+            BlankTexture = new Texture2D(_graphicsDevice, _resolution.X, _resolution.Y);
+            var data = new Color[_resolution.X * _resolution.Y];
+            data = data.Select(i => Color.Black * 0.7f).ToArray();
+            BlankTexture.SetData(data);
         }
 
         // Adds a new screen to the stack 
@@ -118,6 +129,13 @@ namespace CrawlIT.Shared.GameState
             {
                 Console.WriteLine(ex.StackTrace);
             }
+        }
+
+        public void FadeBackBufferToBlack(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
+            spriteBatch.Draw(BlankTexture, Vector2.Zero, Color.White);
+            spriteBatch.End();
         }
 
         // Unloads the content from the screen

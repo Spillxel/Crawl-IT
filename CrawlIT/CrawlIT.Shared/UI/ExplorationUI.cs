@@ -1,107 +1,110 @@
-﻿using CrawlIT.Shared.Entity;
-using CrawlIT.Shared.GameState;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using Camera = CrawlIT.Shared.Camera.Camera;
 
-namespace CrawlIT.Shared.UI
+namespace CrawlIT.Shared
 {
-    public class ExplorationUI
+    public class ExplorationUi
     {
-        private UIIcon _lifeBar;
-        private UIIcon _surgeCrystal;
-        private UIIcon _save;
-        private UIIcon _settings;
-        private UIIcon _help;
-        private UIIcon _badges;
+        private UiIcon _lifeBar;
+        private UiIcon _surgeCrystal;
+
+        private UiIcon _save;
+        private UiIcon _settings;
+        private UiIcon _help;
+        private UiIcon _badges;
 
         private Texture2D _lifeBarTexture;
-        private Texture2D _crystalTexture;
+        private Texture2D _surgeCrystalTexture;
+
+        private Texture2D _helpTexture;
         private Texture2D _saveTexture;
         private Texture2D _settingsTexture;
-        private Texture2D _helpTexture;
         private Texture2D _badgesTexture;
 
-        private readonly float _zoom;
-        private GraphicsDeviceManager _graphics;
-        private ContentManager _content;
-        private Camera.Camera _staticCamera;
         private SpriteFont _font;
-        private SpriteBatch _spriteBatch;
-        private Player _player;
+        private readonly float _fontScale;
+        private Vector2 _levelStringPos;
+        private const string LevelString = "SEMESTER 1";
 
-        public ExplorationUI(float zoom, GraphicsDeviceManager graphics, ContentManager content, Camera.Camera staticCamera, Player player)
+        private readonly Matrix _transform;
+        private readonly float _scale;
+        private readonly Point _resolution;
+
+        private readonly ContentManager _content;
+
+        private readonly Player _player;
+
+        public ExplorationUi(Matrix transform, float scale, Point resolution, ContentManager content,
+                             Player player)
         {
-            _zoom = zoom;
-            _graphics = graphics;
+            _transform = transform;
+            _scale = scale;
+            _fontScale = _scale * 0.3f;
+            _resolution = resolution;
             _content = content;
-            _staticCamera = staticCamera;
             _player = player;
-        }
-
-        public void Initialize()
-        {
-            throw new NotImplementedException();
         }
 
         public void Load()
         {
             _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebarspritesheet");
+            _surgeCrystalTexture = _content.Load<Texture2D>("Sprites/surgecrystal");
+
+            _helpTexture = _content.Load<Texture2D>("Sprites/newhelp");
             _saveTexture = _content.Load<Texture2D>("Sprites/save");
             _settingsTexture = _content.Load<Texture2D>("Sprites/settings");
-            _helpTexture = _content.Load<Texture2D>("Sprites/newhelp");
             _badgesTexture = _content.Load<Texture2D>("Sprites/badges");
-            _crystalTexture = _content.Load<Texture2D>("Sprites/crystalspritesheet");
 
             _font = _content.Load<SpriteFont>("Fonts/File");
 
-            int _border = 100;
-            float _height = _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom);
-            float _screenWithoutBorder = _graphics.PreferredBackBufferWidth - 2 * _border;
-            float _iconWidth = 32 * _zoom;
+            // icon positions
+            var border = _resolution.X * 0.05f;
 
-            _lifeBar = new LifeBarIcon(_lifeBarTexture, _zoom, 32 * _zoom, 50, _player);
-            _surgeCrystal = new CrystalIcon(_crystalTexture, _zoom, _graphics.PreferredBackBufferWidth - (2 * 32 * _zoom), 50, _player);
-            //_save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth / 2) + 50 + (2 * 32), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            //_settings = new UIIcon(_settingsTexture, _zoom, (_graphics.PreferredBackBufferWidth / 4) + 32 + 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            //_help = new UIIcon(_helpTexture, _zoom, 50, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            //_badges = new UIIcon(_badgesTexture, _zoom, _graphics.PreferredBackBufferWidth - (32 * _zoom + 50), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            //_save = new UIIcon(_saveTexture, _zoom, (_graphics.PreferredBackBufferWidth - 32 * _zoom) * 0.6f, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            //_settings = new UIIcon(_settingsTexture, _zoom, (_graphics.PreferredBackBufferWidth - 32 * _zoom) * 0.3f , _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            //_help = new UIIcon(_helpTexture, _zoom, 32 * _zoom, _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            //_badges = new UIIcon(_badgesTexture, _zoom, _graphics.PreferredBackBufferWidth - (2 * 32 * _zoom), _graphics.PreferredBackBufferHeight - 50 - (32 * _zoom));
-            _save = new UIIcon(_saveTexture, _zoom,(_screenWithoutBorder / 3) * 2 + _border - _iconWidth / 2, _height);
-            _settings = new UIIcon(_settingsTexture, _zoom, (_screenWithoutBorder / 3) + _border - _iconWidth / 2, _height);
-            _help = new UIIcon(_helpTexture, _zoom, _border - _iconWidth / 2, _height);
-            _badges = new UIIcon(_badgesTexture, _zoom, (_screenWithoutBorder / 3) * 3 + _border - _iconWidth / 2, _height);    
+            var textureWidth = _saveTexture.Width * _scale;
+            var textureHeight = _saveTexture.Height * _scale;
+
+            var bottomHeight = _resolution.Y - border - textureHeight;
+
+            _lifeBar = new LifeBarIcon(_lifeBarTexture, _scale, border, border, _player);
+            _surgeCrystal = new CrystalIcon(_surgeCrystalTexture, _scale,
+                                       _resolution.X - border - textureWidth, border, _player);
+            
+            // free space between leftmost and rightmost icons, minus textureWidth of the other two
+            var remainingSpace = _resolution.X - 2 * border - 4 * textureWidth;
+            // we want to put two icons in this space, hence we divide the space by three
+            var spacing = remainingSpace / 3 + textureWidth;
+
+            var helpPos = border;
+            var savePos = helpPos + spacing;
+            var settingsPos = savePos + spacing;
+            var badgesPos = settingsPos + spacing;
+            
+            _help = new UiIcon(_helpTexture, _scale, helpPos, bottomHeight);
+            _save = new UiIcon(_saveTexture, _scale, savePos, bottomHeight);
+            _settings = new UiIcon(_settingsTexture, _scale, settingsPos, bottomHeight);
+            _badges = new UiIcon(_badgesTexture, _scale, badgesPos, bottomHeight);
+
+            
+            var (x, y) = _font.MeasureString(LevelString) * _fontScale;
+            _levelStringPos = new Vector2((_resolution.X - x) * 0.5f, border + (textureHeight - y) * 0.5f);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _spriteBatch = spriteBatch;
+            spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
+            spriteBatch.DrawString(_font, LevelString, _levelStringPos, Color.White,
+                                   0, Vector2.Zero, _fontScale, SpriteEffects.None, 0);
 
-            var levelString = "Semester 1";
-            var (levelStringDimensionX, levelStringDimensionY) = _font.MeasureString(levelString);
-            var levelStringPosX = (_graphics.PreferredBackBufferWidth - levelStringDimensionX) / 2;
-            var levelStringPosY = 50;
+            _lifeBar.Draw(spriteBatch);
+            _surgeCrystal.Draw(spriteBatch);
 
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, levelString, new Vector2(levelStringPosX, levelStringPosY), Color.White);
-            _spriteBatch.End();
+            _save.Draw(spriteBatch);
+            _settings.Draw(spriteBatch);
+            _help.Draw(spriteBatch);
+            _badges.Draw(spriteBatch);
 
-            _spriteBatch.Begin(SpriteSortMode.BackToFront,
-                  BlendState.AlphaBlend,
-                  SamplerState.PointClamp, null, null, null,
-                  _staticCamera.Transform);
-            _lifeBar.Draw(_spriteBatch);
-            _surgeCrystal.Draw(_spriteBatch);
-            _save.Draw(_spriteBatch);
-            _settings.Draw(_spriteBatch);
-            _help.Draw(_spriteBatch);
-            _badges.Draw(_spriteBatch);
-            _spriteBatch.End();
+            spriteBatch.End();
         }
 
         public void Update(GameTime gameTime)
