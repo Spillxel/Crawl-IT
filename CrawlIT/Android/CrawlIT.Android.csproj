@@ -58,10 +58,10 @@
     </Reference>
     <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MonoGame.Framework.Android.3.8.0.398-develop\lib\MonoAndroid\MonoGame.Framework.dll</HintPath>
+      <HintPath>..\packages\MonoGame.Framework.Android.3.8.0.402-develop\lib\MonoAndroid\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework.Content.Pipeline, Version=3.8.0.398, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.Content.Pipeline.Portable.3.8.0.398-develop\lib\portable-net45+win8+wpa81\MonoGame.Framework.Content.Pipeline.dll</HintPath>
+    <Reference Include="MonoGame.Framework.Content.Pipeline, Version=3.8.0.402, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.Content.Pipeline.Portable.3.8.0.402-develop\lib\portable-net45+win8+wpa81\MonoGame.Framework.Content.Pipeline.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -165,17 +165,17 @@
     <Content Include="Content\Sprites\tutorspritesheet.png" />
   </ItemGroup>
   <ItemGroup>
-  <AndroidResource Include="Resources\Drawable\logo.png">
-    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-  </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\logo.png">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
-  <Import Project="..\packages\MonoGame.Framework.Android.3.8.0.398-develop\build\MonoGame.Framework.Android.targets" Condition="Exists('..\packages\MonoGame.Framework.Android.3.8.0.398-develop\build\MonoGame.Framework.Android.targets')" />
+  <Import Project="..\packages\MonoGame.Framework.Android.3.8.0.402-develop\build\MonoGame.Framework.Android.targets" Condition="Exists('..\packages\MonoGame.Framework.Android.3.8.0.402-develop\build\MonoGame.Framework.Android.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MonoGame.Framework.Android.3.8.0.398-develop\build\MonoGame.Framework.Android.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.Android.3.8.0.398-develop\build\MonoGame.Framework.Android.targets'))" />
+    <Error Condition="!Exists('..\packages\MonoGame.Framework.Android.3.8.0.402-develop\build\MonoGame.Framework.Android.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.Android.3.8.0.402-develop\build\MonoGame.Framework.Android.targets'))" />
   </Target>
 </Project>

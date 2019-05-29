@@ -50,13 +50,6 @@ namespace CrawlIT.Shared
         private RenderTarget2D _mapRenderTarget;
         private Rectangle _mapRectangle;
 
-        private Player _player;
-        private Enemy _tutor;
-        private Enemy _assistant1;
-        private Enemy _assistant2;
-        private Enemy _assistant3;
-        private Boss _mathsBoss;
-
         private Camera _playerCamera;
         private Camera _staticCamera;
 
@@ -74,6 +67,7 @@ namespace CrawlIT.Shared
         private Enemy _assistant3;
         private Texture2D _assistant3Texture;
         private Texture2D _assistant3CloseUpTexture;
+        private Boss _mathsBoss;
         private Texture2D _mathsBossTexture;
         private Texture2D _mathsBossCloseUpTexture;
 
@@ -194,7 +188,7 @@ namespace CrawlIT.Shared
 
             _mathsBossTexture = Content.Load<Texture2D>("Sprites/mathsteacherspritesheet");
             _mathsBossCloseUpTexture = Content.Load<Texture2D>("Sprites/tutorcloseup");
-            _mathsBoss = new Boss(_mathsBossTexture, _mathsBossCloseUpTexture, _resolution.TransformationMatrix(), 800, 500, 10, 3);
+            _mathsBoss = new Boss(_mathsBossTexture, _mathsBossCloseUpTexture, 800, 500, 10, 3);
             
             _player.Enemies = new List<Enemy>
             {
@@ -470,6 +464,7 @@ namespace CrawlIT.Shared
             _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform,
                                samplerState: SamplerState.PointClamp);
             _tutor.Draw(_spriteBatch);
+            _mathsBoss.Draw(_spriteBatch);
             _assistant1.Draw(_spriteBatch);
             _assistant2.Draw(_spriteBatch);
             _assistant3.Draw(_spriteBatch);

@@ -4,14 +4,14 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CrawlIT.Shared.Entity
+namespace CrawlIT.Shared
 {
     public class Boss : Enemy
     {
-        public Animation.Animation Idle;
+        public Animation Idle;
 
-        public Boss(Texture2D texture, Texture2D closeUpTexture, Matrix scale, float posx, float posy, int fightsLeft, int questionPerFight)
-            : base(texture, closeUpTexture, scale, posx, posy, fightsLeft, questionPerFight)
+        public Boss(Texture2D texture, Texture2D closeUpTexture, float posx, float posy, int fightsLeft, int questionPerFight)
+            : base(texture, closeUpTexture, posx, posy, fightsLeft, questionPerFight)
         {
             FrameWidth = 39;
             FrameHeight = 53;
@@ -19,7 +19,7 @@ namespace CrawlIT.Shared.Entity
             CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
             FightRectangle = new Rectangle((int)PosX - 1, (int)PosY - 1, FrameWidth + 2, (int)(FrameHeight / 1.5) + 2);
                         
-            Idle = new Animation.Animation();
+            Idle = new Animation();
             Idle.AddFrame(new Rectangle(0, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(0.25));
             Idle.AddFrame(new Rectangle(0, FrameHeight, FrameWidth, FrameHeight), TimeSpan.FromSeconds(0.25));
             Idle.AddFrame(new Rectangle(0, FrameHeight * 2, FrameWidth, FrameHeight), TimeSpan.FromSeconds(0.25));
