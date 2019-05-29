@@ -69,6 +69,7 @@ namespace CrawlIT
         private Enemy _assistant1;
         private Enemy _assistant2;
         private Enemy _assistant3;
+        private Boss _mathsBoss;
 
         private Texture2D _playerTexture;
         private Texture2D _tutorTexture;
@@ -79,6 +80,8 @@ namespace CrawlIT
         private Texture2D _assistant2CloseUpTexture;
         private Texture2D _assistant3Texture;
         private Texture2D _assistant3CloseUpTexture;
+        private Texture2D _mathsBossTexture;
+        private Texture2D _mathsBossCloseUpTexture;
 
         private GameState _menu;
         private GameState _level;
@@ -204,6 +207,10 @@ namespace CrawlIT
             _assistant3CloseUpTexture = Content.Load<Texture2D>("Sprites/assistant3closeup");
             _assistant3 = new Enemy(_assistant3Texture, _assistant3CloseUpTexture, _resolution.TransformationMatrix(), 400, 500, 10, 2);
 
+            _mathsBossTexture = Content.Load<Texture2D>("Sprites/mathsteacherspritesheet");
+            _mathsBossCloseUpTexture = Content.Load<Texture2D>("Sprites/tutorcloseup");
+            _mathsBoss = new Boss(_mathsBossTexture, _mathsBossCloseUpTexture, _resolution.TransformationMatrix(), 800, 500, 10, 3);
+
             // Load button textures
             _startButton = Content.Load<Texture2D>("Buttons/start");
             _exitButton = Content.Load<Texture2D>("Buttons/exit");
@@ -242,7 +249,8 @@ namespace CrawlIT
                 _tutor,
                 _assistant1,
                 _assistant2,
-                _assistant3
+                _assistant3,
+                _mathsBoss
             };
             _player.Enemies = _enemies;
             foreach (var enemy in _enemies)
@@ -315,6 +323,7 @@ namespace CrawlIT
                 _assistant1.Update(gameTime);
                 _assistant2.Update(gameTime);
                 _assistant3.Update(gameTime);
+                _mathsBoss.Update(gameTime);
 
                 _playerCamera.Follow(_player);
                 _staticCamera.Follow(null);
@@ -401,6 +410,7 @@ namespace CrawlIT
                 _assistant1.Draw(_spriteBatch);
                 _assistant2.Draw(_spriteBatch);
                 _assistant3.Draw(_spriteBatch);
+                _mathsBoss.Draw(_spriteBatch);
                 _player.Draw(_spriteBatch);
                 _spriteBatch.End();
 

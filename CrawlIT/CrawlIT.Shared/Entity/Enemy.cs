@@ -4,7 +4,6 @@ using System;
 
 namespace CrawlIT.Shared.Entity
 {
-
     public class Enemy : Character
     {
         public Animation.Animation CurrentAnimation;
