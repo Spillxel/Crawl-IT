@@ -23,18 +23,18 @@
       "QuestionSubject": "Programming",
       "QuestionDifficulty": "easy",
       "QuestionText": "What is the Progra teacher's name?",
-      "Answer1": "Schommer",
+      "Answer1": "Franck",
       "Answer2": "Müller",
-      "Answer3": "Zampunieris",
+      "Answer3": "Schommer",
       "Answer4": "Khan"
     },
     {
       "QuestionSubject": "Database",
       "QuestionDifficulty": "easy",
       "QuestionText": "What is the DB teacher's name?",
-      "Answer1": "Rothkugel",
+      "Answer1": "Schommer",
       "Answer2": "Müller",
-      "Answer3": "Schommer",
+      "Answer3": "Rothkugel",
       "Answer4": "Franck"
     }
   ]
