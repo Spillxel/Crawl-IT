@@ -302,8 +302,9 @@ namespace CrawlIT.Shared
             var test = _win ? "YOU WON!!!" : "YOU LOST";
 
             spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
-            spriteBatch.Draw(_popUp, _popUpRec, Color.White);
-            DrawString(spriteBatch, _font, test, _popUpRec, Color.Black);
+            //spriteBatch.Draw(_popUp, _popUpRec, Color.White);
+            spriteBatch.Draw(_screen, _popUpRec, Color.White);
+            DrawString(spriteBatch, _font, test, _popUpRec, Color.Cyan);
             spriteBatch.End();
         }
 
