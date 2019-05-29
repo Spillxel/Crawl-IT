@@ -71,7 +71,7 @@ namespace CrawlIT.Shared
         private Rectangle _startButton;
         private Point _startButtonSize;
         private Texture2D _startButtonTexture;
-        
+
         private bool _played;
 
         private SpriteFont _font;
@@ -80,6 +80,9 @@ namespace CrawlIT.Shared
 
         private bool _fightTrigger;
         private double _fightTransitionTimer = 0;
+
+        private float _timer = 5;
+        private const float _TIMER = 5;
 
         public CrawlIt()
         {
@@ -116,7 +119,7 @@ namespace CrawlIT.Shared
             LoadUi();
 
             _inputManager = new InputManager(_playerCamera);
-            
+
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
             XnaMediaPlayer.Play(_backgroundSong);
         }
@@ -137,8 +140,8 @@ namespace CrawlIT.Shared
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Define scale for virtual rendering
-            var scaleX = Math.Max(_realResolution.X / (float) _virtualResolution.X, 3);
-            var scaleY = Math.Max(_realResolution.Y / (float) _virtualResolution.Y, 3);
+            var scaleX = Math.Max(_realResolution.X / (float)_virtualResolution.X, 3);
+            var scaleY = Math.Max(_realResolution.Y / (float)_virtualResolution.Y, 3);
             _scale = Math.Min(scaleX, scaleY);
 
             // Repeat _backgroundSong on end
@@ -240,7 +243,7 @@ namespace CrawlIT.Shared
             _level = new Level(GraphicsDevice);
             _level.LoadContent(Content);
             _level.Initialize();
-            _fight = new Fight(GraphicsDevice, _virtualResolution, _transform,  _player, _tutor);
+            _fight = new Fight(GraphicsDevice, _virtualResolution, _transform, _player, _tutor);
             _fight.Initialize();
             _fight.LoadContent(Content);
 
@@ -339,9 +342,14 @@ namespace CrawlIT.Shared
                 case GameState.StateType.Fighting:
                     if (_played)
                     {
-                        _played = false;
-                        Thread.Sleep(5000);
-                        GameStateManager.Instance.RemoveScreen();
+                        float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        _timer -= elapsed;
+                        if (_timer < 0)
+                        {
+                            GameStateManager.Instance.RemoveScreen();
+                            _played = false;
+                            _timer = _TIMER;
+                        }
                     }
 
                     _fight.Update(gameTime);
@@ -398,10 +406,12 @@ namespace CrawlIT.Shared
                         _fight.CheckAnswer(_touch);
                         _fight.ChangeColour(_spriteBatch);
                         _played = true;
-                        GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
-                        _fight.PopUp(_spriteBatch);
+                        if (_timer < 2)
+                        {
+                            GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
+                            _fight.PopUp(_spriteBatch);
+                        }
                     }
-
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -425,7 +435,7 @@ namespace CrawlIT.Shared
             _mapRenderer.Draw(_map, _playerCamera.Transform);
 
             GraphicsDevice.SetRenderTarget(null);
-            _spriteBatch.Begin(transformMatrix:_transform, samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
             _spriteBatch.Draw(_mapRenderTarget, _mapRectangle, Color.White);
             _spriteBatch.End();
         }

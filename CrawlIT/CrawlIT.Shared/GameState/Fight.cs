@@ -66,7 +66,9 @@ namespace CrawlIT.Shared
         private float _scale;
         private float _crystalRatio;
         public override StateType State { get; }
-        
+
+        private bool _life;
+
         public Enemy Enemy;
 
         public Fight(GraphicsDevice graphicsDevice, Point resolution, Matrix transform,
@@ -104,6 +106,7 @@ namespace CrawlIT.Shared
         {
             _scale = _resolution.X / 1200f;
             _crystalRatio = _resolution.X / 200f;
+            _life = true;
         }
 
         public override void LoadContent(ContentManager content)
@@ -161,7 +164,7 @@ namespace CrawlIT.Shared
                                         _resolution.Y / 10 * 2 - 3);
             var enemyPoint = new Point(_resolution.X, _resolution.Y / 2);
             var popUpPoint = new Point(_popUp.Width, _popUp.Height);
-            
+
             var popUpData = new Color[_popUp.Width * _popUp.Height];
             popUpData = popUpData.Select(i => Color.White).ToArray();
             _popUp.SetData(popUpData);
@@ -230,7 +233,7 @@ namespace CrawlIT.Shared
 
             // Render crystal sprite
             spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
-                             Vector2.Zero,_crystalScale, SpriteEffects.None, 0);
+                             Vector2.Zero, _crystalScale, SpriteEffects.None, 0);
             spriteBatch.End();
         }
 
@@ -239,16 +242,20 @@ namespace CrawlIT.Shared
             foreach (var rect in _answerRec)
             {
                 if (!touch.Intersects(rect)) continue;
-                if (_answerRec.IndexOf(rect) == _correct)
+                if (_answerRec.IndexOf(rect) == _correct && _life)
                 {
                     Player.SetLifeCount(Player.LifeCount + 1);
                     _win = true;
+                    _life = false;
                     break;
                 }
-
-                Player.SetLifeCount(Player.LifeCount - 1);
-                _win = false;
-                break;
+                else if (_life)
+                {
+                    Player.SetLifeCount(Player.LifeCount - 1);
+                    _life = false;
+                    _win = false;
+                    break;
+                }
             }
         }
 
@@ -277,7 +284,7 @@ namespace CrawlIT.Shared
         public void Help(SpriteBatch spriteBatch)
         {
             _fourthAnswer = "";
-            
+
             spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
             spriteBatch.Draw(_blackScreen, _answerRec[_wrong3], Color.White);
             spriteBatch.Draw(_crystal, _crystalPosition, null, Color.White, 0,
