@@ -36,7 +36,7 @@ namespace CrawlIT.Shared
         private InputManager _inputManager;
 
         private float _scale;
-        private Rectangle _touch;
+        private Rectangle? _touch;
 
         private Song _backgroundSong;
 
@@ -289,8 +289,9 @@ namespace CrawlIT.Shared
             switch (GameStateManager.Instance.State)
             {
                 case GameState.StateType.Menu:
-                    if (_touch.Intersects(_startButton))
-                        GameStateManager.Instance.ChangeScreen(_level);
+                    if (_touch is Rectangle touchRect)
+                        if (touchRect.Intersects(_startButton))
+                            GameStateManager.Instance.ChangeScreen(_level);
                     break;
                 case GameState.StateType.Playing:
                     if (_fightTrigger)
@@ -349,7 +350,9 @@ namespace CrawlIT.Shared
                             GameStateManager.Instance.RemoveScreen();
                             _played = false;
                             _timer = _TIMER;
+                            _player.ResetPos();
                         }
+
                     }
 
                     _fight.Update(gameTime);
@@ -366,7 +369,7 @@ namespace CrawlIT.Shared
         /// Otherwise null.
         /// </summary>
         /// <param name="touchRectangle"></param>
-        private void UpdateTouch(out Rectangle touchRectangle)
+        private void UpdateTouch(out Rectangle? touchRectangle)
         {
             var touchPoint = _resolutionComponent.ScreenToGameCoord(_touchCollection[0].Position)
                                                  .ToPoint();
@@ -396,20 +399,23 @@ namespace CrawlIT.Shared
                 case GameState.StateType.Fighting:
                     // TODO: make this better
                     // it's just straight up a weird way to do what it does
-                    if (_touch.Intersects(_fight.CrystalRectangle))
+                    if (_touch is Rectangle touchRect)
                     {
-                        _player.SetCrystalCount(_player.CrystalCount - 1);
-                        _fight.Help(_spriteBatch);
-                    }
-                    else if (_touch.Intersects(_fight.AnswerRectangle))
-                    {
-                        _fight.CheckAnswer(_touch);
-                        _fight.ChangeColour(_spriteBatch);
-                        _played = true;
-                        if (_timer < 2)
+                        if (touchRect.Intersects(_fight.CrystalRectangle))
                         {
-                            GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
-                            _fight.PopUp(_spriteBatch);
+                            _player.SetCrystalCount(_player.CrystalCount - 1);
+                            _fight.Help(_spriteBatch);
+                        }
+                        else if (touchRect.Intersects(_fight.AnswerRectangle))
+                        {
+                            _fight.CheckAnswer(touchRect);
+                            _fight.ChangeColour(_spriteBatch);
+                            _played = true;
+                            if (_timer < 2)
+                            {
+                                GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
+                                _fight.PopUp(_spriteBatch);
+                            }
                         }
                     }
                     break;

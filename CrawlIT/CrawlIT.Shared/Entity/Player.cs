@@ -248,5 +248,12 @@ namespace CrawlIT.Shared
         {
             CrystalCount = Math.Max(0, count);
         }
+
+        // TODO: temporary because of our current fight setup
+        public void ResetPos()
+        {
+            PosX = 50;
+            PosY = 70;
+        }
     }
 }
