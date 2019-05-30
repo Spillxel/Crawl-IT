@@ -26,7 +26,7 @@ namespace CrawlIT.Shared
             PosY = posy;
             _position = new Vector2(PosX, PosY);
             FrameWidth = 23;
-            FrameHeight = 45;
+            FrameHeight = 47;
             FightsLeft = fightsLeft;
             QuestionPerFight = questionPerFight;
 
@@ -34,16 +34,19 @@ namespace CrawlIT.Shared
             FightRectangle = new Rectangle((int)PosX -1, (int)PosY -1, FrameWidth + 2, (int)(FrameHeight / 1.5) + 2);
 
             StandUp = new Animation();
-            StandUp.AddFrame(new Rectangle(FrameWidth * 3, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
-
+            StandUp.AddFrame(new Rectangle(0, FrameHeight * 3, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
+            
             StandDown = new Animation();
-            StandDown.AddFrame(new Rectangle(0, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
+            StandDown.AddFrame(new Rectangle(0, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
+            StandDown.AddFrame(new Rectangle(0, FrameHeight * 4, FrameWidth, FrameHeight), TimeSpan.FromSeconds(0.25));
 
             StandLeft = new Animation();
-            StandLeft.AddFrame(new Rectangle(FrameWidth, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
+            StandLeft.AddFrame(new Rectangle(0, FrameHeight, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
+            StandLeft.AddFrame(new Rectangle(0, FrameHeight * 5, FrameWidth, FrameHeight), TimeSpan.FromSeconds(0.25));
 
             StandRight = new Animation();
-            StandRight.AddFrame(new Rectangle(FrameWidth * 2, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(1));
+            StandRight.AddFrame(new Rectangle(0, FrameHeight * 2, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
+            StandRight.AddFrame(new Rectangle(0, FrameHeight * 6, FrameWidth, FrameHeight), TimeSpan.FromSeconds(0.25));
 
             CurrentAnimation = StandDown;
         }
