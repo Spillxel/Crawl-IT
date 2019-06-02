@@ -22,7 +22,7 @@ The following was tested on a Windows 10 VM using Hyper-V (provided [here](https
 ![NuGet settings](assets/nuget_window.jpg)  
 ![NuGet package](assets/nuget_package.jpg)  
 Source to use for the package: <http://teamcity.monogame.net/guestAuth/app/nuget/v1/FeedService.svc/>
-- Install [MonoGame for Visual Studio](www.monogame.net/downloads), under the Development Builds section
+- Install [MonoGame for Visual Studio](https://www.monogame.net/downloads), under the Development Builds section
 - Clone this repo
 - Open CrawlIT/CrawlIT.sln with Visual Studio
 - Open Android SDK Manager (the highlighted icon)  
