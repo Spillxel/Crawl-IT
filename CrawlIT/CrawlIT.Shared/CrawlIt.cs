@@ -36,7 +36,8 @@ namespace CrawlIT.Shared
         private InputManager _inputManager;
 
         private float _scale;
-        private Rectangle? _touch;
+        private Rectangle? _gameCoordinate;
+        private Rectangle? _mapCoordinate;
 
         private Song _backgroundSong;
 
@@ -249,8 +250,8 @@ namespace CrawlIT.Shared
             _menu.Initialize();
             _menu.LoadContent(Content);
             _level = new Level(GraphicsDevice);
-            _level.LoadContent(Content);
             _level.Initialize();
+            _level.LoadContent(Content);
             _fight = new Fight(GraphicsDevice, _virtualResolution, _transform, _player, _tutor);
             _fight.Initialize();
             _fight.LoadContent(Content);
@@ -291,14 +292,22 @@ namespace CrawlIT.Shared
 
             _touchCollection = TouchPanel.GetState();
             if (_touchCollection.Count > 0)
-                UpdateTouch(out _touch);
+            {
+                UpdateTouch(out _gameCoordinate);
+                ScreenToMapCoord(out _mapCoordinate);
+            }
+            else
+            {
+                _gameCoordinate = null;
+                _mapCoordinate = null;
+            }
 
             // TODO: simplify stuff inside of here
             switch (GameStateManager.Instance.State)
             {
                 case GameState.StateType.Menu:
-                    if (_touch is Rectangle touchRect)
-                        if (touchRect.Intersects(_startButton))
+                    if (_gameCoordinate != null)
+                        if (_gameCoordinate.Value.Intersects(_startButton))
                             GameStateManager.Instance.ChangeScreen(_level);
                     break;
                 case GameState.StateType.Playing:
@@ -333,19 +342,22 @@ namespace CrawlIT.Shared
 
                     _playerCamera.Follow(_player);
                     _staticCamera.Follow(null);
-
-                    foreach (var enemy in _player.Enemies)
+                    if (_mapCoordinate != null)
                     {
-                        if (_player.Collides(enemy.FightRectangle) && enemy.FightsLeft > 0)
+                        foreach (var enemy in _player.Enemies)
                         {
-                            _fight.Enemy = enemy;
-                            _fightTrigger = true;
+                            Console.WriteLine($"touch pos: {_mapCoordinate} | enemy.rect: {enemy.CollisionRectangle}");
+                            if ( _mapCoordinate.Value.Intersects(enemy.CollisionRectangle) && enemy.FightsLeft > 0)
+                            {
+                                _fight.Enemy = enemy;
+                                _fightTrigger = true;
+                            }
+                            else
+                            {
+                                // TODO: Display TextBox "I have no more questions for you!"
+                            }
                         }
-                        else
-                        {
-                            // TODO: Display TextBox "I have no more questions for you!"
-                        }
-                    }
+                    }       
 
                     _explorationUi.Update(gameTime);
                     break;
@@ -386,6 +398,19 @@ namespace CrawlIT.Shared
         }
 
         /// <summary>
+        /// If there is a touch input, produces a Rectangle with the map coordinates.
+        /// Otherwise null.
+        /// </summary>
+        /// <param name="mapRectangle"></param>
+        private void ScreenToMapCoord(out Rectangle? mapRectangle)
+        {
+            var touchVector = _resolutionComponent.ScreenToGameCoord(_touchCollection[0].Position);
+            var mapVector = Vector2.Transform(touchVector, Matrix.Invert(_playerCamera.Transform));
+            
+            mapRectangle = new Rectangle(mapVector.ToPoint(), new Point(5, 5));
+        }
+
+        /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
@@ -406,9 +431,9 @@ namespace CrawlIT.Shared
                     DrawUi();
                     break;
                 case GameState.StateType.Fighting:
-                    // TODO: make this better
+                    // TODO: move most of this logic to Update, since we're clearing touch in there
                     // it's just straight up a weird way to do what it does
-                    if (_touch is Rectangle touchRect)
+                    if (_gameCoordinate is Rectangle touchRect)
                     {
                         if (touchRect.Intersects(_fight.CrystalRectangle))
                         {
