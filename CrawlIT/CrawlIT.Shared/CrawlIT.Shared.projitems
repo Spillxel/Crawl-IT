@@ -66,7 +66,23 @@
     <None Include="$(MSBuildThisFileDirectory)Content\Sprites\blackscreentexture.png" />
     <None Include="$(MSBuildThisFileDirectory)Content\Sprites\screentexture.png" />
     <None Include="$(MSBuildThisFileDirectory)Content\Sprites\surgecrystal.png" />
-    <None Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorfight.PNG" />
     <None Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorspritesheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\assistant1closeup.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\assistant2closeup.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\assistant3closeup.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\assistantspritesheet1.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\assistantspritesheet2.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\assistantspritesheet3.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\badges.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\crystalspritesheet.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\lifebarspritesheet.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\mathsteacherspritesheet.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\newhelp.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\questiontexturesheet.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\save.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\settings.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\tutorcloseup.png" />
   </ItemGroup>
 </Project>
