@@ -152,6 +152,7 @@
     <Content Include="Content\Sprites\blackscreentexture.png" />
     <Content Include="Content\Sprites\crystalspritesheet.png" />
     <Content Include="Content\Sprites\lifebarspritesheet.png" />
+    <Content Include="Content\Sprites\mathsteachercloseup.png" />
     <Content Include="Content\Sprites\mathsteacherspritesheet.png" />
     <Content Include="Content\Sprites\newhelp.png" />
     <Content Include="Content\Sprites\newscreentexture.png" />

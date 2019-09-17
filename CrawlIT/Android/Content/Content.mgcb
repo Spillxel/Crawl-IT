@@ -257,6 +257,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/lifebarspritesheet.png
 
+#begin Sprites/mathsteachercloseup.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/mathsteachercloseup.png
+
 #begin Sprites/mathsteacherspritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
