@@ -189,7 +189,7 @@ namespace CrawlIT.Shared
 
             _mathsBossTexture = Content.Load<Texture2D>("Sprites/mathsteacherspritesheet");
             _mathsBossCloseUpTexture = Content.Load<Texture2D>("Sprites/mathsteachercloseup");
-            _mathsBoss = new Boss(_mathsBossTexture, _mathsBossCloseUpTexture, 800, 500, 10, 3);
+            _mathsBoss = new Boss(_mathsBossTexture, _mathsBossCloseUpTexture, 812, 478, 10, 3);
             
             _player.Enemies = new List<Enemy>
             {
