@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -76,7 +75,9 @@ namespace CrawlIT.Shared
         private Point _startButtonSize;
         private Texture2D _startButtonTexture;
 
-        private bool _played;
+        // combat flags
+        private bool _hasAnswered;
+        private bool _hasUsedCrystal;
 
         private SpriteFont _font;
 
@@ -86,7 +87,7 @@ namespace CrawlIT.Shared
         private double _fightTransitionTimer = 0;
 
         private float _timer = 5;
-        private const float _TIMER = 5;
+        private const float Timer = 5;
 
         public CrawlIt()
         {
@@ -362,18 +363,30 @@ namespace CrawlIT.Shared
                     _explorationUi.Update(gameTime);
                     break;
                 case GameState.StateType.Fighting:
-                    if (_played)
+                    if (_hasAnswered)
                     {
-                        float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        var elapsed = (float) gameTime.ElapsedGameTime.TotalSeconds;
                         _timer -= elapsed;
                         if (_timer < 0)
                         {
                             GameStateManager.Instance.RemoveScreen();
-                            _played = false;
-                            _timer = _TIMER;
-                            _player.ResetPos();
+                            _hasAnswered = false;
+                            _hasUsedCrystal = false;
+                            _timer = Timer;
                         }
-
+                    }
+                    else if (_gameTouchRectangle is Rectangle gameTouchRectangle)
+                    {
+                        if (gameTouchRectangle.Intersects(_fight.CrystalRectangle))
+                        {
+                            _hasUsedCrystal = true;
+                            _player.SetCrystalCount(_player.CrystalCount - 1);
+                        }
+                        else if (gameTouchRectangle.Intersects(_fight.AnswerRectangle))
+                        {
+                            _fight.CheckAnswer(gameTouchRectangle);
+                            _hasAnswered = true;
+                        }
                     }
 
                     _fight.Update(gameTime);
@@ -406,27 +419,7 @@ namespace CrawlIT.Shared
                     DrawUi();
                     break;
                 case GameState.StateType.Fighting:
-                    // TODO: move most of this logic to Update, since we're clearing touch in there
-                    // it's just straight up a weird way to do what it does
-                    if (_gameTouchRectangle is Rectangle gameTouchRectangle)
-                    {
-                        if (gameTouchRectangle.Intersects(_fight.CrystalRectangle))
-                        {
-                            _player.SetCrystalCount(_player.CrystalCount - 1);
-                            _fight.Help(_spriteBatch);
-                        }
-                        else if (gameTouchRectangle.Intersects(_fight.AnswerRectangle))
-                        {
-                            _fight.CheckAnswer(gameTouchRectangle);
-                            _fight.ChangeColour(_spriteBatch);
-                            _played = true;
-                            if (_timer < 2)
-                            {
-                                GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
-                                _fight.PopUp(_spriteBatch);
-                            }
-                        }
-                    }
+                    DrawFight();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -476,6 +469,21 @@ namespace CrawlIT.Shared
         {
             // Might get more lines in the future, lol
             _explorationUi.Draw(_spriteBatch);
+        }
+
+        private void DrawFight()
+        {
+            if (_hasUsedCrystal)
+                _fight.Help(_spriteBatch);
+
+            if (!_hasAnswered) return;
+
+            _fight.ChangeColour(_spriteBatch);
+
+            if (!(_timer < 2)) return;
+
+            GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
+            _fight.PopUp(_spriteBatch);
         }
 
         /// <summary>
