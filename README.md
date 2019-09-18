@@ -12,7 +12,7 @@ The following was tested on a Windows 10 VM using Hyper-V (provided [here](https
 
 ### Steps
 
-- [Visual Studio 2017]([https://link](https://my.visualstudio.com/Downloads?q=visual%20studio%202017&wt.mc_id=o~msft~vscom~older-downloads))
+- [Visual Studio 2017](https://my.visualstudio.com/Downloads?q=visual%20studio%202017&wt.mc_id=o~msft~vscom~older-downloads)
   - In the installer select
     - '.NET desktop development'  
     ![vs_installer1](assets/vs_installer1.jpg)
@@ -22,7 +22,7 @@ The following was tested on a Windows 10 VM using Hyper-V (provided [here](https
 ![NuGet settings](assets/nuget_window.jpg)  
 ![NuGet package](assets/nuget_package.jpg)  
 Source to use for the package: <http://teamcity.monogame.net/guestAuth/app/nuget/v1/FeedService.svc/>
-- Install [MonoGame for Visual Studio](www.monogame.net/downloads), under the Development Builds section
+- Install [MonoGame for Visual Studio](http://www.monogame.net/downloads), under the Development Builds section
 - Clone this repo
 - Open CrawlIT/CrawlIT.sln with Visual Studio
 - Open Android SDK Manager (the highlighted icon)  
