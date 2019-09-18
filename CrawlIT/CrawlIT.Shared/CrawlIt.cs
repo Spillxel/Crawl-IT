@@ -36,8 +36,8 @@ namespace CrawlIT.Shared
         private InputManager _inputManager;
 
         private float _scale;
-        private Rectangle? _gameCoordinate;
-        private Rectangle? _mapCoordinate;
+        private Rectangle? _gameTouchRectangle;
+        private Rectangle? _mapTouchRectangle;
 
         private Song _backgroundSong;
 
@@ -293,21 +293,21 @@ namespace CrawlIT.Shared
             _touchCollection = TouchPanel.GetState();
             if (_touchCollection.Count > 0)
             {
-                UpdateTouch(out _gameCoordinate);
-                ScreenToMapCoord(out _mapCoordinate);
+                ScreenToGameTouchTransform(out _gameTouchRectangle);
+                ScreenToMapTouchTransform(out _mapTouchRectangle);
             }
             else
             {
-                _gameCoordinate = null;
-                _mapCoordinate = null;
+                _gameTouchRectangle = null;
+                _mapTouchRectangle = null;
             }
 
             // TODO: simplify stuff inside of here
             switch (GameStateManager.Instance.State)
             {
                 case GameState.StateType.Menu:
-                    if (_gameCoordinate != null)
-                        if (_gameCoordinate.Value.Intersects(_startButton))
+                    if (_gameTouchRectangle != null)
+                        if (_gameTouchRectangle.Value.Intersects(_startButton))
                             GameStateManager.Instance.ChangeScreen(_level);
                     break;
                 case GameState.StateType.Playing:
@@ -342,12 +342,12 @@ namespace CrawlIT.Shared
 
                     _playerCamera.Follow(_player);
                     _staticCamera.Follow(null);
-                    if (_mapCoordinate != null)
+                    if (_mapTouchRectangle != null)
                     {
                         foreach (var enemy in _player.Enemies)
                         {
-                            Console.WriteLine($"touch pos: {_mapCoordinate} | enemy.rect: {enemy.CollisionRectangle}");
-                            if ( _mapCoordinate.Value.Intersects(enemy.CollisionRectangle) && enemy.FightsLeft > 0)
+                            Console.WriteLine($"touch pos: {_mapTouchRectangle} | enemy.rect: {enemy.CollisionRectangle}");
+                            if ( _mapTouchRectangle.Value.Intersects(enemy.CollisionRectangle) && enemy.FightsLeft > 0)
                             {
                                 _fight.Enemy = enemy;
                                 _fightTrigger = true;
@@ -386,31 +386,6 @@ namespace CrawlIT.Shared
         }
 
         /// <summary>
-        /// If there is a touch input, produces a Rectangle with the scaled touch location.
-        /// Otherwise null.
-        /// </summary>
-        /// <param name="touchRectangle"></param>
-        private void UpdateTouch(out Rectangle? touchRectangle)
-        {
-            var touchPoint = _resolutionComponent.ScreenToGameCoord(_touchCollection[0].Position)
-                                                 .ToPoint();
-            touchRectangle = new Rectangle(touchPoint, new Point(5, 5));
-        }
-
-        /// <summary>
-        /// If there is a touch input, produces a Rectangle with the map coordinates.
-        /// Otherwise null.
-        /// </summary>
-        /// <param name="mapRectangle"></param>
-        private void ScreenToMapCoord(out Rectangle? mapRectangle)
-        {
-            var touchVector = _resolutionComponent.ScreenToGameCoord(_touchCollection[0].Position);
-            var mapVector = Vector2.Transform(touchVector, Matrix.Invert(_playerCamera.Transform));
-            
-            mapRectangle = new Rectangle(mapVector.ToPoint(), new Point(5, 5));
-        }
-
-        /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
@@ -433,16 +408,16 @@ namespace CrawlIT.Shared
                 case GameState.StateType.Fighting:
                     // TODO: move most of this logic to Update, since we're clearing touch in there
                     // it's just straight up a weird way to do what it does
-                    if (_gameCoordinate is Rectangle touchRect)
+                    if (_gameTouchRectangle is Rectangle gameTouchRectangle)
                     {
-                        if (touchRect.Intersects(_fight.CrystalRectangle))
+                        if (gameTouchRectangle.Intersects(_fight.CrystalRectangle))
                         {
                             _player.SetCrystalCount(_player.CrystalCount - 1);
                             _fight.Help(_spriteBatch);
                         }
-                        else if (touchRect.Intersects(_fight.AnswerRectangle))
+                        else if (gameTouchRectangle.Intersects(_fight.AnswerRectangle))
                         {
-                            _fight.CheckAnswer(touchRect);
+                            _fight.CheckAnswer(gameTouchRectangle);
                             _fight.ChangeColour(_spriteBatch);
                             _played = true;
                             if (_timer < 2)
@@ -501,6 +476,31 @@ namespace CrawlIT.Shared
         {
             // Might get more lines in the future, lol
             _explorationUi.Draw(_spriteBatch);
+        }
+
+        /// <summary>
+        /// If there is a touch input, produces a Rectangle with the scaled touch location.
+        /// Otherwise null.
+        /// </summary>
+        /// <param name="gameTouchRectangle"></param>
+        private void ScreenToGameTouchTransform(out Rectangle? gameTouchRectangle)
+        {
+            var touchPoint = _resolutionComponent.ScreenToGameCoord(_touchCollection[0].Position)
+                                                 .ToPoint();
+            gameTouchRectangle = new Rectangle(touchPoint, new Point(5, 5));
+        }
+
+        /// <summary>
+        /// If there is a touch input, produces a Rectangle with the map coordinates.
+        /// Otherwise null.
+        /// </summary>
+        /// <param name="mapTouchRectangle"></param>
+        private void ScreenToMapTouchTransform(out Rectangle? mapTouchRectangle)
+        {
+            var touchVector = _resolutionComponent.ScreenToGameCoord(_touchCollection[0].Position);
+            var mapVector = Vector2.Transform(touchVector, Matrix.Invert(_playerCamera.Transform));
+            
+            mapTouchRectangle = new Rectangle(mapVector.ToPoint(), new Point(5, 5));
         }
     }
 }
