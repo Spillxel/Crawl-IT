@@ -189,7 +189,7 @@ namespace CrawlIT.Shared
 
             _mathsBossTexture = Content.Load<Texture2D>("Sprites/mathsteacherspritesheet");
             _mathsBossCloseUpTexture = Content.Load<Texture2D>("Sprites/mathsteachercloseup");
-            _mathsBoss = new Boss(_mathsBossTexture, _mathsBossCloseUpTexture, 812, 478, 10, 3);
+            _mathsBoss = new Boss(_mathsBossTexture, _mathsBossCloseUpTexture, 812, 478, 1, 3);
             
             _player.Enemies = new List<Enemy>
             {
@@ -488,11 +488,8 @@ namespace CrawlIT.Shared
             // We draw characters in the playerCamera transform, scaled to our virtual transform
             _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform,
                                samplerState: SamplerState.PointClamp);
-            _tutor.Draw(_spriteBatch);
-            _mathsBoss.Draw(_spriteBatch);
-            _assistant1.Draw(_spriteBatch);
-            _assistant2.Draw(_spriteBatch);
-            _assistant3.Draw(_spriteBatch);
+            foreach (Enemy enemy in _player.Enemies)
+                enemy.Draw(_spriteBatch);
             _player.Draw(_spriteBatch);
             _spriteBatch.End();
         }

@@ -263,6 +263,12 @@ namespace CrawlIT.Shared
                 if (_answerRec.IndexOf(rect) == _correct && _life)
                 {
                     Player.SetLifeCount(Player.LifeCount + 1);
+                    Enemy.FightsLeft = Math.Max(0, Enemy.FightsLeft - 1);
+                    if (Enemy.FightsLeft == 0)
+                    {
+                        Player.Enemies.Remove(Enemy);
+                        Player.CollisionObjects.Remove(Enemy.CollisionRectangle);
+                    }                        
                     _win = true;
                     _life = false;
                     break;
