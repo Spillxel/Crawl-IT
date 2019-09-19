@@ -347,7 +347,7 @@ namespace CrawlIT.Shared
                     {
                         foreach (var enemy in _player.Enemies)
                         {
-                            if ( _mapTouchRectangle.Value.Intersects(enemy.CollisionRectangle)
+                            if ( _mapTouchRectangle.Value.Intersects(enemy.FightRectangle)
                                 && enemy.FightsLeft > 0
                                 && _player.Collides(enemy.FightRectangle))
                             {

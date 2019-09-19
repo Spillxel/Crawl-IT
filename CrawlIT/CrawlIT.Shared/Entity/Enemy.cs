@@ -31,7 +31,7 @@ namespace CrawlIT.Shared
             QuestionPerFight = questionPerFight;
 
             CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
-            FightRectangle = new Rectangle((int)PosX -1, (int)PosY -1, FrameWidth + 2, (int)(FrameHeight / 1.5) + 2);
+            FightRectangle = new Rectangle((int)PosX - 5, (int)PosY - 5, FrameWidth + 5,FrameHeight + 5);
 
             StandUp = new Animation();
             StandUp.AddFrame(new Rectangle(0, FrameHeight * 3, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
