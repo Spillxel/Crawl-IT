@@ -24,7 +24,7 @@ namespace CrawlIT.Shared
         {
             _width = width;
             _height = height;
-            Zoom = Math.Max(3, zoom);
+            Zoom = Math.Max(5, zoom);
         }
 
         public void Follow(Player target)
