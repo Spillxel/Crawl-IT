@@ -61,5 +61,10 @@ namespace CrawlIT.Shared
             var sourceRectangle = CurrentAnimation.CurrentRectangle;
             spriteBatch.Draw(TextureSheet, _position, sourceRectangle, Color.White);
         }
+
+        public virtual void Beaten(Player player)
+        {
+            // Insert here enemy dialogue when player can no longer fight them
+        }
     }
 }

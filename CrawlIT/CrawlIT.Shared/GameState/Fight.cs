@@ -266,8 +266,7 @@ namespace CrawlIT.Shared
                     Enemy.FightsLeft = Math.Max(0, Enemy.FightsLeft - 1);
                     if (Enemy.FightsLeft == 0)
                     {
-                        Player.Enemies.Remove(Enemy);
-                        Player.CollisionObjects.Remove(Enemy.CollisionRectangle);
+                        Enemy.Beaten(Player);
                     }                        
                     _win = true;
                     _life = false;

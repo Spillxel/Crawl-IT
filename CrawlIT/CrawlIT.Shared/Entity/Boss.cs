@@ -42,5 +42,11 @@ namespace CrawlIT.Shared
         {
             base.Update(gameTime);
         }
+
+        public override void Beaten(Player player)
+        {
+            player.Enemies.Remove(this);
+            player.CollisionObjects.Remove(this.CollisionRectangle);
+        }
     }
 }
