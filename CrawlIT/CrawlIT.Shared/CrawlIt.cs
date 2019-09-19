@@ -347,8 +347,9 @@ namespace CrawlIT.Shared
                     {
                         foreach (var enemy in _player.Enemies)
                         {
-                            Console.WriteLine($"touch pos: {_mapTouchRectangle} | enemy.rect: {enemy.CollisionRectangle}");
-                            if ( _mapTouchRectangle.Value.Intersects(enemy.CollisionRectangle) && enemy.FightsLeft > 0)
+                            if ( _mapTouchRectangle.Value.Intersects(enemy.CollisionRectangle)
+                                && enemy.FightsLeft > 0
+                                && _player.Collides(enemy.FightRectangle))
                             {
                                 _fight.Enemy = enemy;
                                 _fightTrigger = true;
