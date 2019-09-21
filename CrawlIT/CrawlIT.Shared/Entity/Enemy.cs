@@ -62,9 +62,19 @@ namespace CrawlIT.Shared
             spriteBatch.Draw(TextureSheet, _position, sourceRectangle, Color.White);
         }
 
-        public virtual void Beaten(Player player)
+        public virtual void BeatenBy(Player player)
         {
-            // Insert here enemy dialogue when player can no longer fight them
+            player.SetCrystalCount(++player.CrystalCount);
+            if (this.FightsLeft == 0)
+            {
+                // Behaviour when no more questions
+            }
+        }
+
+        public virtual void Beat(Player player)
+        {
+            player.SetLifeCount(--player.LifeCount);
+            // TODO: Insert dialogue when you lose against enemy
         }
     }
 }
