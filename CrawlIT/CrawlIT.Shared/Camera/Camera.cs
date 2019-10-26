@@ -5,11 +5,9 @@ using Microsoft.Xna.Framework;
 namespace CrawlIT.Shared
 {
     /// <summary>
-    /// <para>Serves to define an <c>Camera</c> with a width, height and zoom level.</para>
+    /// <para>Serves to define a <c>Camera</c> with a width, height and zoom level.</para>
     /// <para>The class then provides the <see cref="Follow"/> to either follow a
     /// <see cref="Player"/> or null (static camera).</para>
-    /// <para>This method updates the camera's transform and position.
-    /// The transform can be used to draw using the camera's perspective.</para>
     /// </summary>
     public class Camera
     {
@@ -27,6 +25,10 @@ namespace CrawlIT.Shared
             Zoom = Math.Max(5, zoom);
         }
 
+        /// <summary>
+        /// <para>This method updates the camera's transform and position.
+        /// The transform can be used to draw using the camera's perspective.</para>
+        /// </summary>
         public void Follow(Player target)
         {
             _posX = target == null ? 0 : MathHelper.Lerp(_posX, target.PosX, 0.3f);
