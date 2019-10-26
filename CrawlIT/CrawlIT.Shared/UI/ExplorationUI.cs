@@ -7,7 +7,7 @@ namespace CrawlIT.Shared
     public class ExplorationUi
     {
         private UiIcon _lifeBar;
-        private UiIcon _surgeCrystal;
+        public UiIcon _surgeCrystal;
 
         private UiIcon _save;
         private UiIcon _settings;
@@ -49,7 +49,7 @@ namespace CrawlIT.Shared
         public void Load()
         {
             _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebarspritesheet");
-            _surgeCrystalTexture = _content.Load<Texture2D>("Sprites/surgecrystal");
+            _surgeCrystalTexture = _content.Load<Texture2D>("Sprites/crystalspritesheet");
 
             _helpTexture = _content.Load<Texture2D>("Sprites/newhelp");
             _saveTexture = _content.Load<Texture2D>("Sprites/save");
@@ -110,6 +110,7 @@ namespace CrawlIT.Shared
         public void Update(GameTime gameTime)
         {
             _lifeBar.Update(gameTime);
+            _surgeCrystal.Update(gameTime);
         }
     }
 }

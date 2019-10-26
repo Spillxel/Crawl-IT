@@ -24,13 +24,16 @@ namespace CrawlIT.Shared
                                TimeSpan.FromSeconds(1));
 
             _crystal1 = new Animation();
-            _crystal1.AddFrame(new Rectangle(0, IconFrameHeight, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
+            _crystal1.AddFrame(new Rectangle(0, IconFrameHeight, IconFrameWidth, IconFrameHeight),
+                                TimeSpan.FromSeconds(1));
 
             _crystal2 = new Animation();
-            _crystal2.AddFrame(new Rectangle(0, IconFrameHeight * 2, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
+            _crystal2.AddFrame(new Rectangle(0, IconFrameHeight * 2, IconFrameWidth, IconFrameHeight),
+                                TimeSpan.FromSeconds(1));
 
             _crystal3 = new Animation();
-            _crystal2.AddFrame(new Rectangle(0, IconFrameHeight * 3, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
+            _crystal3.AddFrame(new Rectangle(0, IconFrameHeight * 3, IconFrameWidth, IconFrameHeight),
+                                TimeSpan.FromSeconds(1));
 
             CurrentAnimation = _crystal0;
         }
@@ -64,7 +67,10 @@ namespace CrawlIT.Shared
                 case 3:
                     CurrentAnimation = _crystal3;
                     break;
-                    // TODO: Implement a default that throws an error
+                default:
+                    break;
+
+                // TODO: Implement a default that throws an error
             }
         }
     }

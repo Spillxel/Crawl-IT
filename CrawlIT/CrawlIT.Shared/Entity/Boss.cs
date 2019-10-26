@@ -42,5 +42,21 @@ namespace CrawlIT.Shared
         {
             base.Update(gameTime);
         }
+
+        public override void BeatenBy(Player player)
+        {
+            this.FightsLeft = Math.Max(0, this.FightsLeft - 1);
+            if (this.FightsLeft == 0)
+            {
+                player.Enemies.Remove(this);
+                player.CollisionObjects.Remove(this.CollisionRectangle);
+            }     
+        }
+
+        public override void Beat(Player player)
+        {
+            player.SetLifeCount(--player.LifeCount);
+            // TODO: Insert dialogue when you lose against boss
+        }
     }
 }

@@ -246,7 +246,7 @@ namespace CrawlIT.Shared
 
         public void SetCrystalCount(int count)
         {
-            CrystalCount = Math.Max(0, count);
+            CrystalCount = Math.Min(Math.Max(0, count), 6);
         }
 
         // TODO: temporary because of our current fight setup

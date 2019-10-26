@@ -19,16 +19,20 @@ namespace CrawlIT.Shared
             _player = player;
 
             _lifeBar0 = new Animation();
-            _lifeBar0.AddFrame(new Rectangle(0, 0, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
+            _lifeBar0.AddFrame(new Rectangle(0, 0, IconFrameWidth, IconFrameHeight),
+                               TimeSpan.FromSeconds(1));
 
             _lifeBar1 = new Animation();
-            _lifeBar1.AddFrame(new Rectangle(0, IconFrameHeight, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
+            _lifeBar1.AddFrame(new Rectangle(0, IconFrameHeight, IconFrameWidth, IconFrameHeight),
+                               TimeSpan.FromSeconds(1));
 
             _lifeBar2 = new Animation();
-            _lifeBar2.AddFrame(new Rectangle(0, IconFrameHeight * 2, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
+            _lifeBar2.AddFrame(new Rectangle(0, IconFrameHeight * 2, IconFrameWidth, IconFrameHeight),
+                               TimeSpan.FromSeconds(1));
 
             _lifeBar3 = new Animation();
-            _lifeBar3.AddFrame(new Rectangle(0, IconFrameHeight * 3, IconFrameWidth, IconFrameHeight), TimeSpan.FromSeconds(1));
+            _lifeBar3.AddFrame(new Rectangle(0, IconFrameHeight * 3, IconFrameWidth, IconFrameHeight),
+                               TimeSpan.FromSeconds(1));
 
             CurrentAnimation = _lifeBar3;
         }
@@ -46,7 +50,6 @@ namespace CrawlIT.Shared
             CurrentAnimation.Update(gameTime);
         }
 
-
         public override void SetAnimation()
         {
             switch (_player.LifeCount)
@@ -63,8 +66,11 @@ namespace CrawlIT.Shared
                 case 3:
                     CurrentAnimation = _lifeBar3;
                     break;
+                case 4:
+                    Console.WriteLine("You somehow have 4 lives???");
+                    break;
                 default:
-                    throw new NotImplementedException("Well this shouldn't happen...");
+                    break;
             }
         }
     }

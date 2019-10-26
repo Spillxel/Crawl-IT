@@ -174,7 +174,7 @@ namespace CrawlIT.Shared
         {
             _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
             _tutorCloseUpTexture = Content.Load<Texture2D>("Sprites/tutorcloseup");
-            _tutor = new Enemy(_tutorTexture, _tutorCloseUpTexture, 600, 80, 10, 1);
+            _tutor = new Tutor(_tutorTexture, _tutorCloseUpTexture, 600, 80, 10, 1);
 
             _assistant1Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet1");
             _assistant1CloseUpTexture = Content.Load<Texture2D>("Sprites/assistant1closeup");
@@ -322,9 +322,8 @@ namespace CrawlIT.Shared
                             // TODO: For loop with enemy.QuestionPerFight
                             _fight.QuestionCurrentAnimation = _fight.NoAnswer;
                             GameStateManager.Instance.AddScreen(_fight);
+                            // TODO: move line below to Fight.cs somehow
                             _fight.Enemy.FightsLeft--;
-                            _player.MoveBack(_fight.Enemy);
-
                         }
                         break;
                     }
@@ -381,7 +380,7 @@ namespace CrawlIT.Shared
                         if (gameTouchRectangle.Intersects(_fight.CrystalRectangle))
                         {
                             _hasUsedCrystal = true;
-                            _player.SetCrystalCount(_player.CrystalCount - 1);
+                            _player.SetCrystalCount(--_player.CrystalCount);
                         }
                         else if (gameTouchRectangle.Intersects(_fight.AnswerRectangle))
                         {

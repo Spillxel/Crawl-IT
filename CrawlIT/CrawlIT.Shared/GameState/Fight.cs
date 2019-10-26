@@ -262,20 +262,14 @@ namespace CrawlIT.Shared
                 if (!touch.Intersects(rect)) continue;
                 if (_answerRec.IndexOf(rect) == _correct && _life)
                 {
-                    Player.SetLifeCount(Player.LifeCount + 1);
-                    Enemy.FightsLeft = Math.Max(0, Enemy.FightsLeft - 1);
-                    if (Enemy.FightsLeft == 0)
-                    {
-                        Player.Enemies.Remove(Enemy);
-                        Player.CollisionObjects.Remove(Enemy.CollisionRectangle);
-                    }                        
+                    Enemy.BeatenBy(Player);                      
                     _win = true;
                     _life = false;
                     break;
                 }
                 else if (_life)
                 {
-                    Player.SetLifeCount(Player.LifeCount - 1);
+                    //Enemy.Beat(Player);
                     _life = false;
                     _win = false;
                     break;
