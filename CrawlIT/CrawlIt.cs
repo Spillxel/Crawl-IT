@@ -88,6 +88,9 @@ namespace CrawlIT.Shared
         private float _timer = 5;
         private const float Timer = 5;
 
+        // TODO: make do better be
+        private bool _menuState = false;
+
         public CrawlIt()
         {
             _graphics = new GraphicsDeviceManager(this)
@@ -125,7 +128,6 @@ namespace CrawlIT.Shared
             _inputManager = new InputManager(_playerCamera);
 
             _backgroundSong = Content.Load<Song>("Audio/Investigations");
-            XnaMediaPlayer.Play(_backgroundSong);
         }
 
         /// <summary>
@@ -150,7 +152,6 @@ namespace CrawlIT.Shared
 
             // Repeat _backgroundSong on end
             XnaMediaPlayer.IsRepeating = true;
-
             _staticCamera = new Camera(0, 0, 1);
         }
 
@@ -306,6 +307,12 @@ namespace CrawlIT.Shared
             switch (GameStateManager.Instance.State)
             {
                 case GameState.StateType.Menu:
+                    if (!_menuState)
+                    {
+                        _menuState = true;
+                        XnaMediaPlayer.Play(_backgroundSong);
+                    }
+
                     if (_gameTouchRectangle != null)
                         if (_gameTouchRectangle.Value.Intersects(_startButton))
                             GameStateManager.Instance.ChangeScreen(_level);
