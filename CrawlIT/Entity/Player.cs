@@ -118,13 +118,13 @@ namespace CrawlIT.Shared
 
             foreach (var enemy in Enemies)
             {
-                if (_currentVelocity.Y > 0 && CollidesTop(enemy.CollisionRectangle))
+                if (_currentVelocity.Y > 0 && CollidesTop(enemy.FightRectangle))
                     enemy.CurrentAnimation = enemy.StandUp;
-                else if (_currentVelocity.Y < 0 && CollidesBottom(enemy.CollisionRectangle))
+                else if (_currentVelocity.Y < 0 && CollidesBottom(enemy.FightRectangle))
                     enemy.CurrentAnimation = enemy.StandDown;
-                else if (_currentVelocity.X > 0 && CollidesLeft(enemy.CollisionRectangle))
+                else if (_currentVelocity.X > 0 && CollidesLeft(enemy.FightRectangle))
                     enemy.CurrentAnimation = enemy.StandLeft;
-                else if (_currentVelocity.X < 0 && CollidesRight(enemy.CollisionRectangle))
+                else if (_currentVelocity.X < 0 && CollidesRight(enemy.FightRectangle))
                     enemy.CurrentAnimation = enemy.StandRight;
             }
 
