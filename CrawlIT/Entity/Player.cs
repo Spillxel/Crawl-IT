@@ -38,7 +38,7 @@ namespace CrawlIT.Shared
             PosY = posY;
             _scale = scale;
             FrameWidth = 23;
-            FrameHeight = 45;
+            FrameHeight = 48;
             LifeCount = 3;
             CrystalCount = 0;
 
