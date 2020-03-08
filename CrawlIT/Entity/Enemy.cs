@@ -14,8 +14,8 @@ namespace CrawlIT.Shared
         private readonly Vector2 _position;
         private readonly Vector2 _questionMarkPosition;
 
-        public int FightsLeft;
-        public int QuestionPerFight;
+        public int Fights;
+        public int Questions;
 
         public Rectangle CollisionRectangle;
         public Rectangle FightRectangle;
@@ -24,7 +24,7 @@ namespace CrawlIT.Shared
 
         public readonly Texture2D QuestionMarkTexture;
 
-        public Enemy(ContentManager contentManager, string texture, string closeUpTexture, float posx, float posy, int fightsLeft, int questionPerFight)
+        public Enemy(ContentManager contentManager, string texture, string closeUpTexture, float posx, float posy, int fights, int questions)
         {
             TextureSheet = contentManager.Load<Texture2D>(texture);
             CloseUpTexture = contentManager.Load<Texture2D>(closeUpTexture);
@@ -35,8 +35,8 @@ namespace CrawlIT.Shared
             _questionMarkPosition = new Vector2(PosX, PosY - 32);
             FrameWidth = 23;
             FrameHeight = 47;
-            FightsLeft = fightsLeft;
-            QuestionPerFight = questionPerFight;
+            Fights = fights;
+            Questions = questions;
 
             CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
             FightRectangle = new Rectangle((int)PosX - 32, (int)PosY - 32, 32 * 3, 32 * 3);
@@ -94,7 +94,7 @@ namespace CrawlIT.Shared
         public virtual void BeatenBy(Player player)
         {
             player.SetCrystalCount(++player.CrystalCount);
-            if (this.FightsLeft == 0)
+            if (Fights == 0)
             {
                 // Behaviour when no more questions
             }

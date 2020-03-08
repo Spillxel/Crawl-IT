@@ -305,7 +305,7 @@ namespace CrawlIT.Shared
                             _fight.QuestionCurrentAnimation = _fight.NoAnswer;
                             GameStateManager.Instance.AddScreen(_fight);
                             // TODO: move line below to Fight.cs somehow
-                            _fight.Enemy.FightsLeft--;
+                            _fight.Enemy.Fights--;
                         }
                         break;
                     }
@@ -328,8 +328,8 @@ namespace CrawlIT.Shared
                     {
                         foreach (var enemy in _player.Enemies)
                         {
-                            if ( _mapTouchRectangle.Value.Intersects(enemy.FightRectangle)
-                                && enemy.FightsLeft > 0
+                            if (_mapTouchRectangle.Value.Intersects(enemy.FightRectangle)
+                                && enemy.Fights > 0
                                 && _player.Collides(enemy.FightRectangle))
                             {
                                 _fight.Enemy = enemy;
@@ -340,14 +340,14 @@ namespace CrawlIT.Shared
                                 // TODO: Display TextBox "I have no more questions for you!"
                             }
                         }
-                    }       
+                    }
 
                     _explorationUi.Update(gameTime);
                     break;
                 case GameState.StateType.Fighting:
                     if (_hasAnswered)
                     {
-                        var elapsed = (float) gameTime.ElapsedGameTime.TotalSeconds;
+                        var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
                         _timer -= elapsed;
                         if (_timer < 0)
                         {
@@ -489,7 +489,7 @@ namespace CrawlIT.Shared
         {
             var touchVector = _resolutionComponent.ScreenToGameCoord(_touchCollection[0].Position);
             var mapVector = Vector2.Transform(touchVector, Matrix.Invert(_playerCamera.Transform));
-            
+
             mapTouchRectangle = new Rectangle(mapVector.ToPoint(), new Point(5, 5));
         }
     }

@@ -12,7 +12,7 @@ namespace CrawlIT.Shared
         public Animation Idle;
 
         public Boss(ContentManager content, string texture, string closeUpTexture, float posx, float posy, int fights, int questions)
-            : base(content, texture, closeUpTexture, posx, posy, fightsLeft, questionsPerFight)
+            : base(content, texture, closeUpTexture, posx, posy, fights, questions)
         {
             FrameWidth = 39;
             FrameHeight = 53;
@@ -36,11 +36,11 @@ namespace CrawlIT.Shared
 
         public override void BeatenBy(Player player)
         {
-            this.FightsLeft = Math.Max(0, this.FightsLeft - 1);
-            if (this.FightsLeft == 0)
+            Fights = Math.Max(0, Fights - 1);
+            if (Fights == 0)
             {
                 player.Enemies.Remove(this);
-                player.CollisionObjects.Remove(this.CollisionRectangle);
+                player.CollisionObjects.Remove(CollisionRectangle);
             }     
         }
 
