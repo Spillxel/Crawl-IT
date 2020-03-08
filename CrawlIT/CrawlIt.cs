@@ -268,7 +268,7 @@ namespace CrawlIT.Shared
             GameStateManager.Instance.Update(gameTime);
 
             _touchCollection = TouchPanel.GetState();
-            if (_touchCollection.Count > 0)
+            if (_touchCollection.Count > 0 && _touchCollection.First().State == TouchLocationState.Released)
             {
                 ScreenToGameTouchTransform(out _gameTouchRectangle);
                 ScreenToMapTouchTransform(out _mapTouchRectangle);
