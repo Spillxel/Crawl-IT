@@ -100,6 +100,13 @@ namespace CrawlIT.Shared
 
         public override void Update(GameTime gameTime) => _currentAnimation.Update(gameTime);
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            var position = new Vector2(PosX, PosY);
+            var sourceRectangle = _currentAnimation.CurrentRectangle;
+            spriteBatch.Draw(TextureSheet, position, sourceRectangle, Color.White);
+        }
+
         public void UpdateMovement(GameTime gameTime, InputManager.InputState inputState)
         {
             _currentVelocity = inputState != InputManager.InputState.Idle ? Vector2.Zero
@@ -131,13 +138,6 @@ namespace CrawlIT.Shared
 
             PosX += _currentVelocity.X;
             PosY += _currentVelocity.Y;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            var position = new Vector2(PosX, PosY);
-            var sourceRectangle = _currentAnimation.CurrentRectangle;
-            spriteBatch.Draw(TextureSheet, position, sourceRectangle, Color.White);
         }
 
         private Vector2 GetVelocity(GameTime gameTime)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CrawlIT.Shared
@@ -10,8 +11,8 @@ namespace CrawlIT.Shared
     {
         public Animation Idle;
 
-        public Boss(Texture2D texture, Texture2D closeUpTexture, float posx, float posy, int fightsLeft, int questionPerFight)
-            : base(texture, closeUpTexture, posx, posy, fightsLeft, questionPerFight)
+        public Boss(ContentManager content, string texture, string closeUpTexture, float posx, float posy, int fights, int questions)
+            : base(content, texture, closeUpTexture, posx, posy, fightsLeft, questionsPerFight)
         {
             FrameWidth = 39;
             FrameHeight = 53;
@@ -31,16 +32,6 @@ namespace CrawlIT.Shared
             StandUp = Idle;
 
             CurrentAnimation = Idle;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
         }
 
         public override void BeatenBy(Player player)

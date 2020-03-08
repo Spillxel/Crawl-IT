@@ -55,20 +55,10 @@ namespace CrawlIT.Shared
         private Player _player;
         private Texture2D _playerTexture;
         private Enemy _tutor;
-        private Texture2D _tutorTexture;
-        private Texture2D _tutorCloseUpTexture;
         private Enemy _assistant1;
-        private Texture2D _assistant1Texture;
-        private Texture2D _assistant1CloseUpTexture;
         private Enemy _assistant2;
-        private Texture2D _assistant2Texture;
-        private Texture2D _assistant2CloseUpTexture;
         private Enemy _assistant3;
-        private Texture2D _assistant3Texture;
-        private Texture2D _assistant3CloseUpTexture;
         private Boss _mathsBoss;
-        private Texture2D _mathsBossTexture;
-        private Texture2D _mathsBossCloseUpTexture;
 
         private Rectangle _startButton;
         private Point _startButtonSize;
@@ -172,26 +162,12 @@ namespace CrawlIT.Shared
         /// </summary>
         private void LoadEnemies()
         {
-            _tutorTexture = Content.Load<Texture2D>("Sprites/tutorspritesheet");
-            _tutorCloseUpTexture = Content.Load<Texture2D>("Sprites/tutorcloseup");
-            _tutor = new Tutor(_tutorTexture, _tutorCloseUpTexture, 600, 80, 10, 1);
+            _tutor = new Tutor(Content, "Sprites/tutorspritesheet", "Sprites/tutorcloseup", 600, 80, 10, 1);
+            _assistant1 = new Enemy(Content, "Sprites/assistantspritesheet1", "Sprites/assistant1closeup", 300, 300, 10, 2);
+            _assistant2 = new Enemy(Content, "Sprites/assistantspritesheet2", "Sprites/assistant2closeup", 650, 300, 10, 2);
+            _assistant3 = new Enemy(Content, "Sprites/assistantspritesheet3", "Sprites/assistant3closeup", 400, 500, 10, 2);
+            _mathsBoss = new Boss(Content, "Sprites/mathsteacherspritesheet", "Sprites/mathsteachercloseup", 812, 478, 1, 3);
 
-            _assistant1Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet1");
-            _assistant1CloseUpTexture = Content.Load<Texture2D>("Sprites/assistant1closeup");
-            _assistant1 = new Enemy(_assistant1Texture, _assistant1CloseUpTexture, 300, 300, 10, 2);
-
-            _assistant2Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet2");
-            _assistant2CloseUpTexture = Content.Load<Texture2D>("Sprites/assistant2closeup");
-            _assistant2 = new Enemy(_assistant2Texture, _assistant2CloseUpTexture, 650, 300, 10, 2);
-
-            _assistant3Texture = Content.Load<Texture2D>("Sprites/assistantspritesheet3");
-            _assistant3CloseUpTexture = Content.Load<Texture2D>("Sprites/assistant3closeup");
-            _assistant3 = new Enemy(_assistant3Texture, _assistant3CloseUpTexture, 400, 500, 10, 2);
-
-            _mathsBossTexture = Content.Load<Texture2D>("Sprites/mathsteacherspritesheet");
-            _mathsBossCloseUpTexture = Content.Load<Texture2D>("Sprites/mathsteachercloseup");
-            _mathsBoss = new Boss(_mathsBossTexture, _mathsBossCloseUpTexture, 812, 478, 1, 3);
-            
             _player.Enemies = new List<Enemy>
             {
                 _tutor,
@@ -463,7 +439,7 @@ namespace CrawlIT.Shared
             _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform,
                                samplerState: SamplerState.PointClamp);
             foreach (Enemy enemy in _player.Enemies)
-                enemy.Draw(_spriteBatch);
+                enemy.Draw(_spriteBatch, _player.Collides(enemy.FightRectangle));
             _player.Draw(_spriteBatch);
             _spriteBatch.End();
         }

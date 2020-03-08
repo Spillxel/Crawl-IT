@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using CrawlIT.Shared;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 class Tutor : Enemy
 {
-    public Tutor(Texture2D texture, Texture2D closeUpTexture, float posx, float posy, int fightsLeft, int questionPerFight)
-        : base(texture, closeUpTexture, posx, posy, fightsLeft, questionPerFight)
+    public Tutor(ContentManager content, string texture, string closeUpTexture, float posx, float posy, int fightsLeft, int questionPerFight)
+        : base(content, texture, closeUpTexture, posx, posy, fightsLeft, questionPerFight)
     {
         
     }
