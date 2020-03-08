@@ -331,3 +331,4 @@ ASALocalRun/
 
 # Extra
 *.DS_Store
+**iOS.csproj.DotSettings  
