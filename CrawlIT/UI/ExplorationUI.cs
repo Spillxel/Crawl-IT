@@ -7,7 +7,8 @@ namespace CrawlIT.Shared
     public class ExplorationUi
     {
         private UiIcon _lifeBar;
-        public UiIcon _surgeCrystal;
+        private UiIcon _level;
+        private UiIcon _surgeCrystal;
 
         private UiIcon _save;
         private UiIcon _settings;
@@ -15,6 +16,7 @@ namespace CrawlIT.Shared
         private UiIcon _badges;
 
         private Texture2D _lifeBarTexture;
+        private Texture2D _levelTexture;
         private Texture2D _surgeCrystalTexture;
 
         private Texture2D _helpTexture;
@@ -24,8 +26,6 @@ namespace CrawlIT.Shared
 
         private SpriteFont _font;
         private readonly float _fontScale;
-        private Vector2 _levelStringPos;
-        private const string LevelString = "SEMESTER 1";
 
         private readonly Matrix _transform;
         private readonly float _scale;
@@ -49,6 +49,7 @@ namespace CrawlIT.Shared
         public void Load()
         {
             _lifeBarTexture = _content.Load<Texture2D>("Sprites/lifebarspritesheet");
+            _levelTexture = _content.Load<Texture2D>("Sprites/semester1");
             _surgeCrystalTexture = _content.Load<Texture2D>("Sprites/crystalspritesheet");
 
             _helpTexture = _content.Load<Texture2D>("Sprites/newhelp");
@@ -64,9 +65,12 @@ namespace CrawlIT.Shared
             var textureWidth = _saveTexture.Width * _scale;
             var textureHeight = _saveTexture.Height * _scale;
 
+            var levelTextureWidth = _levelTexture.Width * _scale;
+
             var bottomHeight = _resolution.Y - border - textureHeight;
 
             _lifeBar = new LifeBarIcon(_lifeBarTexture, _scale, border, border, _player);
+            _level = new UiIcon(_levelTexture, _scale, (_resolution.X- levelTextureWidth) * 0.5f, border);
             _surgeCrystal = new CrystalIcon(_surgeCrystalTexture, _scale,
                                        _resolution.X - border - textureWidth, border, _player);
             
@@ -84,24 +88,19 @@ namespace CrawlIT.Shared
             _save = new UiIcon(_saveTexture, _scale, savePos, bottomHeight);
             _settings = new UiIcon(_settingsTexture, _scale, settingsPos, bottomHeight);
             _badges = new UiIcon(_badgesTexture, _scale, badgesPos, bottomHeight);
-
-            
-            var (x, y) = _font.MeasureString(LevelString) * _fontScale;
-            _levelStringPos = new Vector2((_resolution.X - x) * 0.5f, border + (textureHeight - y) * 0.5f);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(transformMatrix: _transform, samplerState: SamplerState.PointClamp);
-            spriteBatch.DrawString(_font, LevelString, _levelStringPos, Color.White,
-                                   0, Vector2.Zero, _fontScale, SpriteEffects.None, 0);
 
             _lifeBar.Draw(spriteBatch);
+            _level.Draw(spriteBatch);
             _surgeCrystal.Draw(spriteBatch);
 
+            _help.Draw(spriteBatch);
             _save.Draw(spriteBatch);
             _settings.Draw(spriteBatch);
-            _help.Draw(spriteBatch);
             _badges.Draw(spriteBatch);
 
             spriteBatch.End();

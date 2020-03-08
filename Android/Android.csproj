@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sprites\placeholder_questionmark_spritesheet.png" />
+    <Content Include="Content\Sprites\semester1.png" />
   </ItemGroup>
   <Import Project="..\CrawlIT\CrawlIT.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
