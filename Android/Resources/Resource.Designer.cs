@@ -53,16 +53,10 @@ namespace Android
 		{
 			
 			// aapt resource value: 0x7F010000
-			public const int Icon = 2130771968;
+			public const int logo = 2130771968;
 			
 			// aapt resource value: 0x7F010001
-			public const int logo = 2130771969;
-			
-			// aapt resource value: 0x7F010002
-			public const int PlaceHolderIcon = 2130771970;
-			
-			// aapt resource value: 0x7F010003
-			public const int Splash = 2130771971;
+			public const int PlaceHolderIcon = 2130771969;
 			
 			static Drawable()
 			{
