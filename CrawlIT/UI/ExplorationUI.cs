@@ -57,7 +57,7 @@ namespace CrawlIT.Shared
             _settingsTexture = _content.Load<Texture2D>("Sprites/settings");
             _badgesTexture = _content.Load<Texture2D>("Sprites/badges");
 
-            _font = _content.Load<SpriteFont>("Fonts/File");
+            _font = _content.Load<SpriteFont>("Fonts/Pixel");
 
             // icon positions
             var border = _resolution.X * 0.05f;

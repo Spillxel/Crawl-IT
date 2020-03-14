@@ -156,7 +156,7 @@ namespace CrawlIT.Shared
             _wrong2 = numbers[2];
             _wrong3 = numbers[3];
 
-            _font = content.Load<SpriteFont>("Fonts/File");
+            _font = content.Load<SpriteFont>("Fonts/Pixel");
             _crystal = content.Load<Texture2D>("Sprites/surgecrystal");
             _screen = content.Load<Texture2D>("Sprites/newscreentexture");
             _blackScreen = content.Load<Texture2D>("Sprites/blackscreentexture");

@@ -103,6 +103,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Content\Fonts\File.spritefont" />
+    <None Include="Content\Fonts\Pixel.spritefont" />
     <None Include="Content\Maps\test.tmx" />
     <None Include="Content\Sprites\help.aseprite" />
     <None Include="Content\questions.json">
