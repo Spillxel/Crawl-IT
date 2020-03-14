@@ -405,7 +405,6 @@ namespace CrawlIT.Shared
             switch (gameState)
             {
                 case GameState.StateType.Splash:
-                    _splashScreen.Draw(_spriteBatch);
                     break;
                 case GameState.StateType.Menu:
                     // TODO: Will need to redraw map here once we animate stuff in there
