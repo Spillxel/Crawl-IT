@@ -12,9 +12,10 @@ namespace CrawlIT.Shared
 
         public enum StateType
         {
+            Splash,
             Menu,
             Playing,
-            Fighting
+            Fighting,
         }
 
         public abstract StateType State { get; }

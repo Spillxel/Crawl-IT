@@ -39,6 +39,7 @@ namespace CrawlIT.Shared
 
         private Song _backgroundSong;
 
+        private SplashScreen _splashScreen;
         private Menu _menu;
         private Level _level;
         private Fight _fight;
@@ -223,6 +224,9 @@ namespace CrawlIT.Shared
         /// </summary>
         private void LoadUi()
         {
+            _splashScreen = new SplashScreen(GraphicsDevice, _virtualResolution, _transform, _scale);
+            _splashScreen.Initialize();
+            _splashScreen.LoadContent(Content);
             _menu = new Menu(GraphicsDevice, _virtualResolution, _transform);
             _menu.Initialize();
             _menu.LoadContent(Content);
@@ -239,7 +243,7 @@ namespace CrawlIT.Shared
             // Initialize GameStateManager to be able to use it
             GameStateManager.Instance.Init(GraphicsDevice, Content, _virtualResolution, _transform);
             // Initialize by adding the Menu screen into the game
-            GameStateManager.Instance.AddScreen(_menu);
+            GameStateManager.Instance.AddScreen(_splashScreen);
 
             // TODO: move this to Menu.cs
             // Buttons
@@ -282,6 +286,14 @@ namespace CrawlIT.Shared
             // TODO: simplify stuff inside of here
             switch (GameStateManager.Instance.State)
             {
+                case GameState.StateType.Splash:
+                    if (gameTime.TotalGameTime.Seconds > 3)
+                    {
+                        GameStateManager.Instance.ChangeScreen(_menu);
+                    }
+
+                    _splashScreen.Update(gameTime);
+                    break;
                 case GameState.StateType.Menu:
                     if (!_menuState)
                     {
@@ -392,6 +404,8 @@ namespace CrawlIT.Shared
             var gameState = GameStateManager.Instance.State;
             switch (gameState)
             {
+                case GameState.StateType.Splash:
+                    break;
                 case GameState.StateType.Menu:
                     // TODO: Will need to redraw map here once we animate stuff in there
                     break;
