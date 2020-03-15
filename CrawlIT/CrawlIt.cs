@@ -342,7 +342,7 @@ namespace CrawlIT.Shared
                         {
                             if (_mapTouchRectangle.Value.Intersects(enemy.FightRectangle)
                                 && enemy.Fights > 0
-                                && _player.Collides(enemy.FightRectangle))
+                                && _player.Collides(enemy.FightZoneRectangle))
                             {
                                 _fight.Enemy = enemy;
                                 _fightTrigger = true;
@@ -453,7 +453,7 @@ namespace CrawlIT.Shared
             _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform,
                                samplerState: SamplerState.PointClamp);
             foreach (Enemy enemy in _player.Enemies)
-                enemy.Draw(_spriteBatch, _player.Collides(enemy.FightRectangle));
+                enemy.Draw(_spriteBatch, enemy.FightZoneRectangle.Intersects(_player.CollisionRectangle));
             _player.Draw(_spriteBatch);
             _spriteBatch.End();
         }

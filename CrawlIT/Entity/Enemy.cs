@@ -19,9 +19,9 @@ namespace CrawlIT.Shared
 
         public Rectangle CollisionRectangle;
         public Rectangle FightRectangle;
+        public Rectangle FightZoneRectangle;
 
         public readonly Texture2D CloseUpTexture;
-
         public readonly Texture2D QuestionMarkTexture;
 
         public Enemy(ContentManager contentManager, string texture, string closeUpTexture, float posx, float posy, int fights, int questions)
@@ -39,7 +39,11 @@ namespace CrawlIT.Shared
             Questions = questions;
 
             CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
-            FightRectangle = new Rectangle((int)PosX - 32, (int)PosY - 32, 32 * 3, 32 * 3);
+            FightRectangle = new Rectangle((int)_questionMarkPosition.X, (int)_questionMarkPosition.Y, QuestionMarkTexture.Width, QuestionMarkTexture.Height);
+
+            // Action zone
+            var (centerPosX, centerPosY) = (PosX + FrameWidth * 0.5, PosY + FrameHeight * 0.5);
+            FightZoneRectangle = new Rectangle((int)centerPosX - FrameHeight, (int)centerPosY - FrameHeight, (int) (FrameHeight * 2), FrameHeight * 2);
 
             StandUp = new Animation();
             StandUp.AddFrame(new Rectangle(0, FrameHeight * 3, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
@@ -88,7 +92,6 @@ namespace CrawlIT.Shared
             if (!isInActionZone) return;
             var questionSourceRectangle = QuestionMarkAnimation.CurrentRectangle;
             spriteBatch.Draw(QuestionMarkTexture, _questionMarkPosition, questionSourceRectangle, Color.White);
-
         }
 
         public virtual void BeatenBy(Player player)
