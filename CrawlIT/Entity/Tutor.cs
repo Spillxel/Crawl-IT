@@ -12,7 +12,7 @@ class Tutor : Enemy
 
     public override void BeatenBy(Player player)
     {
-        player.LifeCount++;
+        player.SetLifeCount(++player.LifeCount);
         this.Fights = Math.Max(0, this.Fights - 1);
         if (this.Fights == 0)
         {

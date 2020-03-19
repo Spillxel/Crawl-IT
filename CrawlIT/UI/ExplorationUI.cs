@@ -52,7 +52,7 @@ namespace CrawlIT.Shared
             _levelTexture = _content.Load<Texture2D>("Sprites/semester1");
             _surgeCrystalTexture = _content.Load<Texture2D>("Sprites/crystalspritesheet");
 
-            _helpTexture = _content.Load<Texture2D>("Sprites/newhelp");
+            _helpTexture = _content.Load<Texture2D>("Sprites/help");
             _saveTexture = _content.Load<Texture2D>("Sprites/save");
             _settingsTexture = _content.Load<Texture2D>("Sprites/settings");
             _badgesTexture = _content.Load<Texture2D>("Sprites/badges");

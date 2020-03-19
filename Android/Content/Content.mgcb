@@ -88,13 +88,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Pixel.spritefont
 
-#begin Fonts/Pixel.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/Pixel.spritefont
-
 #begin Images/fight.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -259,6 +252,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/help.png
 
+#begin Sprites/help.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/help.png
+
 #begin Sprites/lifebarspritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -294,18 +299,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/mathsteacherspritesheet.png
-
-#begin Sprites/newhelp.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/newhelp.png
 
 #begin Sprites/newscreentexture.png
 /importer:TextureImporter
