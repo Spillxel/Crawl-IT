@@ -36,16 +36,14 @@ namespace CrawlIT.Shared
 
         public override void BeatenBy(Player player)
         {
-            Fights = Math.Max(0, Fights - 1);
-            if (Fights == 0)
-            {
-                player.Enemies.Remove(this);
-                player.CollisionObjects.Remove(CollisionRectangle);
-            }     
+            // TODO: implement multiple rounds/questions
+            player.Enemies.Remove(this);
+            player.CollisionObjects.Remove(CollisionRectangle);
         }
 
         public override void Beat(Player player)
         {
+            Fights = Math.Max(0, Fights - 1);
             player.SetLifeCount(--player.LifeCount);
             // TODO: Insert dialogue when you lose against boss
         }
