@@ -82,13 +82,13 @@ namespace CrawlIT.Shared
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Draw(spriteBatch, false);
-        }
-
-        public void Draw(SpriteBatch spriteBatch, bool isInActionZone)
-        {
             var currentAnimationSourceRectangle = CurrentAnimation.CurrentRectangle;
             spriteBatch.Draw(TextureSheet, _position, currentAnimationSourceRectangle, Color.White);
+        }
+
+        public void DrawActionIcons(SpriteBatch spriteBatch, bool isInActionZone)
+        {
+            // TODO: implement talk icon
             if (!isInActionZone) return;
             var questionSourceRectangle = QuestionMarkAnimation.CurrentRectangle;
             spriteBatch.Draw(QuestionMarkTexture, _questionMarkPosition, questionSourceRectangle, Color.White);

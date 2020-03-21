@@ -452,9 +452,11 @@ namespace CrawlIT.Shared
             // We draw characters in the playerCamera transform, scaled to our virtual transform
             _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform,
                                samplerState: SamplerState.PointClamp);
-            foreach (Enemy enemy in _player.Enemies)
-                enemy.Draw(_spriteBatch, enemy.FightZoneRectangle.Intersects(_player.CollisionRectangle));
+            
+            _player.Enemies.ForEach(enemy => enemy.Draw(_spriteBatch));
             _player.Draw(_spriteBatch);
+            _player.Enemies.ForEach(enemy => enemy.DrawActionIcons(_spriteBatch, enemy.FightZoneRectangle.Intersects(_player.CollisionRectangle)));
+           
             _spriteBatch.End();
         }
 
