@@ -31,7 +31,7 @@ namespace CrawlIT.Shared
         // For collision
         public Rectangle CollisionRectangle => new Rectangle((int)PosX, (int)PosY, FrameWidth, FrameHeight);
 
-        public Player(Texture2D texture, Matrix scale, float posX = 50, float posY = 70)
+        public Player(Texture2D texture, Matrix scale, float posX = 170, float posY = 275)
         {
             TextureSheet = texture;
             PosX = posX;

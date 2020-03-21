@@ -163,11 +163,11 @@ namespace CrawlIT.Shared
         /// </summary>
         private void LoadEnemies()
         {
-            _tutor = new Tutor(Content, "Sprites/tutorspritesheet", "Sprites/tutorcloseup", 600, 80, 10, 1);
-            _assistant1 = new Enemy(Content, "Sprites/assistantspritesheet1", "Sprites/assistant1closeup", 300, 300, 10, 2);
-            _assistant2 = new Enemy(Content, "Sprites/assistantspritesheet2", "Sprites/assistant2closeup", 650, 300, 10, 2);
-            _assistant3 = new Enemy(Content, "Sprites/assistantspritesheet3", "Sprites/assistant3closeup", 400, 500, 10, 2);
-            _mathsBoss = new Boss(Content, "Sprites/mathsteacherspritesheet", "Sprites/mathsteachercloseup", 812, 478, 1, 3);
+            _tutor = new Tutor(Content, "Sprites/tutorspritesheet", "Sprites/tutorcloseup", 640, 224, 100, 1);
+            _assistant1 = new Enemy(Content, "Sprites/assistantspritesheet1", "Sprites/assistant1closeup", 560, 896, 10, 2);
+            _assistant2 = new Enemy(Content, "Sprites/assistantspritesheet2", "Sprites/assistant2closeup", 768, 1120, 10, 2);
+            _assistant3 = new Enemy(Content, "Sprites/assistantspritesheet3", "Sprites/assistant3closeup", 1184, 1056, 10, 2);
+            _mathsBoss = new Boss(Content, "Sprites/mathsteacherspritesheet", "Sprites/mathsteachercloseup", 1612, 974, 100, 3);
 
             _player.Enemies = new List<Enemy>
             {
