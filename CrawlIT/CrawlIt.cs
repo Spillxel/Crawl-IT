@@ -163,11 +163,11 @@ namespace CrawlIT.Shared
         /// </summary>
         private void LoadEnemies()
         {
-            _tutor = new Tutor(Content, "Sprites/tutorspritesheet", "Sprites/tutorcloseup", 600, 80, 10, 1);
-            _assistant1 = new Enemy(Content, "Sprites/assistantspritesheet1", "Sprites/assistant1closeup", 300, 300, 10, 2);
-            _assistant2 = new Enemy(Content, "Sprites/assistantspritesheet2", "Sprites/assistant2closeup", 650, 300, 10, 2);
-            _assistant3 = new Enemy(Content, "Sprites/assistantspritesheet3", "Sprites/assistant3closeup", 400, 500, 10, 2);
-            _mathsBoss = new Boss(Content, "Sprites/mathsteacherspritesheet", "Sprites/mathsteachercloseup", 812, 478, 1, 3);
+            _tutor = new Tutor(Content, "Sprites/tutorspritesheet", "Sprites/tutorcloseup", 640, 224, 100, 1);
+            _assistant1 = new Enemy(Content, "Sprites/assistantspritesheet1", "Sprites/assistant1closeup", 560, 896, 10, 2);
+            _assistant2 = new Enemy(Content, "Sprites/assistantspritesheet2", "Sprites/assistant2closeup", 768, 1120, 10, 2);
+            _assistant3 = new Enemy(Content, "Sprites/assistantspritesheet3", "Sprites/assistant3closeup", 1184, 1056, 10, 2);
+            _mathsBoss = new Boss(Content, "Sprites/mathsteacherspritesheet", "Sprites/mathsteachercloseup", 1612, 974, 100, 3);
 
             _player.Enemies = new List<Enemy>
             {
@@ -306,55 +306,19 @@ namespace CrawlIT.Shared
                             GameStateManager.Instance.ChangeScreen(_level);
                     break;
                 case GameState.StateType.Playing:
-                    if (_fightTrigger)
+                    if (IsFightTriggered(gameTime))
                     {
-                        _fightTransitionTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                        if (_fightTransitionTimer > 2000)
-                        {
-                            _fightTrigger = false;
-                            _fightTransitionTimer = 0;
-                            // TODO: For loop with enemy.QuestionPerFight
-                            _fight.QuestionCurrentAnimation = _fight.NoAnswer;
-                            GameStateManager.Instance.AddScreen(_fight);
-                            // TODO: move line below to Fight.cs somehow
-                            _fight.Enemy.Fights--;
-                        }
-                        break;
+                        UpdateMap(gameTime);
+                        UpdateCharacters(gameTime);
                     }
-                    _mapRenderer.Update(gameTime);
-
-                    _inputManager.Update(gameTime);
-
-                    _player.UpdateMovement(gameTime, _inputManager.CurrentInputState);
-                    _player.Update(gameTime);
-
-                    _tutor.Update(gameTime);
-                    _assistant1.Update(gameTime);
-                    _assistant2.Update(gameTime);
-                    _assistant3.Update(gameTime);
-                    _mathsBoss.Update(gameTime);
-
-                    _playerCamera.Follow(_player);
-                    _staticCamera.Follow(null);
-                    if (_mapTouchRectangle != null)
+                    else
                     {
-                        foreach (var enemy in _player.Enemies)
-                        {
-                            if (_mapTouchRectangle.Value.Intersects(enemy.FightRectangle)
-                                && enemy.Fights > 0
-                                && _player.Collides(enemy.FightZoneRectangle))
-                            {
-                                _fight.Enemy = enemy;
-                                _fightTrigger = true;
-                            }
-                            else
-                            {
-                                // TODO: Display TextBox "I have no more questions for you!"
-                            }
-                        }
+                        UpdateMap(gameTime);
+                        UpdatePlayerMovement(gameTime);
+                        UpdateCharacters(gameTime);
+                        UpdateUi(gameTime);
+                        UpdateFightTrigger(gameTime);
                     }
-
-                    _explorationUi.Update(gameTime);
                     break;
                 case GameState.StateType.Fighting:
                     if (_hasAnswered)
@@ -390,6 +354,71 @@ namespace CrawlIT.Shared
             }
 
             base.Update(gameTime);
+        }
+
+        private bool IsFightTriggered(GameTime gameTime)
+        {
+            if (!_fightTrigger) return false; // Fight not triggered
+            // Update fight timer
+            _fightTransitionTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (!(_fightTransitionTimer > 2000)) return true; // Fight timer not finished
+            _fightTrigger = false;
+            _fightTransitionTimer = 0;
+            // TODO: For loop with enemy.QuestionPerFight
+            _fight.QuestionCurrentAnimation = _fight.NoAnswer;
+            GameStateManager.Instance.AddScreen(_fight);
+            // TODO: move line below to Fight.cs somehow
+            _fight.Enemy.Fights--;
+            return true;
+        }
+
+        private void UpdateMap(GameTime gameTime)
+        {
+            _mapRenderer.Update(gameTime);
+        }
+
+        private void UpdateCharacters(GameTime gameTime)
+        {
+            
+            _player.Update(gameTime);
+            _tutor.Update(gameTime);
+            _assistant1.Update(gameTime);
+            _assistant2.Update(gameTime);
+            _assistant3.Update(gameTime);
+            _mathsBoss.Update(gameTime);
+
+            _playerCamera.Follow(_player);
+            _staticCamera.Follow(null);
+        }
+
+        private void UpdateUi(GameTime gameTime)
+        {
+            _explorationUi.Update(gameTime);
+        }
+
+        private void UpdatePlayerMovement(GameTime gameTime)
+        {
+            _inputManager.Update(gameTime);
+            _player.UpdateMovement(gameTime, _inputManager.CurrentInputState);
+        }
+
+        private void UpdateFightTrigger(GameTime gameTime)
+        {
+            if (_mapTouchRectangle == null) return; // No touch, no check
+            foreach (var enemy in _player.Enemies)
+            {
+                if (_mapTouchRectangle.Value.Intersects(enemy.FightRectangle)
+                    && enemy.Fights > 0
+                    && _player.Collides(enemy.FightZoneRectangle))
+                {
+                    _fight.Enemy = enemy;
+                    _fightTrigger = true;
+                }
+                else
+                {
+                    // TODO: Display TextBox "I have no more questions for you!"
+                }
+            }
         }
 
         /// <summary>
@@ -452,9 +481,11 @@ namespace CrawlIT.Shared
             // We draw characters in the playerCamera transform, scaled to our virtual transform
             _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform,
                                samplerState: SamplerState.PointClamp);
-            foreach (Enemy enemy in _player.Enemies)
-                enemy.Draw(_spriteBatch, enemy.FightZoneRectangle.Intersects(_player.CollisionRectangle));
+            
+            _player.Enemies.ForEach(enemy => enemy.Draw(_spriteBatch));
             _player.Draw(_spriteBatch);
+            _player.Enemies.ForEach(enemy => enemy.DrawActionIcons(_spriteBatch, enemy.FightZoneRectangle.Intersects(_player.CollisionRectangle)));
+           
             _spriteBatch.End();
         }
 
