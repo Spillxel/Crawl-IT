@@ -227,7 +227,7 @@ namespace CrawlIT.Shared
             _splashScreen = new SplashScreen(GraphicsDevice, _virtualResolution, _transform, _scale);
             _splashScreen.Initialize();
             _splashScreen.LoadContent(Content);
-            _menu = new Menu(GraphicsDevice, _virtualResolution, _transform);
+            _menu = new Menu(GraphicsDevice, _virtualResolution, _transform, _scale);
             _menu.Initialize();
             _menu.LoadContent(Content);
             _level = new Level(GraphicsDevice);
@@ -244,12 +244,6 @@ namespace CrawlIT.Shared
             GameStateManager.Instance.Init(GraphicsDevice, Content, _virtualResolution, _transform);
             // Initialize by adding the Menu screen into the game
             GameStateManager.Instance.AddScreen(_splashScreen);
-
-            // TODO: move this to Menu.cs
-            // Buttons
-            _startButtonTexture = Content.Load<Texture2D>("Buttons/start");
-            _startButtonSize = new Point(_startButtonTexture.Width, _startButtonTexture.Height);
-            _startButton = new Rectangle(_menu.StartButtonPoint, _startButtonSize);
         }
 
         /// <summary>
@@ -300,9 +294,10 @@ namespace CrawlIT.Shared
                         _menuState = true;
                         XnaMediaPlayer.Play(_backgroundSong);
                     }
-
+                    
+                    // TODO: replace with InputManager, able to handle touch within levels then
                     if (_gameTouchRectangle != null)
-                        if (_gameTouchRectangle.Value.Intersects(_startButton))
+                        if (_gameTouchRectangle.Value.Intersects(_menu.NewGameRectangle))
                             GameStateManager.Instance.ChangeScreen(_level);
                     break;
                 case GameState.StateType.Playing:
