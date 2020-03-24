@@ -166,6 +166,8 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Sprites\mainbuttons.png" />
+    <Content Include="Content\Sprites\mainlogo.png" />
     <Content Include="Content\Sprites\splash_sprite_sheet.png" />
     <Content Include="Content\Sprites\placeholder_questionmark_spritesheet.png" />
     <Content Include="Content\Sprites\semester1.png" />
