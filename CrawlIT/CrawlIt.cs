@@ -361,7 +361,7 @@ namespace CrawlIT.Shared
             if (!_fightTrigger) return false; // Fight not triggered
             // Update fight timer
             _fightTransitionTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (!(_fightTransitionTimer > 2000)) return true; // Fight timer not finished
+            if (!(_fightTransitionTimer > 1000)) return true; // Fight timer not finished
             _fightTrigger = false;
             _fightTransitionTimer = 0;
             // TODO: For loop with enemy.QuestionPerFight
