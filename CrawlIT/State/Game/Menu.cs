@@ -29,7 +29,7 @@ namespace CrawlIT.Shared
         private readonly float _scale;
         private readonly Point _resolution;
 
-        public override StateType State { get; }
+        public override GameStateType State { get; }
 
         public Menu(GraphicsDevice graphicsDevice, Point resolution, Matrix transform, float scale)
             : base(graphicsDevice)
@@ -37,7 +37,7 @@ namespace CrawlIT.Shared
             _transform = transform;
             _resolution = resolution;
             _scale = scale;
-            State = StateType.Menu;
+            State = GameStateType.Menu;
         }
 
         public override void Initialize()
@@ -68,7 +68,7 @@ namespace CrawlIT.Shared
                 _resolution.Y * 0.3f - _logo.Height * _scale * 0.5f);
         }
 
-        public override void UnloadContent()
+        public override void Dispose()
         {
         }
 

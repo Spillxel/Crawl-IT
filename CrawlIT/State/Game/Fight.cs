@@ -65,7 +65,7 @@ namespace CrawlIT.Shared
 
         private float _scale;
         private float _crystalRatio;
-        public override StateType State { get; }
+        public override GameStateType State { get; }
 
         private bool _life;
 
@@ -98,7 +98,7 @@ namespace CrawlIT.Shared
                                   TimeSpan.FromSeconds(1));
 
             QuestionCurrentAnimation = NoAnswer;
-            State = StateType.Fighting;
+            State = GameStateType.Fighting;
         }
 
 
@@ -207,7 +207,7 @@ namespace CrawlIT.Shared
             CrystalRectangle = new Rectangle(_crystalPosition.ToPoint(), _crystal.Bounds.Size * _crystalScale.ToPoint());
         }
 
-        public override void UnloadContent()
+        public override void Dispose()
         {
         }
 
