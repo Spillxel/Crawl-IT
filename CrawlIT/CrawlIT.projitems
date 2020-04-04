@@ -24,15 +24,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Tutor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\UIIcon.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameState\Fight.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameState\GameState.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameState\GameStateManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameState\Level.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameState\Menu.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameState\SplashScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)State\Game\Fight.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)State\Game\GameState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)State\Game\GameStateManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)State\Game\Level.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)State\Game\Menu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)State\Game\SplashScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Input\InputManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\ExplorationUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\Helper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)State\Game\" />
   </ItemGroup>
 </Project>
