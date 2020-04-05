@@ -11,7 +11,6 @@ namespace CrawlIT.Shared
         public Animation CurrentAnimation;
         public Animation QuestionMarkAnimation;
 
-        private readonly Vector2 _position;
         private readonly Vector2 _questionMarkPosition;
 
         public int Fights;
@@ -24,54 +23,90 @@ namespace CrawlIT.Shared
         public readonly Texture2D CloseUpTexture;
         public readonly Texture2D QuestionMarkTexture;
 
-        public Enemy(ContentManager contentManager, string texture, string closeUpTexture, float posx, float posy, int fights, int questions)
+        public Enemy(ContentManager contentManager, string texture, string closeUpTexture, Vector2 position, Point frame, int fights, int questions)
         {
             TextureSheet = contentManager.Load<Texture2D>(texture);
+            Position = position;
+            Frame = frame;
+
             CloseUpTexture = contentManager.Load<Texture2D>(closeUpTexture);
             QuestionMarkTexture = contentManager.Load<Texture2D>("Sprites/placeholder_questionmark_spritesheet");
-            PosX = posx;
-            PosY = posy;
-            _position = new Vector2(PosX, PosY);
-            _questionMarkPosition = new Vector2(PosX, PosY - 32);
-            FrameWidth = 23;
-            FrameHeight = 47;
+            _questionMarkPosition = new Vector2(
+                Position.X - QuestionMarkTexture.Height * 0.5f,
+                Position.Y - QuestionMarkTexture.Height);
             Fights = fights;
             Questions = questions;
 
-            CollisionRectangle = new Rectangle((int)PosX, (int)PosY, FrameWidth, (int)(FrameHeight / 1.5));
-            FightRectangle = new Rectangle((int)_questionMarkPosition.X, (int)_questionMarkPosition.Y, QuestionMarkTexture.Width, QuestionMarkTexture.Height);
+            CollisionRectangle = new Rectangle(Position.ToPoint(), new Point(Frame.X, (int) (Frame.Y * 0.65) ));
+            FightRectangle = new Rectangle(_questionMarkPosition.ToPoint(), new Point(QuestionMarkTexture.Height));
 
-            // Action zone
-            var (centerPosX, centerPosY) = (PosX + FrameWidth * 0.5, PosY + FrameHeight * 0.5);
-            FightZoneRectangle = new Rectangle((int)centerPosX - FrameHeight, (int)centerPosY - FrameHeight, (int) (FrameHeight * 2), FrameHeight * 2);
+            // Enemy center coordinate
+            var (centerX, centerY) = new Rectangle(Position.ToPoint(), Frame).Center;
+            FightZoneRectangle = new Rectangle(centerX - Frame.Y, centerY - Frame.Y, Frame.Y * 2, Frame.Y * 2);
 
             StandUp = new Animation();
-            StandUp.AddFrame(new Rectangle(0, FrameHeight * 3, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
+            StandUp.AddFrame(new Rectangle(0, Frame.Y * 3, Frame.X, Frame.Y), TimeSpan.FromSeconds(3.75));
 
             StandDown = new Animation();
-            StandDown.AddFrame(new Rectangle(0, 0, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
-            StandDown.AddFrame(new Rectangle(0, FrameHeight * 4, FrameWidth, FrameHeight), TimeSpan.FromSeconds(0.25));
+            StandDown.AddFrame(new Rectangle(0, 0, Frame.X, Frame.Y), TimeSpan.FromSeconds(3.75));
+            StandDown.AddFrame(new Rectangle(0, Frame.Y * 4, Frame.X, Frame.Y), TimeSpan.FromSeconds(0.25));
 
             StandLeft = new Animation();
-            StandLeft.AddFrame(new Rectangle(0, FrameHeight, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
-            StandLeft.AddFrame(new Rectangle(0, FrameHeight * 5, FrameWidth, FrameHeight), TimeSpan.FromSeconds(0.25));
+            StandLeft.AddFrame(new Rectangle(0, Frame.Y, Frame.X, Frame.Y), TimeSpan.FromSeconds(3.75));
+            StandLeft.AddFrame(new Rectangle(0, Frame.Y * 5, Frame.X, Frame.Y), TimeSpan.FromSeconds(0.25));
 
             StandRight = new Animation();
-            StandRight.AddFrame(new Rectangle(0, FrameHeight * 2, FrameWidth, FrameHeight), TimeSpan.FromSeconds(3.75));
-            StandRight.AddFrame(new Rectangle(0, FrameHeight * 6, FrameWidth, FrameHeight), TimeSpan.FromSeconds(0.25));
+            StandRight.AddFrame(new Rectangle(0, Frame.Y * 2, Frame.X, Frame.Y), TimeSpan.FromSeconds(3.75));
+            StandRight.AddFrame(new Rectangle(0, Frame.Y * 6, Frame.X, Frame.Y), TimeSpan.FromSeconds(0.25));
 
             CurrentAnimation = StandDown;
 
             QuestionMarkAnimation = new Animation();
-            QuestionMarkAnimation.AddFrame(new Rectangle(24 * 2, 0, 24, 24), TimeSpan.FromSeconds(0.125));
-            QuestionMarkAnimation.AddFrame(new Rectangle(24 * 1, 0, 24, 24), TimeSpan.FromSeconds(0.125));
-            QuestionMarkAnimation.AddFrame(new Rectangle(24 * 0, 0, 24, 24), TimeSpan.FromSeconds(0.125));
-            QuestionMarkAnimation.AddFrame(new Rectangle(24 * 1, 0, 24, 24), TimeSpan.FromSeconds(0.125));
-            QuestionMarkAnimation.AddFrame(new Rectangle(24 * 2, 0, 24, 24), TimeSpan.FromSeconds(0.125));
-            QuestionMarkAnimation.AddFrame(new Rectangle(24 * 3, 0, 24, 24), TimeSpan.FromSeconds(0.125));
-            QuestionMarkAnimation.AddFrame(new Rectangle(24 * 4, 0, 24, 24), TimeSpan.FromSeconds(0.125));
-            QuestionMarkAnimation.AddFrame(new Rectangle(24 * 3, 0, 24, 24), TimeSpan.FromSeconds(0.125));
-            QuestionMarkAnimation.AddFrame(new Rectangle(24 * 2, 0, 24, 24), TimeSpan.FromSeconds(0.125));
+            QuestionMarkAnimation.AddFrame(
+                new Rectangle(
+                    QuestionMarkTexture.Height * 2, 0,
+                    QuestionMarkTexture.Height, QuestionMarkTexture.Height),
+                TimeSpan.FromSeconds(0.125));
+            QuestionMarkAnimation.AddFrame(
+                new Rectangle(
+                    QuestionMarkTexture.Height * 1, 0,
+                    QuestionMarkTexture.Height, QuestionMarkTexture.Height),
+                TimeSpan.FromSeconds(0.125));
+            QuestionMarkAnimation.AddFrame(
+                new Rectangle(
+                    QuestionMarkTexture.Height * 0, 0,
+                    QuestionMarkTexture.Height, QuestionMarkTexture.Height),
+                TimeSpan.FromSeconds(0.125));
+            QuestionMarkAnimation.AddFrame(
+                new Rectangle(
+                    QuestionMarkTexture.Height * 1, 0,
+                    QuestionMarkTexture.Height, QuestionMarkTexture.Height),
+                TimeSpan.FromSeconds(0.125));
+            QuestionMarkAnimation.AddFrame(
+                new Rectangle(
+                    QuestionMarkTexture.Height * 2, 0,
+                    QuestionMarkTexture.Height, QuestionMarkTexture.Height),
+                TimeSpan.FromSeconds(0.125));
+            QuestionMarkAnimation.AddFrame(
+                new Rectangle(
+                    QuestionMarkTexture.Height * 3, 0,
+                    QuestionMarkTexture.Height, QuestionMarkTexture.Height),
+                TimeSpan.FromSeconds(0.125));
+            QuestionMarkAnimation.AddFrame(
+                new Rectangle(
+                    QuestionMarkTexture.Height * 4, 0,
+                    QuestionMarkTexture.Height, QuestionMarkTexture.Height),
+                TimeSpan.FromSeconds(0.125));
+            QuestionMarkAnimation.AddFrame(
+                new Rectangle(
+                    QuestionMarkTexture.Height * 3, 0,
+                    QuestionMarkTexture.Height, QuestionMarkTexture.Height),
+                TimeSpan.FromSeconds(0.125));
+            QuestionMarkAnimation.AddFrame(
+                new Rectangle(
+                    QuestionMarkTexture.Height * 2, 0,
+                    QuestionMarkTexture.Height, QuestionMarkTexture.Height),
+                TimeSpan.FromSeconds(0.125));
         }
 
         public override void Update(GameTime gameTime)
@@ -83,7 +118,7 @@ namespace CrawlIT.Shared
         public override void Draw(SpriteBatch spriteBatch)
         {
             var currentAnimationSourceRectangle = CurrentAnimation.CurrentRectangle;
-            spriteBatch.Draw(TextureSheet, _position, currentAnimationSourceRectangle, Color.White);
+            spriteBatch.Draw(TextureSheet, Position, currentAnimationSourceRectangle, Color.White);
         }
 
         public void DrawActionIcons(SpriteBatch spriteBatch, bool isInActionZone)

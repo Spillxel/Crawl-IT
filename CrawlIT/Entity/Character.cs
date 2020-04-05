@@ -1,4 +1,6 @@
-﻿namespace CrawlIT.Shared
+﻿using Microsoft.Xna.Framework;
+
+namespace CrawlIT.Shared
 {
     public abstract class Character : Entity
     {
@@ -7,7 +9,6 @@
         public Animation StandLeft;
         public Animation StandRight;
 
-        public int FrameWidth;
-        public int FrameHeight; 
+        public Point Frame;
     }
 }

@@ -7,8 +7,7 @@ namespace CrawlIT.Shared
     {
         protected Texture2D TextureSheet;
 
-        public float PosX { get; protected set; }
-        public float PosY { get; protected set; }
+        public Vector2 Position { get; protected set; }
 
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch spriteBatch);

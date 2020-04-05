@@ -31,11 +31,11 @@ namespace CrawlIT.Shared
         /// </summary>
         public void Follow(Player target)
         {
-            _posX = target == null ? 0 : MathHelper.Lerp(_posX, target.PosX, 0.3f);
-            _posY = target == null ? 0 : MathHelper.Lerp(_posY, target.PosY, 0.3f);
+            _posX = target == null ? 0 : MathHelper.Lerp(_posX, target.Position.X, 0.3f);
+            _posY = target == null ? 0 : MathHelper.Lerp(_posY, target.Position.Y, 0.3f);
 
-            Transform = Matrix.CreateTranslation(new Vector3(-_posX - target?.FrameWidth * 0.5f ?? 0,
-                                                             -_posY - target?.FrameHeight * 0.5f ?? 0,
+            Transform = Matrix.CreateTranslation(new Vector3(-_posX - target?.Frame.X * 0.5f ?? 0,
+                                                             -_posY - target?.Frame.Y * 0.5f ?? 0,
                                                              0))
                         * Matrix.CreateRotationZ(0)
                         * Matrix.CreateScale(Zoom, Zoom, 1)
