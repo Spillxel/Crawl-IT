@@ -7,16 +7,14 @@ namespace CrawlIT.Shared
 {
     public class UiIcon : Entity
     {
-        protected readonly Vector2 Position;
         protected float Scale;
 
-        public UiIcon(Texture2D texture, float scale, float posX, float posY)
+        public UiIcon(Texture2D texture, float scale, Vector2 position)
         {
+            Position = position;
+
             TextureSheet = texture;
             Scale = scale;
-            PosX = posX;
-            PosY = posY;
-            Position = new Vector2(PosX, PosY);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

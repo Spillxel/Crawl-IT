@@ -72,13 +72,12 @@ namespace CrawlIT.Shared
         public Enemy Enemy;
 
         public Fight(GraphicsDevice graphicsDevice, Point resolution, Matrix transform,
-                     Player player, Enemy enemy)
+                     Player player)
             : base(graphicsDevice)
         {
             _resolution = resolution;
             _transform = transform;
             Player = player;
-            Enemy = enemy;
 
             const int questionFrameWidth = 600;
             const int questionFrameHeight = 150;
