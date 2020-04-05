@@ -60,6 +60,7 @@ namespace CrawlIT.Shared
             var resolutionSize = new Point(_graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
             _resolutionRectangle = new Rectangle(Point.Zero, resolutionSize);
             _overlayTexture = new Texture2D(_graphicsDevice, 1, 1);
+            _overlayTexture.SetData(new [] { Color.White });
         }
 
         /// <summary>
