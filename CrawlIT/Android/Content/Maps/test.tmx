@@ -166,7 +166,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="Collision" visible="0" locked="1">
-  <object id="49" name="name123" x="128" y="192" width="448" height="64"/>
+  <object id="49" x="128" y="192" width="448" height="64"/>
   <object id="52" x="128" y="352" width="448" height="320"/>
   <object id="53" x="544" y="128" width="224" height="64"/>
   <object id="54" x="576" y="416" width="64" height="256"/>
@@ -191,8 +191,8 @@
   <object id="97" x="1536" y="928" width="64" height="64"/>
   <object id="98" x="1664" y="928" width="64" height="64"/>
   <object id="101" x="128" y="256" width="32" height="96"/>
-  <object id="105" name="StairsLeft" x="1593.5" y="800" width="6.5" height="32.75"/>
-  <object id="106" name="StairsRight" x="1663.9" y="800" width="6.44685" height="32.75"/>
+  <object id="105" x="1593.5" y="800" width="6.5" height="32.75"/>
+  <object id="106" x="1663.9" y="800" width="6.44685" height="32.75"/>
  </objectgroup>
  <objectgroup id="13" name="Stairs" visible="0" locked="1">
   <object id="99" x="1600" y="704" width="64" height="32"/>
