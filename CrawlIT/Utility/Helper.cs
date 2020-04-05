@@ -14,7 +14,11 @@ namespace CrawlIT.Shared
         /// <param name="position">Where to draw the texture.</param>
         /// <param name="source">Which part of the texture to draw (null = all of it).</param>
         /// <param name="scale">Scale the texture up or down.</param>
-        public static void DrawWrapper(SpriteBatch spriteBatch, Texture2D texture, Vector2 position, Rectangle? source,
+        public static void DrawWrapper(
+            SpriteBatch spriteBatch,
+            Texture2D texture,
+            Vector2 position,
+            Rectangle? source,
             float scale)
         {
             spriteBatch.Draw(

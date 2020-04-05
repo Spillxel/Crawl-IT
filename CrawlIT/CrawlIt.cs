@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
 
 using ResolutionBuddy;
+using MonoGame.Extended;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using Color = Microsoft.Xna.Framework.Color;
@@ -184,16 +185,14 @@ namespace CrawlIT.Shared
         /// </summary>
         private void LoadCollision()
         {
-            // List of collision objects in the map
-            _player.CollisionObjects = _map.ObjectLayers[0]
-                                           .Objects
-                                           .Select(o => new Rectangle((int)o.Position.X, (int)o.Position.Y,
-                                                                      (int)o.Size.Width, (int)o.Size.Height))
-                                           .ToList();
+            // Add a rectangle with position & size of each collision object in the map to the CollisionObjects list
+            _map.GetLayer<TiledMapObjectLayer>("Collision")
+                .Objects
+                .ToList()
+                .ForEach(collisionObject => _player.CollisionObjects.Add(collisionObject.ToRectangle()));
 
-            // Add enemies to CollisionObjects
-            foreach (var enemy in _player.Enemies)
-                _player.CollisionObjects.Add(enemy.CollisionRectangle);
+            // Same for each enemy
+            _enemies.ForEach(enemy => _player.CollisionObjects.Add(enemy.CollisionRectangle));
         }
 
         /// <summary>

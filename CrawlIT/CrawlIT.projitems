@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameState\SplashScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Input\InputManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\ExplorationUI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utility\Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\Helper.cs" />
   </ItemGroup>
 </Project>
