@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CrawlIT.Shared
 {
@@ -9,8 +10,8 @@ namespace CrawlIT.Shared
 
         public Animation CurrentAnimation;
 
-        protected AnimatedUiIcon(Texture2D texture, float scale, float posX, float posY)
-            : base(texture, scale, posX, posY)
+        protected AnimatedUiIcon(Texture2D texture, float scale, Vector2 position)
+            : base(texture, scale, position)
         {
             IconFrameWidth = 32;
             IconFrameHeight = 32;

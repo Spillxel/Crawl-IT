@@ -69,10 +69,14 @@ namespace CrawlIT.Shared
 
             var bottomHeight = _resolution.Y - border - textureHeight;
 
-            _lifeBar = new LifeBarIcon(_lifeBarTexture, _scale, border, border, _player);
-            _level = new UiIcon(_levelTexture, _scale, (_resolution.X- levelTextureWidth) * 0.5f, border);
-            _surgeCrystal = new CrystalIcon(_surgeCrystalTexture, _scale,
-                                       _resolution.X - border - textureWidth, border, _player);
+            _lifeBar = new LifeBarIcon(_lifeBarTexture, _scale, new Vector2(border),  _player);
+            _level = new UiIcon(
+                _levelTexture, _scale,
+                new Vector2((_resolution.X - levelTextureWidth) * 0.5f, border));
+            _surgeCrystal = new CrystalIcon(
+                _surgeCrystalTexture, _scale, 
+                new Vector2(_resolution.X - border - textureWidth, border),
+                _player);
             
             // free space between leftmost and rightmost icons, minus textureWidth of the other two
             var remainingSpace = _resolution.X - 2 * border - 4 * textureWidth;
@@ -84,10 +88,10 @@ namespace CrawlIT.Shared
             var settingsPos = savePos + spacing;
             var badgesPos = settingsPos + spacing;
             
-            _help = new UiIcon(_helpTexture, _scale, helpPos, bottomHeight);
-            _save = new UiIcon(_saveTexture, _scale, savePos, bottomHeight);
-            _settings = new UiIcon(_settingsTexture, _scale, settingsPos, bottomHeight);
-            _badges = new UiIcon(_badgesTexture, _scale, badgesPos, bottomHeight);
+            _help = new UiIcon(_helpTexture, _scale, new Vector2(helpPos, bottomHeight));
+            _save = new UiIcon(_saveTexture, _scale, new Vector2(savePos, bottomHeight));
+            _settings = new UiIcon(_settingsTexture, _scale, new Vector2(settingsPos, bottomHeight));
+            _badges = new UiIcon(_badgesTexture, _scale, new Vector2(badgesPos, bottomHeight));
         }
 
         public void Draw(SpriteBatch spriteBatch)

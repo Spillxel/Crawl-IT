@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="60" height="50" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#d9d4ff" nextlayerid="15" nextobjectid="107">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="60" height="50" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#d9d4ff" nextlayerid="18" nextobjectid="113">
  <tileset firstgid="1" name="maptiles" tilewidth="32" tileheight="32" tilecount="40" columns="8">
   <image source="maptiles.png" width="256" height="160"/>
  </tileset>
@@ -166,7 +166,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="Collision" visible="0" locked="1">
-  <object id="49" x="128" y="192" width="448" height="64"/>
+  <object id="49" name="name123" x="128" y="192" width="448" height="64"/>
   <object id="52" x="128" y="352" width="448" height="320"/>
   <object id="53" x="544" y="128" width="224" height="64"/>
   <object id="54" x="576" y="416" width="64" height="256"/>
@@ -191,10 +191,18 @@
   <object id="97" x="1536" y="928" width="64" height="64"/>
   <object id="98" x="1664" y="928" width="64" height="64"/>
   <object id="101" x="128" y="256" width="32" height="96"/>
-  <object id="105" x="1593.5" y="800" width="6.5" height="32.75"/>
-  <object id="106" x="1663.9" y="800" width="6.44685" height="32.75"/>
+  <object id="105" name="StairsLeft" x="1593.5" y="800" width="6.5" height="32.75"/>
+  <object id="106" name="StairsRight" x="1663.9" y="800" width="6.44685" height="32.75"/>
  </objectgroup>
  <objectgroup id="13" name="Stairs" visible="0" locked="1">
   <object id="99" x="1600" y="704" width="64" height="32"/>
+ </objectgroup>
+ <objectgroup id="16" name="Entity">
+  <object id="107" name="Player" x="170" y="275" width="23" height="48"/>
+  <object id="108" name="Tutor" x="640" y="224" width="23" height="47"/>
+  <object id="109" name="FirstAssistant" x="560" y="896" width="23" height="47"/>
+  <object id="110" name="SecondAssistant" x="768" y="1120" width="23" height="47"/>
+  <object id="111" name="ThirdAssistant" x="1184" y="1056" width="23" height="47"/>
+  <object id="112" name="MathBoss" x="1612" y="974" width="39" height="53"/>
  </objectgroup>
 </map>
