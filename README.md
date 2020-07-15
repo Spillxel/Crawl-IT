@@ -1,44 +1,50 @@
 # Crawl IT
 
-A promotional game for BINFO @ [uni.lu](https://binfo.uni.lu) made for the Software Engineering Project course.
+Crawl IT is a dungeon crawler, quiz-style combat game with the purpose of
+educating the player about the
+[Bachelor in Applied Information Technology](https://binfo.uni.lu)
+(short: BINFO) at the University of Luxembourg.
 
-## Downloading the current version
+It started as a project for the **Software Engineering Project** course but
+from there became a hobby project for us to code away at whenever we feel like.
 
-We've uploaded the latest version to the Google Play Store as a beta test, you can download for any Android phone here: <https://play.google.com/store/apps/details?id=com.crawl.it>
+Currently we plan on getting it to a state that we would personally consider
+'finished'.
 
-## Running the game in Visual Studio
+## Playing
 
-The following was tested on a Windows 10 VM using Hyper-V (provided [here](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)).
+Currently we plan on releasing all of our builds via the github release feature
+in the form of **apk**'s only, as we don't have access to an MacOS device to
+test on iOS.
 
-### Steps
+We also push our new releases to
+[Google Play Store](https://play.google.com/store/apps/details?id=com.crawl.it).
 
-- [Visual Studio 2017](https://my.visualstudio.com/Downloads?q=visual%20studio%202017&wt.mc_id=o~msft~vscom~older-downloads)
-  - In the installer select
-    - '.NET desktop development'  
-    ![vs_installer1](assets/vs_installer1.jpg)
-    - 'Mobile development with .NET'  
-    ![vs_installer2](assets/vs_installer2.jpg)
-- Adding the MonoGame dev NuGet package to VS:  
-![NuGet settings](assets/nuget_window.jpg)  
-![NuGet package](assets/nuget_package.jpg)  
-Source to use for the package: <http://teamcity.monogame.net/guestAuth/app/nuget/v1/FeedService.svc/>
-- Install [MonoGame for Visual Studio](http://www.monogame.net/downloads), under the Development Builds section
-- Clone this repo
-- Open CrawlIT/CrawlIT.sln with Visual Studio
-- Open Android SDK Manager (the highlighted icon)  
-![android_sdk_manager](assets/android_sdk_manager.jpg)
-- Select Android 28 SDK like so:  
-![android_28_sdk](assets/android_28_sdk.jpg)
-- Apply these changes and any outstanding updates (4 updates for me)
-- In case of missing references, restore NuGet packages:  
-![nuget_restore](assets/nuget_restore.jpg)
-- On my VM I also had to install the following redistributables (found [here](https://my.visualstudio.com/Downloads?q=redistributable&pgroup=)) to fix the errors that mention 'Importer XXX had an unexpected failure' in the output window:
-  - Visual C++ for Visual Studio 2013
-  - Visual C++ for Visual Studio 2012 Update 4
-- Another note: on my VM downloading the project as a .zip caused the resulting folder to be read-only, which caused an issue with the MonoGame framework. Downloading the project through the Gitlab extension offered in Visual Studio solved this issue and finally allowed the build to succeed!
-- From here the game should run once you press on the run button, which has a default android emulator installed.
-- Extra note: the process on Mac should be similar (Pedro worked on the game exclusively on Mac, and he faced similar issues as mine). I think for next time we'll try using Unity, or focus on just building for one platform initially :)
+## Development
 
-### Result (hopefully)
+To get this bad boy running on your machine is almost harder than developing it.
+We use MonoGame as engine and develop on Visual Studio
+(2019 Enterprise because student licenses are dope 🎉).
 
-![result](assets/result.jpg)
+The general procedure for getting it to run (without any guarantee) is:
+
+- Install MonoGame (the latest stable build should do, we are using **3.7.1**)
+- Install Visual Studio (2017 should work flawlessly, 2019 might not 🤷‍♀️)
+  - Note: you might want to install workloads such as:
+    - Mobile development with .NET
+    - Game development with Unity
+      (might as well since you'll want to switch after dealing with MonoGame)
+    - .NET Core cross-platform development
+- Clone this pretty repo 💅
+- Load the pretty solution 💅
+- Realise everything is broken 🙂
+- Usually Visual Studio will complain about some Android stuff being out of date
+  so fix that first (just updating things through Android SDK manager)
+- Now everything should absolutely not work, but usually only two issues pop up:
+  - If the error mentions something about *MGCB* or *Texture importer* or
+  *Map import something*, then this should fix it:
+    - [Issue regarding MonoGame Extended](https://github.com/craftworkgames/MonoGame.Extended/issues/495#issuecomment-487315604)
+  - If the error mentions something about AndroidGameActivity, or in general some namespaces missing, first make sure that you have the *Android* project selected, as the iOS one is currently not being worked on, if that fails, this should fix it:
+    - [Issue regarding MonoGame](https://github.com/craftworkgames/MonoGame.Extended/issues/609#issuecomment-500259738)
+  - ???
+  - Profit! Pretend you're a game dev the same way we do 🕹
