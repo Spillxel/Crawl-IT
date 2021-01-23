@@ -28,8 +28,8 @@ We use MonoGame as engine and develop on Visual Studio
 
 The general procedure for getting it to run (without any guarantee) is:
 
-- Install MonoGame (the latest stable build should do, we are using **3.7.1**)
-- Install Visual Studio (2017 should work flawlessly, 2019 might not 🤷‍♀️)
+- Install MonoGame 3.8.\*
+- Install Visual Studio 2019
   - Note: you might want to install workloads such as:
     - Mobile development with .NET
     - Game development with Unity
@@ -46,5 +46,5 @@ The general procedure for getting it to run (without any guarantee) is:
     - [Issue regarding MonoGame Extended](https://github.com/craftworkgames/MonoGame.Extended/issues/495#issuecomment-487315604)
   - If the error mentions something about AndroidGameActivity, or in general some namespaces missing, first make sure that you have the *Android* project selected, as the iOS one is currently not being worked on, if that fails, this should fix it:
     - [Issue regarding MonoGame](https://github.com/craftworkgames/MonoGame.Extended/issues/609#issuecomment-500259738)
-  - ???
-  - Profit! Pretend you're a game dev the same way we do 🕹
+- ???
+- Profit! Pretend you're a game dev the same way we do 🎉
