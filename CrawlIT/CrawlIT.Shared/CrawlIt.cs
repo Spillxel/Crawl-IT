@@ -198,7 +198,6 @@ namespace CrawlIT.Shared
                 _mathBoss
             });
 
-            Entities.AddRange(_player.Enemies);
             Entities.Add(_player);
         }
 
@@ -387,6 +386,9 @@ namespace CrawlIT.Shared
 
         private void UpdateCharacters(GameTime gameTime)
         {
+            // HACK: temp fix for updating every enemy
+            _player.Enemies.ForEach(enemy => enemy.Update(gameTime));
+
             Entities.ForEach(entity => entity.Update(gameTime));
 
             _playerCamera.Follow(_player);
@@ -484,7 +486,11 @@ namespace CrawlIT.Shared
             _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform,
                                samplerState: SamplerState.PointClamp);
             
+            // HACK: temp fix to make enemies dissapear once their fights are completed
+            _player.Enemies.ForEach(enemy => enemy.Draw(_spriteBatch));
+            
             Entities.ForEach(entity => entity.Draw(_spriteBatch));
+
             // TODO: this can surely be simplified, too...
             _player.Enemies.ForEach(
                 enemy => enemy.DrawActionIcons(

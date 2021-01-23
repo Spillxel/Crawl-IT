@@ -31,13 +31,17 @@ namespace CrawlIT.Shared
 
             CloseUpTexture = contentManager.Load<Texture2D>(closeUpTexture);
             QuestionMarkTexture = contentManager.Load<Texture2D>("Sprites/placeholder_questionmark_spritesheet");
-            _questionMarkPosition = new Vector2(
-                Position.X - QuestionMarkTexture.Height * 0.5f,
-                Position.Y - QuestionMarkTexture.Height);
             Fights = fights;
             Questions = questions;
 
             CollisionRectangle = new Rectangle(Position.ToPoint(), new Point(Frame.X, (int) (Frame.Y * 0.65) ));
+
+            // The question mark texture sheet's frames are drawn width-wise, since its frames are squares, we just
+            // use height wherever needed.
+            _questionMarkPosition = new Vector2(
+                Position.X + CollisionRectangle.Width * 0.5f - QuestionMarkTexture.Height * 0.5f,
+                Position.Y - QuestionMarkTexture.Height);
+            // Clickable area where question mark is drawn
             FightRectangle = new Rectangle(_questionMarkPosition.ToPoint(), new Point(QuestionMarkTexture.Height));
 
             // Enemy center coordinate
