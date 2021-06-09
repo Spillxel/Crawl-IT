@@ -178,7 +178,7 @@ namespace CrawlIT.Shared
                 10, 2);
             _secondAssistant = new Enemy(
                 Content, "Sprites/assistantspritesheet2", "Sprites/assistant2closeup",
-                entityData["SecondAssistant"].position, entityData["SecondAssistant"].frame, 
+                entityData["SecondAssistant"].position, entityData["SecondAssistant"].frame,
                 10, 2);
             _thirdAssistant = new Enemy(
                 Content, "Sprites/assistantspritesheet3", "Sprites/assistant3closeup",
@@ -485,10 +485,10 @@ namespace CrawlIT.Shared
             // We draw characters in the playerCamera transform, scaled to our virtual transform
             _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform,
                                samplerState: SamplerState.PointClamp);
-            
+
             // HACK: temp fix to make enemies dissapear once their fights are completed
             _player.Enemies.ForEach(enemy => enemy.Draw(_spriteBatch));
-            
+
             Entities.ForEach(entity => entity.Draw(_spriteBatch));
 
             // TODO: this can surely be simplified, too...
@@ -496,7 +496,7 @@ namespace CrawlIT.Shared
                 enemy => enemy.DrawActionIcons(
                     _spriteBatch,
                     enemy.FightZoneRectangle.Intersects(_player.CollisionRectangle)));
-           
+
             _spriteBatch.End();
         }
 
