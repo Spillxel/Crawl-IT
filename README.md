@@ -22,29 +22,12 @@ We also push our new releases to
 
 ## Development
 
-To get this bad boy running on your machine is almost harder than developing it.
-We use MonoGame as engine and develop on Visual Studio
-(2019 Enterprise because student licenses are dope 🎉).
+Getting set-up for development should be relatively straight-forward:
 
-The general procedure for getting it to run (without any guarantee) is:
-
-- Install MonoGame 3.8.\*
-- Install Visual Studio 2019
-  - Note: you might want to install workloads such as:
-    - Mobile development with .NET
-    - Game development with Unity
-      (might as well since you'll want to switch after dealing with MonoGame)
-    - .NET Core cross-platform development
-- Clone this pretty repo 💅
-- Load the pretty solution 💅
-- Realise everything is broken 🙂
-- Usually Visual Studio will complain about some Android stuff being out of date
-  so fix that first (just updating things through Android SDK manager)
-- Now everything should absolutely not work, but usually only two issues pop up:
-  - If the error mentions something about *MGCB* or *Texture importer* or
-  *Map import something*, then this should fix it:
-    - [Issue regarding MonoGame Extended](https://github.com/craftworkgames/MonoGame.Extended/issues/495#issuecomment-487315604)
-  - If the error mentions something about AndroidGameActivity, or in general some namespaces missing, first make sure that you have the *Android* project selected, as the iOS one is currently not being worked on, if that fails, this should fix it:
-    - [Issue regarding MonoGame](https://github.com/craftworkgames/MonoGame.Extended/issues/609#issuecomment-500259738)
-- ???
-- Profit! Pretend you're a game dev the same way we do 🎉
+- Have a Visual Studio 2019/2022 installation with up-to-date:
+  - Mobile Development module (**Visual Studio Installer -> Modify**)
+  - Android SDK
+  - `MonoGame Project Templates` extension
+- Clone the repo
+- Open the included `CrawlIT.sln`
+- The project should build and you should be able to deploy it on an android emulator
