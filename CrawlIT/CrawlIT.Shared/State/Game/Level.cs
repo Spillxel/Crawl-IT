@@ -2,17 +2,17 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CrawlIT.Shared
+namespace CrawlIT.Shared.State.Game
 {
     // TODO: This class should probably contain everything related to the exploration mode
     public class Level : GameState
     {
 
-        public override StateType State { get; }
+        public override GameStateType State { get; }
         public Level(GraphicsDevice graphicsDevice)
             : base(graphicsDevice)
         {
-            State = StateType.Playing;
+            State = GameStateType.Playing;
         }
 
         public override void Initialize()
@@ -22,7 +22,7 @@ namespace CrawlIT.Shared
         public override void LoadContent(ContentManager content)
         {
         }
-        public override void UnloadContent()
+        public override void Dispose()
         {
         }
 

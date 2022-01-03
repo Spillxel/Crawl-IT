@@ -14,6 +14,7 @@ using MonoGame.Extended.Tiled.Renderers;
 using Color = Microsoft.Xna.Framework.Color;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using Point = Microsoft.Xna.Framework.Point;
+using CrawlIT.Shared.State.Game;
 
 namespace CrawlIT.Shared
 {
@@ -253,9 +254,9 @@ namespace CrawlIT.Shared
             _explorationUi.Load();
 
             // Initialize GameStateManager to be able to use it
-            GameStateManager.Instance.Init(GraphicsDevice, Content, _virtualResolution, _transform);
+            GameStateManager.Instance.Initialize(GraphicsDevice, Content);
             // Initialize by adding the Menu screen into the game
-            GameStateManager.Instance.AddScreen(_splashScreen);
+            GameStateManager.Instance.Push(_splashScreen);
         }
 
         /// <summary>
@@ -292,15 +293,15 @@ namespace CrawlIT.Shared
             // TODO: simplify stuff inside of here
             switch (GameStateManager.Instance.State)
             {
-                case GameState.StateType.Splash:
+                case GameStateType.Splash:
                     if (gameTime.TotalGameTime.Seconds > 3)
                     {
-                        GameStateManager.Instance.ChangeScreen(_menu);
+                        GameStateManager.Instance.Set(_menu);
                     }
 
                     _splashScreen.Update(gameTime);
                     break;
-                case GameState.StateType.Menu:
+                case GameStateType.Menu:
                     if (!_menuState)
                     {
                         _menuState = true;
@@ -310,9 +311,9 @@ namespace CrawlIT.Shared
                     // TODO: replace with InputManager, able to handle touch within levels then
                     if (_gameTouchRectangle != null)
                         if (_gameTouchRectangle.Value.Intersects(_menu.NewGameRectangle))
-                            GameStateManager.Instance.ChangeScreen(_level);
+                            GameStateManager.Instance.Set(_level);
                     break;
-                case GameState.StateType.Playing:
+                case GameStateType.Playing:
                     if (IsFightTriggered(gameTime))
                     {
                         UpdateMap(gameTime);
@@ -327,14 +328,14 @@ namespace CrawlIT.Shared
                         UpdateFightTrigger(gameTime);
                     }
                     break;
-                case GameState.StateType.Fighting:
+                case GameStateType.Fighting:
                     if (_hasAnswered)
                     {
                         var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
                         _timer -= elapsed;
                         if (_timer < 0)
                         {
-                            GameStateManager.Instance.RemoveScreen();
+                            GameStateManager.Instance.Pop();
                             _hasAnswered = false;
                             _hasUsedCrystal = false;
                             _timer = Timer;
@@ -373,7 +374,7 @@ namespace CrawlIT.Shared
             _fightTransitionTimer = 0;
             // TODO: For loop with enemy.QuestionPerFight
             _fight.QuestionCurrentAnimation = _fight.NoAnswer;
-            GameStateManager.Instance.AddScreen(_fight);
+            GameStateManager.Instance.Push(_fight);
             // TODO: move line below to Fight.cs somehow
             _fight.Enemy.Fights--;
             return true;
@@ -437,17 +438,17 @@ namespace CrawlIT.Shared
             var gameState = GameStateManager.Instance.State;
             switch (gameState)
             {
-                case GameState.StateType.Splash:
+                case GameStateType.Splash:
                     break;
-                case GameState.StateType.Menu:
+                case GameStateType.Menu:
                     // TODO: Will need to redraw map here once we animate stuff in there
                     break;
-                case GameState.StateType.Playing:
+                case GameStateType.Playing:
                     DrawMap();
                     DrawCharacters();
                     DrawUi();
                     break;
-                case GameState.StateType.Fighting:
+                case GameStateType.Fighting:
                     DrawFight();
                     break;
                 default:
@@ -520,7 +521,7 @@ namespace CrawlIT.Shared
 
             if (!(_timer < 2)) return;
 
-            GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
+            GameStateManager.Instance.DrawTranslucentOverlay(_spriteBatch);
             _fight.PopUp(_spriteBatch);
         }
 
