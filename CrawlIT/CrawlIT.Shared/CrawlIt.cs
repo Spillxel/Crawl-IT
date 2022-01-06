@@ -14,6 +14,7 @@ using MonoGame.Extended.Tiled.Renderers;
 using Color = Microsoft.Xna.Framework.Color;
 using XnaMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using Point = Microsoft.Xna.Framework.Point;
+using CrawlIT.Shared.State.Game;
 
 namespace CrawlIT.Shared
 {
@@ -53,13 +54,14 @@ namespace CrawlIT.Shared
         private Camera _playerCamera;
         private Camera _staticCamera;
 
+        public List<Entity> Entities { get; private set; }
         private Player _player;
         private Texture2D _playerTexture;
-        private Enemy _tutor;
-        private Enemy _assistant1;
-        private Enemy _assistant2;
-        private Enemy _assistant3;
-        private Boss _mathsBoss;
+        private Tutor _tutor;
+        private Enemy _firstAssistant;
+        private Enemy _secondAssistant;
+        private Enemy _thirdAssistant;
+        private Boss _mathBoss;
 
         private Rectangle _startButton;
         private Point _startButtonSize;
@@ -70,8 +72,6 @@ namespace CrawlIT.Shared
         private bool _hasUsedCrystal;
 
         private SpriteFont _font;
-
-        private List<Enemy> _enemies;
 
         private bool _fightTrigger;
         private double _fightTransitionTimer = 0;
@@ -110,9 +110,8 @@ namespace CrawlIT.Shared
         {
             InitializeComponents();
 
-            LoadPlayer();
-            LoadEnemies();
             LoadMap();
+            LoadEntities();
             LoadCollision();
             LoadUi();
 
@@ -141,42 +140,66 @@ namespace CrawlIT.Shared
             var scaleY = Math.Max(_realResolution.Y / (float)_virtualResolution.Y, 3);
             _scale = Math.Min(scaleX, scaleY);
 
+            Entities = new List<Entity>();
+
             // Repeat _backgroundSong on end
             XnaMediaPlayer.IsRepeating = true;
             _staticCamera = new Camera(0, 0, 1);
         }
 
         /// <summary>
-        /// Load player related stuff.
+        /// Load entity related stuff.
         /// </summary>
-        private void LoadPlayer()
+        private void LoadEntities()
         {
+            // TODO: keep list of entities for game, rather than separate instances for each...
+            var entityData = _map.GetLayer<TiledMapObjectLayer>("Entity")
+                .Objects
+                .ToDictionary(obj => obj.Name,  obj => (position: obj.Position, frame: obj.Size.ToPoint()));
+
+            // TODO: unify content loading into content manager class or smth...
             _playerTexture = Content.Load<Texture2D>("Sprites/playerspritesheet");
-            _player = new Player(_playerTexture, _transform);
+            _player = new Player(
+                _playerTexture,
+                _transform,
+                entityData["Player"].position, entityData["Player"].frame);
+
             _playerCamera = new Camera(_virtualResolution.X,
                                        _virtualResolution.Y,
                                        _scale);
-        }
 
-        /// <summary>
-        /// Load all the enemies.
-        /// </summary>
-        private void LoadEnemies()
-        {
-            _tutor = new Tutor(Content, "Sprites/tutorspritesheet", "Sprites/tutorcloseup", 640, 224, 100, 1);
-            _assistant1 = new Enemy(Content, "Sprites/assistantspritesheet1", "Sprites/assistant1closeup", 560, 896, 10, 2);
-            _assistant2 = new Enemy(Content, "Sprites/assistantspritesheet2", "Sprites/assistant2closeup", 768, 1120, 10, 2);
-            _assistant3 = new Enemy(Content, "Sprites/assistantspritesheet3", "Sprites/assistant3closeup", 1184, 1056, 10, 2);
-            _mathsBoss = new Boss(Content, "Sprites/mathsteacherspritesheet", "Sprites/mathsteachercloseup", 1612, 974, 100, 3);
+            // TODO: probably possible to simplify this even further.
+            _tutor = new Tutor(
+                Content, "Sprites/tutorspritesheet", "Sprites/tutorcloseup",
+                entityData["Tutor"].position, entityData["Tutor"].frame,
+                100, 1);
+            _firstAssistant = new Enemy(
+                Content, "Sprites/assistantspritesheet1", "Sprites/assistant1closeup",
+                entityData["FirstAssistant"].position, entityData["FirstAssistant"].frame,
+                10, 2);
+            _secondAssistant = new Enemy(
+                Content, "Sprites/assistantspritesheet2", "Sprites/assistant2closeup",
+                entityData["SecondAssistant"].position, entityData["SecondAssistant"].frame,
+                10, 2);
+            _thirdAssistant = new Enemy(
+                Content, "Sprites/assistantspritesheet3", "Sprites/assistant3closeup",
+                entityData["ThirdAssistant"].position, entityData["ThirdAssistant"].frame,
+                10, 2);
+            _mathBoss = new Boss(
+                Content, "Sprites/mathsteacherspritesheet", "Sprites/mathsteachercloseup",
+                entityData["MathBoss"].position, entityData["MathBoss"].frame,
+                100, 3);
 
-            _player.Enemies = new List<Enemy>
+            _player.Enemies.AddRange(new List<Enemy>
             {
                 _tutor,
-                _assistant1,
-                _assistant2,
-                _assistant3,
-                _mathsBoss
-            };
+                _firstAssistant,
+                _secondAssistant,
+                _thirdAssistant,
+                _mathBoss
+            });
+
+            Entities.Add(_player);
         }
 
         /// <summary>
@@ -184,16 +207,14 @@ namespace CrawlIT.Shared
         /// </summary>
         private void LoadCollision()
         {
-            // List of collision objects in the map
-            _player.CollisionObjects = _map.ObjectLayers[0]
-                                           .Objects
-                                           .Select(o => new Rectangle((int)o.Position.X, (int)o.Position.Y,
-                                                                      (int)o.Size.Width, (int)o.Size.Height))
-                                           .ToList();
+            // Add a rectangle with position & size of each collision object in the map to the CollisionObjects list
+            _map.GetLayer<TiledMapObjectLayer>("Collision")
+                .Objects
+                .ToList()
+                .ForEach(collisionObject => _player.CollisionObjects.Add(collisionObject.ToRectangle()));
 
-            // Add enemies to CollisionObjects
-            foreach (var enemy in _player.Enemies)
-                _player.CollisionObjects.Add(enemy.CollisionRectangle);
+            // Same for each enemy
+            _player.Enemies.ForEach(enemy => _player.CollisionObjects.Add(enemy.CollisionRectangle));
         }
 
         /// <summary>
@@ -225,25 +246,17 @@ namespace CrawlIT.Shared
         private void LoadUi()
         {
             _splashScreen = new SplashScreen(GraphicsDevice, _virtualResolution, _transform, _scale);
-            _splashScreen.Initialize();
-            _splashScreen.LoadContent(Content);
             _menu = new Menu(GraphicsDevice, _virtualResolution, _transform, _scale);
-            _menu.Initialize();
-            _menu.LoadContent(Content);
             _level = new Level(GraphicsDevice);
-            _level.Initialize();
-            _level.LoadContent(Content);
-            _fight = new Fight(GraphicsDevice, _virtualResolution, _transform, _player, _tutor);
-            _fight.Initialize();
-            _fight.LoadContent(Content);
+            _fight = new Fight(GraphicsDevice, _virtualResolution, _transform, _player);
 
             _explorationUi = new ExplorationUi(_transform, _scale, _virtualResolution, Content, _player);
             _explorationUi.Load();
 
             // Initialize GameStateManager to be able to use it
-            GameStateManager.Instance.Init(GraphicsDevice, Content, _virtualResolution, _transform);
+            GameStateManager.Instance.Initialize(GraphicsDevice, Content);
             // Initialize by adding the Menu screen into the game
-            GameStateManager.Instance.AddScreen(_splashScreen);
+            GameStateManager.Instance.Push(_splashScreen);
         }
 
         /// <summary>
@@ -280,15 +293,15 @@ namespace CrawlIT.Shared
             // TODO: simplify stuff inside of here
             switch (GameStateManager.Instance.State)
             {
-                case GameState.StateType.Splash:
+                case GameStateType.Splash:
                     if (gameTime.TotalGameTime.Seconds > 3)
                     {
-                        GameStateManager.Instance.ChangeScreen(_menu);
+                        GameStateManager.Instance.Set(_menu);
                     }
 
                     _splashScreen.Update(gameTime);
                     break;
-                case GameState.StateType.Menu:
+                case GameStateType.Menu:
                     if (!_menuState)
                     {
                         _menuState = true;
@@ -298,9 +311,9 @@ namespace CrawlIT.Shared
                     // TODO: replace with InputManager, able to handle touch within levels then
                     if (_gameTouchRectangle != null)
                         if (_gameTouchRectangle.Value.Intersects(_menu.NewGameRectangle))
-                            GameStateManager.Instance.ChangeScreen(_level);
+                            GameStateManager.Instance.Set(_level);
                     break;
-                case GameState.StateType.Playing:
+                case GameStateType.Playing:
                     if (IsFightTriggered(gameTime))
                     {
                         UpdateMap(gameTime);
@@ -315,14 +328,14 @@ namespace CrawlIT.Shared
                         UpdateFightTrigger(gameTime);
                     }
                     break;
-                case GameState.StateType.Fighting:
+                case GameStateType.Fighting:
                     if (_hasAnswered)
                     {
                         var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
                         _timer -= elapsed;
                         if (_timer < 0)
                         {
-                            GameStateManager.Instance.RemoveScreen();
+                            GameStateManager.Instance.Pop();
                             _hasAnswered = false;
                             _hasUsedCrystal = false;
                             _timer = Timer;
@@ -361,7 +374,7 @@ namespace CrawlIT.Shared
             _fightTransitionTimer = 0;
             // TODO: For loop with enemy.QuestionPerFight
             _fight.QuestionCurrentAnimation = _fight.NoAnswer;
-            GameStateManager.Instance.AddScreen(_fight);
+            GameStateManager.Instance.Push(_fight);
             // TODO: move line below to Fight.cs somehow
             _fight.Enemy.Fights--;
             return true;
@@ -374,13 +387,10 @@ namespace CrawlIT.Shared
 
         private void UpdateCharacters(GameTime gameTime)
         {
+            // HACK: temp fix for updating every enemy
+            _player.Enemies.ForEach(enemy => enemy.Update(gameTime));
 
-            _player.Update(gameTime);
-            _tutor.Update(gameTime);
-            _assistant1.Update(gameTime);
-            _assistant2.Update(gameTime);
-            _assistant3.Update(gameTime);
-            _mathsBoss.Update(gameTime);
+            Entities.ForEach(entity => entity.Update(gameTime));
 
             _playerCamera.Follow(_player);
             _staticCamera.Follow(null);
@@ -428,17 +438,17 @@ namespace CrawlIT.Shared
             var gameState = GameStateManager.Instance.State;
             switch (gameState)
             {
-                case GameState.StateType.Splash:
+                case GameStateType.Splash:
                     break;
-                case GameState.StateType.Menu:
+                case GameStateType.Menu:
                     // TODO: Will need to redraw map here once we animate stuff in there
                     break;
-                case GameState.StateType.Playing:
+                case GameStateType.Playing:
                     DrawMap();
                     DrawCharacters();
                     DrawUi();
                     break;
-                case GameState.StateType.Fighting:
+                case GameStateType.Fighting:
                     DrawFight();
                     break;
                 default:
@@ -477,9 +487,16 @@ namespace CrawlIT.Shared
             _spriteBatch.Begin(transformMatrix: _playerCamera.Transform * _transform,
                                samplerState: SamplerState.PointClamp);
 
+            // HACK: temp fix to make enemies dissapear once their fights are completed
             _player.Enemies.ForEach(enemy => enemy.Draw(_spriteBatch));
-            _player.Draw(_spriteBatch);
-            _player.Enemies.ForEach(enemy => enemy.DrawActionIcons(_spriteBatch, enemy.FightZoneRectangle.Intersects(_player.CollisionRectangle)));
+
+            Entities.ForEach(entity => entity.Draw(_spriteBatch));
+
+            // TODO: this can surely be simplified, too...
+            _player.Enemies.ForEach(
+                enemy => enemy.DrawActionIcons(
+                    _spriteBatch,
+                    enemy.FightZoneRectangle.Intersects(_player.CollisionRectangle)));
 
             _spriteBatch.End();
         }
@@ -504,7 +521,7 @@ namespace CrawlIT.Shared
 
             if (!(_timer < 2)) return;
 
-            GameStateManager.Instance.FadeBackBufferToBlack(_spriteBatch);
+            GameStateManager.Instance.DrawTranslucentOverlay(_spriteBatch);
             _fight.PopUp(_spriteBatch);
         }
 

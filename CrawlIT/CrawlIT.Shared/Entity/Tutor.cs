@@ -1,13 +1,13 @@
 ﻿using System;
 using CrawlIT.Shared;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
 class Tutor : Enemy
 {
-    public Tutor(ContentManager content, string texture, string closeUpTexture, float posx, float posy, int fights, int questions)
-        : base(content, texture, closeUpTexture, posx, posy, fights, questions)
+    public Tutor(ContentManager content, string texture, string closeUpTexture, Vector2 position, Point frame, int fights, int questions)
+        : base(content, texture, closeUpTexture, position, frame, fights, questions)
     {
-        
     }
 
     public override void BeatenBy(Player player)

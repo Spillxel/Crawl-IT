@@ -13,8 +13,8 @@ namespace CrawlIT.Shared
 
         private readonly Player _player;
 
-        public LifeBarIcon(Texture2D texture, float scale, float posX, float posY, Player player)
-            : base(texture, scale, posX, posY)
+        public LifeBarIcon(Texture2D texture, float scale, Vector2 position, Player player)
+            : base(texture, scale, position)
         {
             _player = player;
 

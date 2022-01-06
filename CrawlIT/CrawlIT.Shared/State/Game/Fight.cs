@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json;
 
-namespace CrawlIT.Shared
+namespace CrawlIT.Shared.State.Game
 {
     public class Fight : GameState
     {
@@ -65,20 +65,19 @@ namespace CrawlIT.Shared
 
         private float _scale;
         private float _crystalRatio;
-        public override StateType State { get; }
+        public override GameStateType State { get; }
 
         private bool _life;
 
         public Enemy Enemy;
 
         public Fight(GraphicsDevice graphicsDevice, Point resolution, Matrix transform,
-                     Player player, Enemy enemy)
+                     Player player)
             : base(graphicsDevice)
         {
             _resolution = resolution;
             _transform = transform;
             Player = player;
-            Enemy = enemy;
 
             const int questionFrameWidth = 600;
             const int questionFrameHeight = 150;
@@ -98,7 +97,7 @@ namespace CrawlIT.Shared
                                   TimeSpan.FromSeconds(1));
 
             QuestionCurrentAnimation = NoAnswer;
-            State = StateType.Fighting;
+            State = GameStateType.Fighting;
         }
 
 
@@ -207,7 +206,7 @@ namespace CrawlIT.Shared
             CrystalRectangle = new Rectangle(_crystalPosition.ToPoint(), _crystal.Bounds.Size * _crystalScale.ToPoint());
         }
 
-        public override void UnloadContent()
+        public override void Dispose()
         {
         }
 
