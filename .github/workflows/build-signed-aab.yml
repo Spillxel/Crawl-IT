@@ -1,1 +1,26 @@
+name: Build Crawl-IT signed aab
 
+on:
+  push:
+    branches: [feature/build-action]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Build android project
+        uses: igotinfected-ci/build-and-sign-monogame-android@v0.0.10
+        with:
+          solution-path: '${{ github.workspace }}\CrawlIT\CrawlIT.sln'
+          content-mgcb-path: '${{ github.workspace }}\CrawlIT\Android\Content'
+          project-path: '${{ github.workspace }}\CrawlIT\Android'
+          csproj-path: '${{ github.workspace }}\CrawlIT\Android\Android.csproj'
+          build-configuration: "Release"
+          package-format: "aab"
+          keystore: ${{ secrets.KEYSTORE }}
+          keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
+          key-alias: ${{ secrets.KEYSTORE_ALIAS }}
+          key-password: ${{ secrets.KEYSTORE_PASSWORD }}
