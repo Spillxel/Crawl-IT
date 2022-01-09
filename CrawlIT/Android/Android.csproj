@@ -93,7 +93,6 @@
       <Version>2.0.5</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="Content\Audio\Investigations.mp3" />
     <None Include="Content\Audio\sneaky_snitch.mp3" />

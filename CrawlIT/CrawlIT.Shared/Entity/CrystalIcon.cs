@@ -13,8 +13,8 @@ namespace CrawlIT.Shared
 
         private readonly Player _player;
 
-        public CrystalIcon(Texture2D texture, float scale, float posx, float posy, Player player)
-            : base(texture, scale, posx, posy)
+        public CrystalIcon(Texture2D texture, float scale, Vector2 position, Player player)
+            : base(texture, scale, position)
         {
             // need to keep track of crystal count to set the correct animation
             _player = player;

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CrawlIT.Shared
+namespace CrawlIT.Shared.State.Game
 {
     public class Menu : GameState
     {
@@ -30,7 +30,7 @@ namespace CrawlIT.Shared
         private readonly float _scale;
         private readonly Point _resolution;
 
-        public override StateType State { get; }
+        public override GameStateType State { get; }
 
         public Menu(GraphicsDevice graphicsDevice, Point resolution, Matrix transform, float scale)
             : base(graphicsDevice)
@@ -38,7 +38,7 @@ namespace CrawlIT.Shared
             _transform = transform;
             _resolution = resolution;
             _scale = scale;
-            State = StateType.Menu;
+            State = GameStateType.Menu;
         }
 
         public override void Initialize()
@@ -75,7 +75,7 @@ namespace CrawlIT.Shared
             _logoAnimation.AddFrame(new Rectangle(0, (_logoSpritesheet.Height / 4) * 3, _logoSpritesheet.Width, _logoSpritesheet.Height / 4), TimeSpan.FromSeconds(.25));
         }
 
-        public override void UnloadContent()
+        public override void Dispose()
         {
         }
 
