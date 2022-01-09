@@ -22,8 +22,9 @@ namespace CrawlIT.Shared
         private Vector2 _blankButtonPosition;
         private Rectangle _blankButton;
         public Rectangle BlankRectangle;
-        private Texture2D _logo;
+        private Texture2D _logoSpritesheet;
         private Vector2 _logoPosition;
+        private Animation _logoAnimation;
 
         private readonly Matrix _transform;
         private readonly float _scale;
@@ -63,9 +64,15 @@ namespace CrawlIT.Shared
             _blankButtonPosition = new Vector2(_newGameButtonPosition.X, _resolution.Y * 0.8f);
             BlankRectangle = new Rectangle(_blankButtonPosition.ToPoint(), _buttonSize);
 
-            _logo = content.Load<Texture2D>("Sprites/mainlogo");
-            _logoPosition = new Vector2((_resolution.X - _logo.Width * _scale) * 0.5f,
-                _resolution.Y * 0.3f - _logo.Height * _scale * 0.5f);
+            _logoSpritesheet = content.Load<Texture2D>("Sprites/mainlogo");
+            _logoPosition = new Vector2((_resolution.X - _logoSpritesheet.Width * _scale) * 0.5f,
+                _resolution.Y * 0.3f - (_logoSpritesheet.Height / 4) * _scale * 0.5f);
+
+            _logoAnimation = new Animation();
+            _logoAnimation.AddFrame(new Rectangle(0, 0, _logoSpritesheet.Width, _logoSpritesheet.Height / 4), TimeSpan.FromSeconds(.25));
+            _logoAnimation.AddFrame(new Rectangle(0, (_logoSpritesheet.Height / 4), _logoSpritesheet.Width, _logoSpritesheet.Height / 4), TimeSpan.FromSeconds(.25));
+            _logoAnimation.AddFrame(new Rectangle(0, (_logoSpritesheet.Height /4) * 2, _logoSpritesheet.Width, _logoSpritesheet.Height / 4), TimeSpan.FromSeconds(.25));
+            _logoAnimation.AddFrame(new Rectangle(0, (_logoSpritesheet.Height / 4) * 3, _logoSpritesheet.Width, _logoSpritesheet.Height / 4), TimeSpan.FromSeconds(.25));
         }
 
         public override void UnloadContent()
@@ -74,6 +81,7 @@ namespace CrawlIT.Shared
 
         public override void Update(GameTime gameTime)
         {
+            _logoAnimation.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -83,7 +91,8 @@ namespace CrawlIT.Shared
             Helper.DrawWrapper(spriteBatch, _buttonsSprite, _newGameButtonPosition, _newGameButton, _scale);
             Helper.DrawWrapper(spriteBatch, _buttonsSprite, _creditsButtonPosition, _creditsButton, _scale);
             Helper.DrawWrapper(spriteBatch, _buttonsSprite, _blankButtonPosition, _blankButton, _scale);
-            Helper.DrawWrapper(spriteBatch, _logo, _logoPosition, null, _scale);
+            spriteBatch.Draw(_logoSpritesheet, _logoPosition, _logoAnimation.CurrentRectangle, Color.White,
+                0f, Vector2.Zero, _scale, SpriteEffects.None, 0f);
             spriteBatch.End();
         }
     }
