@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Build android project
-        uses: igotinfected-ci/build-monogame@v1
+        uses: igotinfected-ci/build-monogame@v2
         with:
           solution-path: '${{ github.workspace }}\CrawlIT\CrawlIT.sln'
           content-mgcb-path: '${{ github.workspace }}\CrawlIT\Android\Content'
