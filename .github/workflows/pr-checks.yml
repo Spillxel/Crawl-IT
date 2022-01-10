@@ -2,7 +2,7 @@ name: Run checks on incoming PR
 
 on:
   pull_request:
-    branches: [master, release, develop]
+    branches: [master, develop]
 
   # allow running this workflow manually
   workflow_dispatch:
