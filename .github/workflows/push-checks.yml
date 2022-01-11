@@ -21,7 +21,6 @@ jobs:
           solution-path: '${{ github.workspace }}\CrawlIT\CrawlIT.sln'
           content-mgcb-path: '${{ github.workspace }}\CrawlIT\Android\Content'
           content-mgcb-platform: "Android"
-          project-path: '${{ github.workspace }}\CrawlIT\Android'
           csproj-path: '${{ github.workspace }}\CrawlIT\Android\Android.csproj'
           build-target: "PackageForAndroid"
           build-configuration: "Release"
