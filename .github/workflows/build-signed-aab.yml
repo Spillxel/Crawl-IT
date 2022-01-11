@@ -18,10 +18,13 @@ jobs:
       - name: Build Android project and sign generated aab
         uses: igotinfected-ci/build-and-sign-monogame-android@v1
         with:
-          solution-path: '${{ github.workspace }}\Project\Project.sln'
-          content-mgcb-path: '${{ github.workspace }}\Project\Android\Content'
-          content-mgcb-platform: "Android"
-          project-path: '${{ github.workspace }}\Project\Android'
-          csproj-path: '${{ github.workspace }}\Project\Android\Android.csproj'
-          build-target: "PackageForAndroid"
+          solution-path: '${{ github.workspace }}\CrawlIT\CrawlIT.sln'
+          content-mgcb-path: '${{ github.workspace }}\CrawlIT\Android\Content'
+          project-path: '${{ github.workspace }}\CrawlIT\Android'
+          csproj-path: '${{ github.workspace }}\CrawlIT\Android\Android.csproj'
           build-configuration: "Release"
+          package-format: "aab"
+          keystore: ${{ secrets.KEYSTORE }}
+          keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
+          key-alias: ${{ secrets.KEY_ALIAS }}
+          key-password: ${{ secrets.KEY_PASSWORD }}
