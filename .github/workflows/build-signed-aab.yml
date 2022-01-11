@@ -1,1 +1,27 @@
+name: Build signed aab for release
 
+on:
+  push:
+    branches: [master, release/*, develop]
+
+  # allow running this workflow manually
+  workflow_dispatch:
+
+jobs:
+  generate-signed-aab:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Build Android project and sign generated aab
+        uses: igotinfected-ci/build-and-sign-monogame-android@v1
+        with:
+          solution-path: '${{ github.workspace }}\Project\Project.sln'
+          content-mgcb-path: '${{ github.workspace }}\Project\Android\Content'
+          content-mgcb-platform: "Android"
+          project-path: '${{ github.workspace }}\Project\Android'
+          csproj-path: '${{ github.workspace }}\Project\Android\Android.csproj'
+          build-target: "PackageForAndroid"
+          build-configuration: "Release"
