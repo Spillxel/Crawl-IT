@@ -1,8 +1,11 @@
-name: Run checks on incoming PR
+name: Run checks after push
 
 on:
-  pull_request:
-    branches: [master, develop]
+  push:
+    branches: [master, release/*, develop]
+
+  # allow running this workflow manually
+  workflow_dispatch:
 
 jobs:
   android-build-check:
