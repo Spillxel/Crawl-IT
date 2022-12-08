@@ -87,7 +87,7 @@
     </PackageReference>
     <PackageReference Include="MonoGame.Framework.Android" Version="3.8.0.1641" />
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.1</Version>
+      <Version>13.0.2</Version>
     </PackageReference>
     <PackageReference Include="ResolutionBuddy">
       <Version>2.0.5</Version>
